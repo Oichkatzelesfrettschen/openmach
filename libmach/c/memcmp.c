@@ -38,8 +38,10 @@
  *	contents are identical upto the length of s1.
  */
 
+#include <sys/types.h>
+
 int
-memcmp(const void *s1v, const void *s2v, int size)
+memcmp(const void *s1v, const void *s2v, size_t size)
 {
 	register const char *s1 = s1v, *s2 = s2v;
 	register unsigned int a, b;

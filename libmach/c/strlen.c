@@ -32,14 +32,15 @@
  *	the terminating null character.
  */
 
-int
-strlen(string)
-    register char *string;
+#include <sys/types.h>
+
+size_t
+strlen(const char *string)
 {
-register char *ret = string;
+    const char *ret = string;
 
-    while (*string++);
-
-    return string - 1 - ret;
+    while (*string++)
+        ;
+    return (size_t)(string - 1 - ret);
 
 }

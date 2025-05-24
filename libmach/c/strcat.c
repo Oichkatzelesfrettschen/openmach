@@ -22,17 +22,19 @@
  * 
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
- */
+*/
+
+#include <string.h>
 
 char *
-strcat(s, add)
-register char *s, *add;
+strcat(char *s, const char *add)
 {
-register char *ret = s;
+    char *ret = s;
 
-	while(*s) s++;
+    while (*s)
+        s++;
 
-	while(*s++ = *add++) ;
-
-	return ret;
+    while ((*s++ = *add++) != '\0')
+        ;
+    return ret;
 }
