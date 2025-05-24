@@ -35,17 +35,18 @@
  *	to the "to" string.
  */
 
+#include <sys/types.h>
+
 char *
-strncpy(to, from, count)
-    register char *to, *from;
-    register int count;
+strncpy(char *to, const char *from, size_t count)
 {
-    register char *ret = to;
+    char *ret = to;
 
-    while (count-- > 0 && (*to++ = *from++));
+    while (count-- > 0 && (*to++ = *from++) != '\0')
+        ;
 
-    while (count-- > 0) 
-	*to++ = '\0';
+    while (count-- > 0)
+        *to++ = '\0';
 
     return ret;
 }

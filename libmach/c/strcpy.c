@@ -33,13 +33,14 @@
  *	is returned.
  */
 
+#include <string.h>
+
 char *
-strcpy(to,from)
-register char *to, *from;
+strcpy(char *to, const char *from)
 {
-register char *ret = to;
+    char *ret = to;
 
-	while(*to++ = *from++);
-
-	return ret;
+    while ((*to++ = *from++) != '\0')
+        ;
+    return ret;
 }

@@ -24,13 +24,13 @@
 #include <sys/types.h>
 
 void *
-memcmp(void *tov, int c, size_t len)
+memset(void *tov, int c, size_t len)
 {
-	register char *to = tov;
+        char *to = tov;
 
-	while (len-- > 0)
-		*to++ = c;
+        while (len-- > 0)
+                *to++ = c;
 
-	return tov;
+        return tov;
 }
 
