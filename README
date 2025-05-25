@@ -627,6 +627,22 @@ happening, and why.
   This will allow more-specific header files to override less-specific files
   automatically, just like .c files already can.  Separate include file
   namespaces are pretty much useless in Mach anyway, because their
+Codex Setup
+-----------
+
+For development within the Codex environment a helper script is provided in
+`.codex/setup.sh`.  The script installs a wide range of build tools including
+Clang, LLD, AFL++, Coq and TLA+ utilities.  It also installs common Python and
+Node tooling for linting and testing.  Run the script once to prepare a
+container:
+
+```
+./.codex/setup.sh
+```
+
+Note that the script uses `apt` and `pip` to fetch dependencies and will
+require network access during the setup phase.
+
   corresponding object files all get thrown into one object directory
   and therefore have to have unique names.  Having separate .h
   namespaces but a single .c namespace is just an inconsistency without
