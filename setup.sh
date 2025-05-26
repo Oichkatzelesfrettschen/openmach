@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
-set -u
+set -euo pipefail
 LOGFILE="setup.log"
 
-packages=("build-essential" "clang" "clang-tools" "lld" "lldb" "llvm" \
-          "cmake" "make" "automake" "autoconf" "libtool" "pkg-config" \
-          "gdb" "valgrind" "git" "curl" "wget" "python3" "python3-pip" \
-          "libffi-dev" "libssl-dev" "nodejs" "npm" "shellcheck")
+# Enable debugging and log everything
+exec > >(tee -a "$LOGFILE") 2>&1
+set -x
+
+packages=(
+    "build-essential" "clang" "clang-tools" "lld" "lldb" "llvm"
+    "cmake" "make" "automake" "autoconf" "libtool" "pkg-config"
+    "gdb" "valgrind" "git" "curl" "wget" "python3" "python3-pip"
+    "libffi-dev" "libssl-dev" "nodejs" "npm" "shellcheck"
+    "graphviz" "doxygen" "tlaplus" "coq" "coqide" "libcoq-ocaml-dev"
+    "coq-theories" "isabelle" "openjdk-11-jre-headless"
+    "llvm-bolt" "polly"
+)
 
 sudo apt-get update && sudo apt-get dist-upgrade -y
 
