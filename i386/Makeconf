@@ -37,11 +37,11 @@ HOST_CC		= gcc
 
 LEX		= flex
 LEXLIB		= -lfl
-YACC		= yacc
+YACC		= bison -y
 AWK		= mawk
 INSTALL		= /usr/bin/install -c
 
-DEFINES		= -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_VPRINTF=1 -DHAVE_STRERROR=1
+DEFINES		= -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DYYTEXT_POINTER=1 -DHAVE_VPRINTF=1 -DHAVE_STRERROR=1
 
 # These get set to "yes" if the user specified
 # the corresponding --enable-xxx options to configure.

@@ -26,18 +26,11 @@
 #
 
 migcom=${MIGDIR-/usr/local/lib}/migcom
-cpp="${CPP-gcc -x c-header -E}"
+cpp="${CPP-gcc}" # This should be just "gcc" or similar
 
 cppflags=
 migflags=
 files=
-
-# If an argument to this shell script contains whitespace,
-# then we will screw up.  migcom will see it as multiple arguments.
-#
-# As a special hack, if -i is specified first we don't pass -user to migcom.
-# We do use the -user argument for the dependencies.
-# In this case, the -user argument can have whitespace.
 
 until [ $# -eq 0 ]
 do
@@ -62,33 +55,91 @@ done
 
 for file in $files
 do
-    $cpp $cppflags "$file" | $migcom $migflags || exit
+    # Filter -MD for the main preprocessing pass, also filter -nostdinc for testing
+    actual_cppflags_no_md="`echo "$cppflags" | sed 's/-MD//g'`"
+    actual_cppflags_for_main_pass="`echo "$actual_cppflags_no_md" | sed 's/-nostdinc//g'`" # TEST: remove nostdinc
 
-    if [ $sawMD ]
-    then
-	base="`basename "$file"|sed 's%[.][^.]*$%%'`"
-	deps=
-	rheader="${header-${base}.h}"
-	if [ "$rheader" != /dev/null ]; then deps="$deps $rheader"; fi
-	ruser="${user-${base}User.c}"
-	if [ "$ruser" != /dev/null ]; then
-		if [ $sawI ]; then
-		    for un in $ruser
-		    do
-			deps="$deps $un"
-		    done
-		else
-		    deps="$deps $ruser"
-		fi
-	fi
-	rserver="${server-${base}Server.c}"
-	if [ "$rserver" != /dev/null ]; then deps="$deps $rserver"; fi
-	rsheader="${sheader-/dev/null}"
-	if [ "$rsheader" != /dev/null ]; then deps="$deps $rsheader"; fi
-	riheader="${iheader-/dev/null}"
-	if [ "$riheader" != /dev/null ]; then deps="$deps $riheader"; fi
-	sed 's%^[^:]*:%'"${deps}"':%' <"${base}.d" >"${base}-mig.d"
-	rm -f ${base}.d
+    echo "DEBUG MIG.SH: Processing $file" >&2
+    echo "DEBUG MIG.SH: Original cppflags for mig.sh: $cppflags" >&2
+    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc): $actual_cppflags_for_main_pass" >&2
+    echo "DEBUG MIG.SH: Migcom flags: $migflags" >&2
+    echo "DEBUG MIG.SH: Preprocessor command to be run: $cpp -E $actual_cppflags_for_main_pass \"$file\"" >&2
+
+    rm -f /tmp/mig_cpp_errors.log
+
+    exit_status=0
+    if [ "$file" = "/app/libmach/bootstrap.pres" ]; then
+        echo "DEBUG MIG.SH: Special handling for /app/libmach/bootstrap.pres" >&2
+        rm -f /tmp/bootstrap_pres_preprocessed.txt
+
+        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | tee /tmp/bootstrap_pres_preprocessed.txt | "$migcom" $migflags
+        exit_status=${PIPESTATUS[2]}
+
+        if [ -f /tmp/bootstrap_pres_preprocessed.txt ]; then
+            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was created." >&2
+            if [ -s /tmp/bootstrap_pres_preprocessed.txt ]; then
+                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt is NOT empty." >&2
+            else
+                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt IS EMPTY." >&2
+            fi
+        else
+            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was NOT created." >&2
+        fi
+    else
+        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | "$migcom" $migflags
+        exit_status=${PIPESTATUS[1]}
+    fi
+
+    if [ -s /tmp/mig_cpp_errors.log ]; then
+        echo "DEBUG MIG.SH: Errors from C preprocessor ($cpp -E) for $file:" >&2
+        cat /tmp/mig_cpp_errors.log >&2
+    fi
+
+    if [ $exit_status -ne 0 ]; then
+        echo "DEBUG MIG.SH: migcom failed for $file with status $exit_status." >&2
+    fi
+
+    if [ $sawMD ]; then
+        base="`basename "$file"|sed 's%[.][^.]*$%%'`"
+        deps=
+        rheader="${header-${base}.h}"
+        if [ "$rheader" != /dev/null ]; then deps="$deps $rheader"; fi
+        ruser="${user-${base}User.c}"
+        if [ "$ruser" != /dev/null ]; then
+            if [ $sawI ]; then
+                for un in $ruser; do deps="$deps $un"; done
+            else
+                deps="$deps $ruser"
+            fi
+        fi
+        rserver="${server-${base}Server.c}"
+        if [ "$rserver" != /dev/null ]; then deps="$deps $rserver"; fi
+        rsheader="${sheader-/dev/null}"
+        if [ "$rsheader" != /dev/null ]; then deps="$deps $rsheader"; fi
+        riheader="${iheader-/dev/null}"
+        if [ "$riheader" != /dev/null ]; then deps="$deps $riheader"; fi
+
+        echo "DEBUG MIG.SH: Generating dependency file ${base}.d for $file (using original cppflags: $cppflags)" >&2
+        rm -f /tmp/mig_dep_errors.log
+        # Use original cppflags for .d file generation, which includes -MD
+        "$cpp" -E $cppflags "$file" > /dev/null 2>/tmp/mig_dep_errors.log
+        if [ -s /tmp/mig_dep_errors.log ]; then
+            echo "DEBUG MIG.SH: Errors during .d generation for $file:" >&2
+            cat /tmp/mig_dep_errors.log >&2
+        fi
+
+        if [ -f "${base}.d" ]; then
+            sed 's%^[^:]*:%'"${deps}"':%' <"${base}.d" >"${base}-mig.d"
+            rm -f ${base}.d
+            echo "DEBUG MIG.SH: Processed dependency file ${base}.d -> ${base}-mig.d" >&2
+        else
+            echo "DEBUG MIG.SH: Dependency file ${base}.d was NOT created for $file (check /tmp/mig_dep_errors.log)." >&2
+            echo "${deps}: # ${base}.d not generated by mig.sh" > "${base}-mig.d"
+        fi
+    fi
+
+    if [ $exit_status -ne 0 ]; then
+        exit $exit_status
     fi
 done
 
