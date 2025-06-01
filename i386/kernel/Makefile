@@ -1,3 +1,4 @@
+# Generated automatically from Makefile.in by configure.
 #
 # Copyright (c) 1994 The University of Utah and
 # the Computer Systems Laboratory (CSL).  All rights reserved.
@@ -17,50 +18,32 @@
 #
 #      Author: Bryan Ford, University of Utah CSL
 #
-ifndef _mach4_mig_makerules_
-_mach4_mig_makerules_ = yes
 
 
-SRCDIRS += $(GSRCDIR)/mig
+# This makefile is for the i386 microkernel.
+# It is usually included by the Makefile
+# configured from the Makefile.in file in this same directory,
+# but might be included instead from some other place
+# if the i386 code is used in an even more specific configuration.
+
+# XXX support simultaneous SMP and non-SMP kernels.
+
+#### Start of configuration section ####
+
+GSRCDIR	= ../..
+MSRCDIR = ..
+OBJDIR	= ..
+
+prefix = /usr/local
+exec_prefix = ${prefix}
+
+include $(OBJDIR)/Makeconf
+
+##### End of configuration section #####
 
 
-all: mig migcom
+# First define what we're trying to accomplish.
+TARGET	= kernel
 
-
-GEN_OBJFILES += parser.o lexxer.o
-
-CLEAN_FILES += parser.c lexxer.c parser.h
-
-.PRECIOUS: parser.c lexxer.c parser.h cpu.symc cpu.symc.o
-
-%.c: %.l
-	$(LEX) $(LFLAGS) $<
-	mv lex.yy.c $*.c
-
-%.c %.h: %.y
-	$(YACC) $(YFLAGS) -d $<
-	mv y.tab.c $*.c
-	mv y.tab.h $*.h
-
-# Compile the migcom sources with the host includes and flags.
-COMPILE_FOR = HOST
-
-include $(GSRCDIR)/Makerules
-
-
-mig: mig.sh
-	sed -e 's,@MIGDIR@,$(INSTALL_LIBDIR),g' \
-	    -e 's,@CPP@,${CC} -x c-header -E,g' \
-		$< >$@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
-
-migcom: $(OBJFILES)
-	$(HOST_CC) -g $(CPPFLAGS) $(CFLAGS) $(HOST_CFLAGS) -o $@ $^ $(LEXLIB)
-
-$(OBJFILES): cpu.h
-CLEAN_FILES += cpu.h
-
-install: $(INSTALL_BINDIR)/mig $(INSTALL_LIBDIR)/migcom
-
-lexxer.o: parser.h
-
-endif
+# Everything else is done in here.
+include $(MSRCDIR)/kernel/Makerules

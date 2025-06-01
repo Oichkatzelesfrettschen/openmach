@@ -54,7 +54,7 @@ mig: mig.sh
 		$< >$@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
 
 migcom: $(OBJFILES)
-	$(HOST_CC) -g $(CPPFLAGS) $(CFLAGS) $(HOST_CFLAGS) -o $@ $^ $(LEXLIB)
+	$(HOST_CC) $(CPPFLAGS) $(CFLAGS) $(HOST_CFLAGS) -o $@ $^ $(LEXLIB)
 
 $(OBJFILES): cpu.h
 CLEAN_FILES += cpu.h

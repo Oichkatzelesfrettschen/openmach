@@ -1,3 +1,4 @@
+# Generated automatically from Makefile.in by configure.
 #
 # Copyright (c) 1994 The University of Utah and
 # the Computer Systems Laboratory (CSL).  All rights reserved.
@@ -17,50 +18,21 @@
 #
 #      Author: Bryan Ford, University of Utah CSL
 #
-ifndef _mach4_mig_makerules_
-_mach4_mig_makerules_ = yes
+#### Start of configuration section ####
 
+GSRCDIR	= ../..
+MSRCDIR = ..
+OBJDIR	= ..
 
-SRCDIRS += $(GSRCDIR)/mig
+prefix = /usr/local
+exec_prefix = ${prefix}
 
+include $(OBJDIR)/Makeconf
 
-all: mig migcom
+##### End of configuration section #####
 
+SRCDIRS += $(GSRCDIR)/libthreads $(MSRCDIR)/libthreads
+TARGET = libthreads.a
 
-GEN_OBJFILES += parser.o lexxer.o
-
-CLEAN_FILES += parser.c lexxer.c parser.h
-
-.PRECIOUS: parser.c lexxer.c parser.h cpu.symc cpu.symc.o
-
-%.c: %.l
-	$(LEX) $(LFLAGS) $<
-	mv lex.yy.c $*.c
-
-%.c %.h: %.y
-	$(YACC) $(YFLAGS) -d $<
-	mv y.tab.c $*.c
-	mv y.tab.h $*.h
-
-# Compile the migcom sources with the host includes and flags.
-COMPILE_FOR = HOST
-
-include $(GSRCDIR)/Makerules
-
-
-mig: mig.sh
-	sed -e 's,@MIGDIR@,$(INSTALL_LIBDIR),g' \
-	    -e 's,@CPP@,${CC} -x c-header -E,g' \
-		$< >$@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
-
-migcom: $(OBJFILES)
-	$(HOST_CC) -g $(CPPFLAGS) $(CFLAGS) $(HOST_CFLAGS) -o $@ $^ $(LEXLIB)
-
-$(OBJFILES): cpu.h
-CLEAN_FILES += cpu.h
-
-install: $(INSTALL_BINDIR)/mig $(INSTALL_LIBDIR)/migcom
-
-lexxer.o: parser.h
-
-endif
+include $(MSRCDIR)/Makerules
+include $(GSRCDIR)/Makerules.lib

@@ -1,3 +1,4 @@
+# Generated automatically from Makefile.in by configure.
 #
 # Copyright (c) 1994 The University of Utah and
 # the Computer Systems Laboratory (CSL).  All rights reserved.
@@ -17,50 +18,50 @@
 #
 #      Author: Bryan Ford, University of Utah CSL
 #
-ifndef _mach4_mig_makerules_
-_mach4_mig_makerules_ = yes
 
 
-SRCDIRS += $(GSRCDIR)/mig
+# This makefile creates a microkernel
+# that supports Intel MP specification-compliant machines.
+#### Start of configuration section ####
+
+GSRCDIR	= ../../..
+MSRCDIR = ../..
+OBJDIR	= ../..
+
+prefix = /usr/local
+exec_prefix = ${prefix}
+
+include $(OBJDIR)/Makeconf
+
+##### End of configuration section #####
 
 
-all: mig migcom
+# Only build an MP kernel if the user asked for one.
+ifeq ($(ENABLE_MP),yes)
 
 
-GEN_OBJFILES += parser.o lexxer.o
-
-CLEAN_FILES += parser.c lexxer.c parser.h
-
-.PRECIOUS: parser.c lexxer.c parser.h cpu.symc cpu.symc.o
-
-%.c: %.l
-	$(LEX) $(LFLAGS) $<
-	mv lex.yy.c $*.c
-
-%.c %.h: %.y
-	$(YACC) $(YFLAGS) -d $<
-	mv y.tab.c $*.c
-	mv y.tab.h $*.h
-
-# Compile the migcom sources with the host includes and flags.
-COMPILE_FOR = HOST
-
-include $(GSRCDIR)/Makerules
+# First define what we're trying to accomplish.
+TARGET	= kernel-imps.bmod
 
 
-mig: mig.sh
-	sed -e 's,@MIGDIR@,$(INSTALL_LIBDIR),g' \
-	    -e 's,@CPP@,${CC} -x c-header -E,g' \
-		$< >$@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+# For Intel MP spec support add the imps directory.
+SRCDIRS += $(MSRCDIR)/kernel/imps
 
-migcom: $(OBJFILES)
-	$(HOST_CC) -g $(CPPFLAGS) $(CFLAGS) $(HOST_CFLAGS) -o $@ $^ $(LEXLIB)
 
-$(OBJFILES): cpu.h
-CLEAN_FILES += cpu.h
+# Everything else is done in here.
+include $(MSRCDIR)/kernel/Makerules
 
-install: $(INSTALL_BINDIR)/mig $(INSTALL_LIBDIR)/migcom
 
-lexxer.o: parser.h
+# Be sure and build the asm symbol file before anything else.
+# This is sort of a bogus dependency, but it does the job.
+i386asm.h: impsasm.h
+CLEAN_FILES += impsasm.h
+
+
+else
+
+all:
+clean:
+install:
 
 endif

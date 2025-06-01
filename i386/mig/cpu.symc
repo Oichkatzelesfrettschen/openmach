@@ -1,0 +1,32 @@
+#include <mach/message.h>
+void bogus() {
+__asm ("* word_size mAgIc%0" : : "i" (sizeof(integer_t)));
+__asm ("* word_size_in_bits mAgIc%0" : : "i" (sizeof(integer_t)*8));
+__asm ("* sizeof_pointer mAgIc%0" : : "i" (sizeof(void*)));
+__asm ("* sizeof_mach_msg_header_t mAgIc%0" : : "i" (sizeof(mach_msg_header_t)));
+__asm ("* sizeof_mach_msg_type_t mAgIc%0" : : "i" (sizeof(mach_msg_type_t)));
+__asm ("* sizeof_mach_msg_type_long_t mAgIc%0" : : "i" (sizeof(mach_msg_type_long_t)));
+__asm ("* MACH_MSG_TYPE_UNSTRUCTURED mAgIc%0" : : "i" (MACH_MSG_TYPE_UNSTRUCTURED));
+__asm ("* MACH_MSG_TYPE_POLYMORPHIC mAgIc%0" : : "i" (MACH_MSG_TYPE_POLYMORPHIC));
+__asm ("* MACH_MSG_TYPE_BIT mAgIc%0" : : "i" (MACH_MSG_TYPE_BIT));
+__asm ("* MACH_MSG_TYPE_BOOLEAN mAgIc%0" : : "i" (MACH_MSG_TYPE_BOOLEAN));
+__asm ("* MACH_MSG_TYPE_INTEGER_16 mAgIc%0" : : "i" (MACH_MSG_TYPE_INTEGER_16));
+__asm ("* MACH_MSG_TYPE_INTEGER_32 mAgIc%0" : : "i" (MACH_MSG_TYPE_INTEGER_32));
+__asm ("* MACH_MSG_TYPE_CHAR mAgIc%0" : : "i" (MACH_MSG_TYPE_CHAR));
+__asm ("* MACH_MSG_TYPE_BYTE mAgIc%0" : : "i" (MACH_MSG_TYPE_BYTE));
+__asm ("* MACH_MSG_TYPE_INTEGER_8 mAgIc%0" : : "i" (MACH_MSG_TYPE_INTEGER_8));
+__asm ("* MACH_MSG_TYPE_REAL mAgIc%0" : : "i" (MACH_MSG_TYPE_REAL));
+__asm ("* MACH_MSG_TYPE_INTEGER_64 mAgIc%0" : : "i" (MACH_MSG_TYPE_INTEGER_64));
+__asm ("* MACH_MSG_TYPE_STRING mAgIc%0" : : "i" (MACH_MSG_TYPE_STRING));
+__asm ("* MACH_MSG_TYPE_STRING_C mAgIc%0" : : "i" (MACH_MSG_TYPE_STRING_C));
+__asm ("* MACH_MSG_TYPE_MOVE_RECEIVE mAgIc%0" : : "i" (MACH_MSG_TYPE_MOVE_RECEIVE));
+__asm ("* MACH_MSG_TYPE_MOVE_SEND mAgIc%0" : : "i" (MACH_MSG_TYPE_MOVE_SEND));
+__asm ("* MACH_MSG_TYPE_MOVE_SEND_ONCE mAgIc%0" : : "i" (MACH_MSG_TYPE_MOVE_SEND_ONCE));
+__asm ("* MACH_MSG_TYPE_COPY_SEND mAgIc%0" : : "i" (MACH_MSG_TYPE_COPY_SEND));
+__asm ("* MACH_MSG_TYPE_MAKE_SEND mAgIc%0" : : "i" (MACH_MSG_TYPE_MAKE_SEND));
+__asm ("* MACH_MSG_TYPE_MAKE_SEND_ONCE mAgIc%0" : : "i" (MACH_MSG_TYPE_MAKE_SEND_ONCE));
+__asm ("* MACH_MSG_TYPE_PORT_NAME mAgIc%0" : : "i" (MACH_MSG_TYPE_PORT_NAME));
+__asm ("* MACH_MSG_TYPE_PORT_RECEIVE mAgIc%0" : : "i" (MACH_MSG_TYPE_PORT_RECEIVE));
+__asm ("* MACH_MSG_TYPE_PORT_SEND mAgIc%0" : : "i" (MACH_MSG_TYPE_PORT_SEND));
+__asm ("* MACH_MSG_TYPE_PORT_SEND_ONCE mAgIc%0" : : "i" (MACH_MSG_TYPE_PORT_SEND_ONCE));
+}

@@ -1,0 +1,62 @@
+#
+bootstrap.o: ../../libmach/bootstrap.pres \
+ ../../include/mach/bootstrap.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs
+#
+mach_i386.o: mach_i386.pres ../include/mach/machine/mach_i386.defs \
+ ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs \
+ ../../include/device/device_types.defs
+#
+#
+default_pager.o: ../../libmach/default_pager.pres \
+ ../../include/mach/default_pager.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs \
+ ../../include/mach/default_pager_types.defs
+#
+ default_pager_helper.h default_pager_helper_user.c default_pager_helper_server.c: ../../libmach/default_pager_helper.pres \
+ ../../include/mach/default_pager_helper.defs \
+ ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs
+#
+device.o: ../../libmach/device.pres ../../include/device/device.defs \
+ ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs \
+ ../../include/device/device_types.defs
+#
+ device_reply.h device_reply_user.c device_reply_server.c: ../../libmach/device_reply.pres \
+ ../../include/device/device_reply.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/device/device_types.defs
+#
+ device_request.h device_request_user.c device_request_server.c: ../../libmach/device_request.pres \
+ ../../include/device/device_request.defs \
+ ../../include/device/device_types.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs
+#
+ exc.h exc_user.c exc_server.c: ../../libmach/exc.pres ../../include/mach/exc.defs \
+ ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs
+#
+ mach4_interface.h mach4_interface_user.c mach4_interface_server.c: ../../libmach/mach4_interface.pres \
+ ../../include/mach/mach4.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs
+#
+mach_debug.o: ../../libmach/mach_debug.pres \
+ ../../include/mach_debug/mach_debug.defs \
+ ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs \
+ ../../include/mach_debug/mach_debug_types.defs
+#
+mach_host.o: ../../libmach/mach_host.pres \
+ ../../include/mach/mach_host.defs ../../include/mach/std_types.defs \
+ ../include/mach/machine/machine_types.defs \
+ ../../include/mach/mach_types.defs
+#
+#

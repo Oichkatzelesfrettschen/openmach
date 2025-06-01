@@ -35,8 +35,8 @@ export RANLIB	= @RANLIB@
 
 HOST_CC		= @HOST_CC@
 
-LEX		= @LEX@
-LEXLIB		= @LEXLIB@
+LEX		= flex
+LEXLIB		= -lfl
 YACC		= @YACC@
 AWK		= @AWK@
 INSTALL		= @INSTALL@

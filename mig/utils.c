@@ -370,6 +370,7 @@ WriteCopyType(FILE *file, const ipc_type_t *it, const char *left,
 {
     va_list pvar;
     va_start(pvar, right);
+fprintf(stderr, "DEBUG MIG: WritePackMsgType: left = [%p] \"%s\"\n", (void*)left, left); fflush(stderr); fprintf(stderr, "DEBUG MIG: WritePackMsgType: right = [%p] \"%s\"\n", (void*)right, right); fflush(stderr);
 
     if (it->itStruct)
     {
@@ -406,6 +407,7 @@ WritePackMsgType(FILE *file, const ipc_type_t *it, dealloc_t dealloc,
 {
     va_list pvar;
     va_start(pvar, right);
+fprintf(stderr, "DEBUG MIG: WritePackMsgType: left = [%p] \"%s\"\n", (void*)left, left); fflush(stderr); fprintf(stderr, "DEBUG MIG: WritePackMsgType: right = [%p] \"%s\"\n", (void*)right, right); fflush(stderr);
 
     fprintf(file, "\t");
     SkipVFPrintf(file, left, pvar);
