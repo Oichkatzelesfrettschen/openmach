@@ -21,9 +21,9 @@
 
 #### Start of configuration section ####
 
-GSRCDIR	= @top_gsrcdir@
+GSRCDIR	= @gsrcdir@
 MSRCDIR = @top_srcdir@
-OBJDIR	= @top_objdir@
+OBJDIR	= @top_srcdir@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@

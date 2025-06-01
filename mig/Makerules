@@ -50,7 +50,7 @@ include $(GSRCDIR)/Makerules
 
 mig: mig.sh
 	sed -e 's,@MIGDIR@,$(INSTALL_LIBDIR),g' \
-	    -e 's,@CPP@,${CC} -x c-header -E,g' \
+	    -e 's,@CPP@,$(HOST_CC),g' \
 		$< >$@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
 
 migcom: $(OBJFILES)

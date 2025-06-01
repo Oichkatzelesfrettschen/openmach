@@ -639,6 +639,7 @@ CC
 LEX_OUTPUT_ROOT
 LEX
 AWK
+objdir
 gsrcdir
 enable_fipc
 with_elf
@@ -2410,6 +2411,7 @@ gsrcdir=`cd "$gsrcdir" && pwd`
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gsrcdir" >&5
 printf "%s\n" "$gsrcdir" >&6; }
+
 
 
 # Find an awk, and make sure it has a toupper() function...  XXX

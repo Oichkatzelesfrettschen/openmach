@@ -195,7 +195,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 139 "../../mig/parser.y"
+#line 139 "/app/mig/parser.y"
 
     u_int number;
     identifier_t identifier;

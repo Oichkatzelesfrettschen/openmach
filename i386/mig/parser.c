@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 117 "../../mig/parser.y"
+#line 117 "/app/mig/parser.y"
 
 
 #include <stdio.h>
@@ -273,7 +273,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 139 "../../mig/parser.y"
+#line 139 "/app/mig/parser.y"
 
     u_int number;
     identifier_t identifier;
@@ -1539,7 +1539,7 @@ yyreduce:
   switch (yyn)
     {
   case 12: /* Statement: RoutineDecl sySemi  */
-#line 174 "../../mig/parser.y"
+#line 174 "/app/mig/parser.y"
 {
     register statement_t *st = stAlloc();
 
@@ -1553,25 +1553,25 @@ yyreduce:
     break;
 
   case 13: /* Statement: sySkip sySemi  */
-#line 184 "../../mig/parser.y"
+#line 184 "/app/mig/parser.y"
                                 { rtSkip(1); }
 #line 1559 "y.tab.c"
     break;
 
   case 14: /* Statement: sySkip syNumber sySemi  */
-#line 186 "../../mig/parser.y"
+#line 186 "/app/mig/parser.y"
                                 { rtSkip((yyvsp[-1].number)); }
 #line 1565 "y.tab.c"
     break;
 
   case 18: /* Statement: error sySemi  */
-#line 191 "../../mig/parser.y"
+#line 191 "/app/mig/parser.y"
                                 { yyerrok; }
 #line 1571 "y.tab.c"
     break;
 
   case 19: /* Subsystem: SubsystemStart SubsystemMods SubsystemName SubsystemBase  */
-#line 196 "../../mig/parser.y"
+#line 196 "/app/mig/parser.y"
 {
     if (BeVerbose)
     {
@@ -1585,7 +1585,7 @@ yyreduce:
     break;
 
   case 20: /* SubsystemStart: sySubsystem  */
-#line 208 "../../mig/parser.y"
+#line 208 "/app/mig/parser.y"
 {
     if (SubsystemName != strNULL)
     {
@@ -1599,7 +1599,7 @@ yyreduce:
     break;
 
   case 23: /* SubsystemMod: syKernelUser  */
-#line 224 "../../mig/parser.y"
+#line 224 "/app/mig/parser.y"
 {
     if (IsKernelUser)
 	warn("duplicate KernelUser keyword");
@@ -1609,7 +1609,7 @@ yyreduce:
     break;
 
   case 24: /* SubsystemMod: syKernelServer  */
-#line 230 "../../mig/parser.y"
+#line 230 "/app/mig/parser.y"
 {
     if (IsKernelServer)
 	warn("duplicate KernelServer keyword");
@@ -1619,19 +1619,19 @@ yyreduce:
     break;
 
   case 25: /* SubsystemName: syIdentifier  */
-#line 237 "../../mig/parser.y"
+#line 237 "/app/mig/parser.y"
                                                 { SubsystemName = (yyvsp[0].identifier); }
 #line 1625 "y.tab.c"
     break;
 
   case 26: /* SubsystemBase: syNumber  */
-#line 240 "../../mig/parser.y"
+#line 240 "/app/mig/parser.y"
                                                 { SubsystemBase = (yyvsp[0].number); }
 #line 1631 "y.tab.c"
     break;
 
   case 27: /* MsgOption: LookString syMsgOption syString  */
-#line 244 "../../mig/parser.y"
+#line 244 "/app/mig/parser.y"
 {
     if (streql((yyvsp[0].string), "MACH_MSG_OPTION_NONE"))
     {
@@ -1650,7 +1650,7 @@ yyreduce:
     break;
 
   case 28: /* WaitTime: LookString syWaitTime syString  */
-#line 261 "../../mig/parser.y"
+#line 261 "/app/mig/parser.y"
 {
     WaitTime = (yyvsp[0].string);
     if (BeVerbose)
@@ -1660,7 +1660,7 @@ yyreduce:
     break;
 
   case 29: /* WaitTime: syNoWaitTime  */
-#line 267 "../../mig/parser.y"
+#line 267 "/app/mig/parser.y"
 {
     WaitTime = strNULL;
     if (BeVerbose)
@@ -1670,7 +1670,7 @@ yyreduce:
     break;
 
   case 30: /* Error: syErrorProc syIdentifier  */
-#line 275 "../../mig/parser.y"
+#line 275 "/app/mig/parser.y"
 {
     ErrorProc = (yyvsp[0].identifier);
     if (BeVerbose)
@@ -1680,7 +1680,7 @@ yyreduce:
     break;
 
   case 31: /* ServerPrefix: syServerPrefix syIdentifier  */
-#line 283 "../../mig/parser.y"
+#line 283 "/app/mig/parser.y"
 {
     ServerPrefix = (yyvsp[0].identifier);
     if (BeVerbose)
@@ -1690,7 +1690,7 @@ yyreduce:
     break;
 
   case 32: /* UserPrefix: syUserPrefix syIdentifier  */
-#line 291 "../../mig/parser.y"
+#line 291 "/app/mig/parser.y"
 {
     UserPrefix = (yyvsp[0].identifier);
     if (BeVerbose)
@@ -1700,7 +1700,7 @@ yyreduce:
     break;
 
   case 33: /* ServerDemux: syServerDemux syIdentifier  */
-#line 299 "../../mig/parser.y"
+#line 299 "/app/mig/parser.y"
 {
     ServerDemux = (yyvsp[0].identifier);
     if (BeVerbose)
@@ -1710,7 +1710,7 @@ yyreduce:
     break;
 
   case 34: /* Import: LookFileName ImportIndicant syFileName  */
-#line 307 "../../mig/parser.y"
+#line 307 "/app/mig/parser.y"
 {
     register statement_t *st = stAlloc();
     st->stKind = (yyvsp[-1].statement_kind);
@@ -1723,25 +1723,25 @@ yyreduce:
     break;
 
   case 35: /* ImportIndicant: syImport  */
-#line 317 "../../mig/parser.y"
+#line 317 "/app/mig/parser.y"
                                                 { (yyval.statement_kind) = skImport; }
 #line 1729 "y.tab.c"
     break;
 
   case 36: /* ImportIndicant: syUImport  */
-#line 318 "../../mig/parser.y"
+#line 318 "/app/mig/parser.y"
                                                 { (yyval.statement_kind) = skUImport; }
 #line 1735 "y.tab.c"
     break;
 
   case 37: /* ImportIndicant: sySImport  */
-#line 319 "../../mig/parser.y"
+#line 319 "/app/mig/parser.y"
                                                 { (yyval.statement_kind) = skSImport; }
 #line 1741 "y.tab.c"
     break;
 
   case 38: /* RCSDecl: LookQString syRCSId syQString  */
-#line 323 "../../mig/parser.y"
+#line 323 "/app/mig/parser.y"
 {
     if (RCSId != strNULL)
 	warn("previous RCS decl will be ignored");
@@ -1753,7 +1753,7 @@ yyreduce:
     break;
 
   case 39: /* TypeDecl: syType NamedTypeSpec  */
-#line 333 "../../mig/parser.y"
+#line 333 "/app/mig/parser.y"
 {
     register identifier_t name = (yyvsp[0].type)->itName;
 
@@ -1765,19 +1765,19 @@ yyreduce:
     break;
 
   case 40: /* NamedTypeSpec: syIdentifier syEqual TransTypeSpec  */
-#line 343 "../../mig/parser.y"
+#line 343 "/app/mig/parser.y"
                                 { itTypeDecl((yyvsp[-2].identifier), (yyval.type) = (yyvsp[0].type)); }
 #line 1771 "y.tab.c"
     break;
 
   case 41: /* TransTypeSpec: TypeSpec  */
-#line 347 "../../mig/parser.y"
+#line 347 "/app/mig/parser.y"
                                 { (yyval.type) = itResetType((yyvsp[0].type)); }
 #line 1777 "y.tab.c"
     break;
 
   case 42: /* TransTypeSpec: TransTypeSpec syInTran syColon syIdentifier syIdentifier syLParen syIdentifier syRParen  */
-#line 350 "../../mig/parser.y"
+#line 350 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-7].type);
 
@@ -1800,7 +1800,7 @@ yyreduce:
     break;
 
   case 43: /* TransTypeSpec: TransTypeSpec syOutTran syColon syIdentifier syIdentifier syLParen syIdentifier syRParen  */
-#line 370 "../../mig/parser.y"
+#line 370 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-7].type);
 
@@ -1823,7 +1823,7 @@ yyreduce:
     break;
 
   case 44: /* TransTypeSpec: TransTypeSpec syDestructor syColon syIdentifier syLParen syIdentifier syRParen  */
-#line 390 "../../mig/parser.y"
+#line 390 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-6].type);
 
@@ -1841,7 +1841,7 @@ yyreduce:
     break;
 
   case 45: /* TransTypeSpec: TransTypeSpec syCType syColon syIdentifier  */
-#line 404 "../../mig/parser.y"
+#line 404 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-3].type);
 
@@ -1859,7 +1859,7 @@ yyreduce:
     break;
 
   case 46: /* TransTypeSpec: TransTypeSpec syCUserType syColon syIdentifier  */
-#line 418 "../../mig/parser.y"
+#line 418 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-3].type);
 
@@ -1872,7 +1872,7 @@ yyreduce:
     break;
 
   case 47: /* TransTypeSpec: TransTypeSpec syCServerType syColon syIdentifier  */
-#line 428 "../../mig/parser.y"
+#line 428 "/app/mig/parser.y"
 {
     (yyval.type) = (yyvsp[-3].type);
 
@@ -1885,49 +1885,49 @@ yyreduce:
     break;
 
   case 48: /* TypeSpec: BasicTypeSpec  */
-#line 439 "../../mig/parser.y"
+#line 439 "/app/mig/parser.y"
                                 { (yyval.type) = (yyvsp[0].type); }
 #line 1891 "y.tab.c"
     break;
 
   case 49: /* TypeSpec: PrevTypeSpec  */
-#line 441 "../../mig/parser.y"
+#line 441 "/app/mig/parser.y"
                                 { (yyval.type) = (yyvsp[0].type); }
 #line 1897 "y.tab.c"
     break;
 
   case 50: /* TypeSpec: VarArrayHead TypeSpec  */
-#line 443 "../../mig/parser.y"
+#line 443 "/app/mig/parser.y"
                                 { (yyval.type) = itVarArrayDecl((yyvsp[-1].number), (yyvsp[0].type)); }
 #line 1903 "y.tab.c"
     break;
 
   case 51: /* TypeSpec: ArrayHead TypeSpec  */
-#line 445 "../../mig/parser.y"
+#line 445 "/app/mig/parser.y"
                                 { (yyval.type) = itArrayDecl((yyvsp[-1].number), (yyvsp[0].type)); }
 #line 1909 "y.tab.c"
     break;
 
   case 52: /* TypeSpec: syCaret TypeSpec  */
-#line 447 "../../mig/parser.y"
+#line 447 "/app/mig/parser.y"
                                 { (yyval.type) = itPtrDecl((yyvsp[0].type)); }
 #line 1915 "y.tab.c"
     break;
 
   case 53: /* TypeSpec: StructHead TypeSpec  */
-#line 449 "../../mig/parser.y"
+#line 449 "/app/mig/parser.y"
                                 { (yyval.type) = itStructDecl((yyvsp[-1].number), (yyvsp[0].type)); }
 #line 1921 "y.tab.c"
     break;
 
   case 54: /* TypeSpec: CStringSpec  */
-#line 451 "../../mig/parser.y"
+#line 451 "/app/mig/parser.y"
                                 { (yyval.type) = (yyvsp[0].type); }
 #line 1927 "y.tab.c"
     break;
 
   case 55: /* BasicTypeSpec: IPCType  */
-#line 455 "../../mig/parser.y"
+#line 455 "/app/mig/parser.y"
 {
     (yyval.type) = itShortDecl((yyvsp[0].symtype).innumber, (yyvsp[0].symtype).instr,
 		     (yyvsp[0].symtype).outnumber, (yyvsp[0].symtype).outstr,
@@ -1937,7 +1937,7 @@ yyreduce:
     break;
 
   case 56: /* BasicTypeSpec: syLParen IPCType syComma IntExp IPCFlags syRParen  */
-#line 462 "../../mig/parser.y"
+#line 462 "/app/mig/parser.y"
 {
     (yyval.type) = itLongDecl((yyvsp[-4].symtype).innumber, (yyvsp[-4].symtype).instr,
 		    (yyvsp[-4].symtype).outnumber, (yyvsp[-4].symtype).outstr,
@@ -1947,13 +1947,13 @@ yyreduce:
     break;
 
   case 57: /* IPCFlags: %empty  */
-#line 470 "../../mig/parser.y"
+#line 470 "/app/mig/parser.y"
                                 { (yyval.flag) = flNone; }
 #line 1953 "y.tab.c"
     break;
 
   case 58: /* IPCFlags: IPCFlags syComma syIPCFlag  */
-#line 472 "../../mig/parser.y"
+#line 472 "/app/mig/parser.y"
 {
     if ((yyvsp[-2].flag) & (yyvsp[0].flag))
 	warn("redundant IPC flag ignored");
@@ -1964,7 +1964,7 @@ yyreduce:
     break;
 
   case 59: /* IPCFlags: IPCFlags syComma syIPCFlag syLBrack syRBrack  */
-#line 479 "../../mig/parser.y"
+#line 479 "/app/mig/parser.y"
 {
     if ((yyvsp[-2].flag) != flDealloc)
 	warn("only Dealloc is variable");
@@ -1975,7 +1975,7 @@ yyreduce:
     break;
 
   case 60: /* PrimIPCType: syNumber  */
-#line 488 "../../mig/parser.y"
+#line 488 "/app/mig/parser.y"
 {
     (yyval.symtype).innumber = (yyval.symtype).outnumber = (yyvsp[0].number);
     (yyval.symtype).instr = (yyval.symtype).outstr = strNULL;
@@ -1985,19 +1985,19 @@ yyreduce:
     break;
 
   case 61: /* PrimIPCType: sySymbolicType  */
-#line 494 "../../mig/parser.y"
+#line 494 "/app/mig/parser.y"
                                 { (yyval.symtype) = (yyvsp[0].symtype); }
 #line 1991 "y.tab.c"
     break;
 
   case 62: /* IPCType: PrimIPCType  */
-#line 498 "../../mig/parser.y"
+#line 498 "/app/mig/parser.y"
                                 { (yyval.symtype) = (yyvsp[0].symtype); }
 #line 1997 "y.tab.c"
     break;
 
   case 63: /* IPCType: PrimIPCType syBar PrimIPCType  */
-#line 500 "../../mig/parser.y"
+#line 500 "/app/mig/parser.y"
 {
     if ((yyvsp[-2].symtype).size != (yyvsp[0].symtype).size)
     {
@@ -2023,169 +2023,169 @@ yyreduce:
     break;
 
   case 64: /* PrevTypeSpec: syIdentifier  */
-#line 524 "../../mig/parser.y"
+#line 524 "/app/mig/parser.y"
                                 { (yyval.type) = itPrevDecl((yyvsp[0].identifier)); }
 #line 2029 "y.tab.c"
     break;
 
   case 65: /* VarArrayHead: syArray syLBrack syRBrack syOf  */
-#line 528 "../../mig/parser.y"
+#line 528 "/app/mig/parser.y"
                                 { (yyval.number) = 0; }
 #line 2035 "y.tab.c"
     break;
 
   case 66: /* VarArrayHead: syArray syLBrack syStar syRBrack syOf  */
-#line 530 "../../mig/parser.y"
+#line 530 "/app/mig/parser.y"
                                 { (yyval.number) = 0; }
 #line 2041 "y.tab.c"
     break;
 
   case 67: /* VarArrayHead: syArray syLBrack syStar syColon IntExp syRBrack syOf  */
-#line 533 "../../mig/parser.y"
+#line 533 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number); }
 #line 2047 "y.tab.c"
     break;
 
   case 68: /* ArrayHead: syArray syLBrack IntExp syRBrack syOf  */
-#line 537 "../../mig/parser.y"
+#line 537 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number); }
 #line 2053 "y.tab.c"
     break;
 
   case 69: /* StructHead: syStruct syLBrack IntExp syRBrack syOf  */
-#line 541 "../../mig/parser.y"
+#line 541 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number); }
 #line 2059 "y.tab.c"
     break;
 
   case 70: /* CStringSpec: syCString syLBrack IntExp syRBrack  */
-#line 545 "../../mig/parser.y"
+#line 545 "/app/mig/parser.y"
                                 { (yyval.type) = itCStringDecl((yyvsp[-1].number), FALSE); }
 #line 2065 "y.tab.c"
     break;
 
   case 71: /* CStringSpec: syCString syLBrack syStar syColon IntExp syRBrack  */
-#line 548 "../../mig/parser.y"
+#line 548 "/app/mig/parser.y"
                                 { (yyval.type) = itCStringDecl((yyvsp[-1].number), TRUE); }
 #line 2071 "y.tab.c"
     break;
 
   case 72: /* IntExp: IntExp syPlus IntExp  */
-#line 552 "../../mig/parser.y"
+#line 552 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number) + (yyvsp[0].number);	}
 #line 2077 "y.tab.c"
     break;
 
   case 73: /* IntExp: IntExp syMinus IntExp  */
-#line 554 "../../mig/parser.y"
+#line 554 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number) - (yyvsp[0].number);	}
 #line 2083 "y.tab.c"
     break;
 
   case 74: /* IntExp: IntExp syStar IntExp  */
-#line 556 "../../mig/parser.y"
+#line 556 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number) * (yyvsp[0].number);	}
 #line 2089 "y.tab.c"
     break;
 
   case 75: /* IntExp: IntExp syDiv IntExp  */
-#line 558 "../../mig/parser.y"
+#line 558 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-2].number) / (yyvsp[0].number);	}
 #line 2095 "y.tab.c"
     break;
 
   case 76: /* IntExp: syNumber  */
-#line 560 "../../mig/parser.y"
+#line 560 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[0].number);	}
 #line 2101 "y.tab.c"
     break;
 
   case 77: /* IntExp: syLParen IntExp syRParen  */
-#line 562 "../../mig/parser.y"
+#line 562 "/app/mig/parser.y"
                                 { (yyval.number) = (yyvsp[-1].number);	}
 #line 2107 "y.tab.c"
     break;
 
   case 78: /* RoutineDecl: Routine  */
-#line 566 "../../mig/parser.y"
+#line 566 "/app/mig/parser.y"
                                                         { (yyval.routine) = (yyvsp[0].routine); }
 #line 2113 "y.tab.c"
     break;
 
   case 79: /* RoutineDecl: SimpleRoutine  */
-#line 567 "../../mig/parser.y"
+#line 567 "/app/mig/parser.y"
                                                         { (yyval.routine) = (yyvsp[0].routine); }
 #line 2119 "y.tab.c"
     break;
 
   case 80: /* RoutineDecl: Procedure  */
-#line 568 "../../mig/parser.y"
+#line 568 "/app/mig/parser.y"
                                                         { (yyval.routine) = (yyvsp[0].routine); }
 #line 2125 "y.tab.c"
     break;
 
   case 81: /* RoutineDecl: SimpleProcedure  */
-#line 569 "../../mig/parser.y"
+#line 569 "/app/mig/parser.y"
                                                         { (yyval.routine) = (yyvsp[0].routine); }
 #line 2131 "y.tab.c"
     break;
 
   case 82: /* RoutineDecl: Function  */
-#line 570 "../../mig/parser.y"
+#line 570 "/app/mig/parser.y"
                                                         { (yyval.routine) = (yyvsp[0].routine); }
 #line 2137 "y.tab.c"
     break;
 
   case 83: /* Routine: syRoutine syIdentifier Arguments  */
-#line 574 "../../mig/parser.y"
+#line 574 "/app/mig/parser.y"
                                 { (yyval.routine) = rtMakeRoutine((yyvsp[-1].identifier), (yyvsp[0].argument)); }
 #line 2143 "y.tab.c"
     break;
 
   case 84: /* SimpleRoutine: sySimpleRoutine syIdentifier Arguments  */
-#line 578 "../../mig/parser.y"
+#line 578 "/app/mig/parser.y"
                                 { (yyval.routine) = rtMakeSimpleRoutine((yyvsp[-1].identifier), (yyvsp[0].argument)); }
 #line 2149 "y.tab.c"
     break;
 
   case 85: /* Procedure: syProcedure syIdentifier Arguments  */
-#line 582 "../../mig/parser.y"
+#line 582 "/app/mig/parser.y"
                                 { (yyval.routine) = rtMakeProcedure((yyvsp[-1].identifier), (yyvsp[0].argument)); }
 #line 2155 "y.tab.c"
     break;
 
   case 86: /* SimpleProcedure: sySimpleProcedure syIdentifier Arguments  */
-#line 586 "../../mig/parser.y"
+#line 586 "/app/mig/parser.y"
                                 { (yyval.routine) = rtMakeSimpleProcedure((yyvsp[-1].identifier), (yyvsp[0].argument)); }
 #line 2161 "y.tab.c"
     break;
 
   case 87: /* Function: syFunction syIdentifier Arguments ArgumentType  */
-#line 590 "../../mig/parser.y"
+#line 590 "/app/mig/parser.y"
                                 { (yyval.routine) = rtMakeFunction((yyvsp[-2].identifier), (yyvsp[-1].argument), (yyvsp[0].type)); }
 #line 2167 "y.tab.c"
     break;
 
   case 88: /* Arguments: syLParen syRParen  */
-#line 594 "../../mig/parser.y"
+#line 594 "/app/mig/parser.y"
                                 { (yyval.argument) = argNULL; }
 #line 2173 "y.tab.c"
     break;
 
   case 89: /* Arguments: syLParen ArgumentList syRParen  */
-#line 596 "../../mig/parser.y"
+#line 596 "/app/mig/parser.y"
                                 { (yyval.argument) = (yyvsp[-1].argument); }
 #line 2179 "y.tab.c"
     break;
 
   case 90: /* ArgumentList: Argument  */
-#line 601 "../../mig/parser.y"
+#line 601 "/app/mig/parser.y"
                                 { (yyval.argument) = (yyvsp[0].argument); }
 #line 2185 "y.tab.c"
     break;
 
   case 91: /* ArgumentList: Argument sySemi ArgumentList  */
-#line 603 "../../mig/parser.y"
+#line 603 "/app/mig/parser.y"
 {
     (yyval.argument) = (yyvsp[-2].argument);
     (yyval.argument)->argNext = (yyvsp[0].argument);
@@ -2194,7 +2194,7 @@ yyreduce:
     break;
 
   case 92: /* Argument: Direction syIdentifier ArgumentType IPCFlags  */
-#line 610 "../../mig/parser.y"
+#line 610 "/app/mig/parser.y"
 {
     (yyval.argument) = argAlloc();
     (yyval.argument)->argKind = (yyvsp[-3].direction);
@@ -2206,73 +2206,73 @@ yyreduce:
     break;
 
   case 93: /* Direction: %empty  */
-#line 619 "../../mig/parser.y"
+#line 619 "/app/mig/parser.y"
                                                 { (yyval.direction) = akNone; }
 #line 2212 "y.tab.c"
     break;
 
   case 94: /* Direction: syIn  */
-#line 620 "../../mig/parser.y"
+#line 620 "/app/mig/parser.y"
                                                 { (yyval.direction) = akIn; }
 #line 2218 "y.tab.c"
     break;
 
   case 95: /* Direction: syOut  */
-#line 621 "../../mig/parser.y"
+#line 621 "/app/mig/parser.y"
                                                 { (yyval.direction) = akOut; }
 #line 2224 "y.tab.c"
     break;
 
   case 96: /* Direction: syInOut  */
-#line 622 "../../mig/parser.y"
+#line 622 "/app/mig/parser.y"
                                                 { (yyval.direction) = akInOut; }
 #line 2230 "y.tab.c"
     break;
 
   case 97: /* Direction: syRequestPort  */
-#line 623 "../../mig/parser.y"
+#line 623 "/app/mig/parser.y"
                                                 { (yyval.direction) = akRequestPort; }
 #line 2236 "y.tab.c"
     break;
 
   case 98: /* Direction: syReplyPort  */
-#line 624 "../../mig/parser.y"
+#line 624 "/app/mig/parser.y"
                                                 { (yyval.direction) = akReplyPort; }
 #line 2242 "y.tab.c"
     break;
 
   case 99: /* Direction: sySReplyPort  */
-#line 625 "../../mig/parser.y"
+#line 625 "/app/mig/parser.y"
                                                 { (yyval.direction) = akSReplyPort; }
 #line 2248 "y.tab.c"
     break;
 
   case 100: /* Direction: syUReplyPort  */
-#line 626 "../../mig/parser.y"
+#line 626 "/app/mig/parser.y"
                                                 { (yyval.direction) = akUReplyPort; }
 #line 2254 "y.tab.c"
     break;
 
   case 101: /* Direction: syWaitTime  */
-#line 627 "../../mig/parser.y"
+#line 627 "/app/mig/parser.y"
                                                 { (yyval.direction) = akWaitTime; }
 #line 2260 "y.tab.c"
     break;
 
   case 102: /* Direction: syMsgOption  */
-#line 628 "../../mig/parser.y"
+#line 628 "/app/mig/parser.y"
                                                 { (yyval.direction) = akMsgOption; }
 #line 2266 "y.tab.c"
     break;
 
   case 103: /* Direction: syMsgSeqno  */
-#line 629 "../../mig/parser.y"
+#line 629 "/app/mig/parser.y"
                                                 { (yyval.direction) = akMsgSeqno; }
 #line 2272 "y.tab.c"
     break;
 
   case 104: /* ArgumentType: syColon syIdentifier  */
-#line 633 "../../mig/parser.y"
+#line 633 "/app/mig/parser.y"
 {
     (yyval.type) = itLookUp((yyvsp[0].identifier));
     if ((yyval.type) == itNULL)
@@ -2282,25 +2282,25 @@ yyreduce:
     break;
 
   case 105: /* ArgumentType: syColon NamedTypeSpec  */
-#line 639 "../../mig/parser.y"
+#line 639 "/app/mig/parser.y"
                                 { (yyval.type) = (yyvsp[0].type); }
 #line 2288 "y.tab.c"
     break;
 
   case 106: /* LookString: %empty  */
-#line 643 "../../mig/parser.y"
+#line 643 "/app/mig/parser.y"
                                 { LookString(); }
 #line 2294 "y.tab.c"
     break;
 
   case 107: /* LookFileName: %empty  */
-#line 647 "../../mig/parser.y"
+#line 647 "/app/mig/parser.y"
                                 { LookFileName(); }
 #line 2300 "y.tab.c"
     break;
 
   case 108: /* LookQString: %empty  */
-#line 651 "../../mig/parser.y"
+#line 651 "/app/mig/parser.y"
                                 { LookQString(); }
 #line 2306 "y.tab.c"
     break;
@@ -2499,7 +2499,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 654 "../../mig/parser.y"
+#line 654 "/app/mig/parser.y"
 
 
 static const char *

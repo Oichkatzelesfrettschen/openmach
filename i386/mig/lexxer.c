@@ -845,8 +845,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "../../mig/lexxer.l"
-#line 15 "../../mig/lexxer.l"
+#line 1 "/app/mig/lexxer.l"
+#line 15 "/app/mig/lexxer.l"
 /*
  * Mach Operating System
  * Copyright (c) 1991,1990 Carnegie Mellon University
@@ -1156,7 +1156,7 @@ YY_DECL
 		}
 
 	{
-#line 101 "../../mig/lexxer.l"
+#line 101 "/app/mig/lexxer.l"
 
 
 #line 1163 "lex.yy.c"
@@ -1219,481 +1219,481 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 103 "../../mig/lexxer.l"
+#line 103 "/app/mig/lexxer.l"
 RETURN(syRoutine);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 104 "../../mig/lexxer.l"
+#line 104 "/app/mig/lexxer.l"
 RETURN(syFunction);
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 105 "../../mig/lexxer.l"
+#line 105 "/app/mig/lexxer.l"
 RETURN(syProcedure);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 106 "../../mig/lexxer.l"
+#line 106 "/app/mig/lexxer.l"
 RETURN(sySimpleProcedure);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 107 "../../mig/lexxer.l"
+#line 107 "/app/mig/lexxer.l"
 RETURN(sySimpleRoutine);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 108 "../../mig/lexxer.l"
+#line 108 "/app/mig/lexxer.l"
 RETURN(sySubsystem);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 109 "../../mig/lexxer.l"
+#line 109 "/app/mig/lexxer.l"
 RETURN(syMsgOption);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 110 "../../mig/lexxer.l"
+#line 110 "/app/mig/lexxer.l"
 RETURN(syMsgSeqno);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 111 "../../mig/lexxer.l"
+#line 111 "/app/mig/lexxer.l"
 RETURN(syWaitTime);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 112 "../../mig/lexxer.l"
+#line 112 "/app/mig/lexxer.l"
 RETURN(syNoWaitTime);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 113 "../../mig/lexxer.l"
+#line 113 "/app/mig/lexxer.l"
 RETURN(syIn);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 114 "../../mig/lexxer.l"
+#line 114 "/app/mig/lexxer.l"
 RETURN(syOut);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 115 "../../mig/lexxer.l"
+#line 115 "/app/mig/lexxer.l"
 RETURN(syInOut);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 116 "../../mig/lexxer.l"
+#line 116 "/app/mig/lexxer.l"
 RETURN(syRequestPort);
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 117 "../../mig/lexxer.l"
+#line 117 "/app/mig/lexxer.l"
 RETURN(syReplyPort);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 118 "../../mig/lexxer.l"
+#line 118 "/app/mig/lexxer.l"
 RETURN(syUReplyPort);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 119 "../../mig/lexxer.l"
+#line 119 "/app/mig/lexxer.l"
 RETURN(sySReplyPort);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 120 "../../mig/lexxer.l"
+#line 120 "/app/mig/lexxer.l"
 RETURN(syArray);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 121 "../../mig/lexxer.l"
+#line 121 "/app/mig/lexxer.l"
 RETURN(syOf);
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 122 "../../mig/lexxer.l"
+#line 122 "/app/mig/lexxer.l"
 RETURN(syErrorProc);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 123 "../../mig/lexxer.l"
+#line 123 "/app/mig/lexxer.l"
 RETURN(syServerPrefix);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 124 "../../mig/lexxer.l"
+#line 124 "/app/mig/lexxer.l"
 RETURN(syUserPrefix);
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 125 "../../mig/lexxer.l"
+#line 125 "/app/mig/lexxer.l"
 RETURN(syServerDemux);
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 126 "../../mig/lexxer.l"
+#line 126 "/app/mig/lexxer.l"
 RETURN(syRCSId);
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 127 "../../mig/lexxer.l"
+#line 127 "/app/mig/lexxer.l"
 RETURN(syImport);
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 128 "../../mig/lexxer.l"
+#line 128 "/app/mig/lexxer.l"
 RETURN(syUImport);
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 129 "../../mig/lexxer.l"
+#line 129 "/app/mig/lexxer.l"
 RETURN(sySImport);
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 130 "../../mig/lexxer.l"
+#line 130 "/app/mig/lexxer.l"
 RETURN(syType);
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 131 "../../mig/lexxer.l"
+#line 131 "/app/mig/lexxer.l"
 RETURN(syKernelServer);
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 132 "../../mig/lexxer.l"
+#line 132 "/app/mig/lexxer.l"
 RETURN(syKernelUser);
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 133 "../../mig/lexxer.l"
+#line 133 "/app/mig/lexxer.l"
 RETURN(sySkip);
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 134 "../../mig/lexxer.l"
+#line 134 "/app/mig/lexxer.l"
 RETURN(syStruct);
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 135 "../../mig/lexxer.l"
+#line 135 "/app/mig/lexxer.l"
 RETURN(syInTran);
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 136 "../../mig/lexxer.l"
+#line 136 "/app/mig/lexxer.l"
 RETURN(syOutTran);
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 137 "../../mig/lexxer.l"
+#line 137 "/app/mig/lexxer.l"
 RETURN(syDestructor);
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 138 "../../mig/lexxer.l"
+#line 138 "/app/mig/lexxer.l"
 RETURN(syCType);
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 139 "../../mig/lexxer.l"
+#line 139 "/app/mig/lexxer.l"
 RETURN(syCUserType);
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 140 "../../mig/lexxer.l"
+#line 140 "/app/mig/lexxer.l"
 RETURN(syCServerType);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 141 "../../mig/lexxer.l"
+#line 141 "/app/mig/lexxer.l"
 RETURN(syCString);
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 143 "../../mig/lexxer.l"
+#line 143 "/app/mig/lexxer.l"
 FRETURN(flLong);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 144 "../../mig/lexxer.l"
+#line 144 "/app/mig/lexxer.l"
 FRETURN(flNotLong);
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 145 "../../mig/lexxer.l"
+#line 145 "/app/mig/lexxer.l"
 FRETURN(flDealloc);
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 146 "../../mig/lexxer.l"
+#line 146 "/app/mig/lexxer.l"
 FRETURN(flNotDealloc);
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 147 "../../mig/lexxer.l"
+#line 147 "/app/mig/lexxer.l"
 FRETURN(flServerCopy);
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 148 "../../mig/lexxer.l"
+#line 148 "/app/mig/lexxer.l"
 FRETURN(flCountInOut);
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 150 "../../mig/lexxer.l"
+#line 150 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_POLYMORPHIC,word_size_in_bits);
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 152 "../../mig/lexxer.l"
+#line 152 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_UNSTRUCTURED,0);
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 153 "../../mig/lexxer.l"
+#line 153 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_BIT,1);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 154 "../../mig/lexxer.l"
+#line 154 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_BOOLEAN,32);
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 155 "../../mig/lexxer.l"
+#line 155 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_INTEGER_16,16);
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 156 "../../mig/lexxer.l"
+#line 156 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_INTEGER_32,32);
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 157 "../../mig/lexxer.l"
+#line 157 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_INTEGER_64,64);
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 158 "../../mig/lexxer.l"
+#line 158 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_CHAR,8);
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 159 "../../mig/lexxer.l"
+#line 159 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_BYTE,8);
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 160 "../../mig/lexxer.l"
+#line 160 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_INTEGER_8,8);
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 161 "../../mig/lexxer.l"
+#line 161 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_REAL,0);
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 162 "../../mig/lexxer.l"
+#line 162 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_STRING,0);
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 163 "../../mig/lexxer.l"
+#line 163 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_STRING_C,0);
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 165 "../../mig/lexxer.l"
+#line 165 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_MOVE_RECEIVE,MACH_MSG_TYPE_PORT_RECEIVE,word_size_in_bits);
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 166 "../../mig/lexxer.l"
+#line 166 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_COPY_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 167 "../../mig/lexxer.l"
+#line 167 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_MAKE_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 168 "../../mig/lexxer.l"
+#line 168 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_MOVE_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 169 "../../mig/lexxer.l"
+#line 169 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_MAKE_SEND_ONCE,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 170 "../../mig/lexxer.l"
+#line 170 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_MOVE_SEND_ONCE,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 172 "../../mig/lexxer.l"
+#line 172 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_PORT_NAME,word_size_in_bits);
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 173 "../../mig/lexxer.l"
+#line 173 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_RECEIVE,word_size_in_bits);
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 174 "../../mig/lexxer.l"
+#line 174 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 175 "../../mig/lexxer.l"
+#line 175 "/app/mig/lexxer.l"
 TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 176 "../../mig/lexxer.l"
+#line 176 "/app/mig/lexxer.l"
 TRETURN(MACH_MSG_TYPE_POLYMORPHIC,0);
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 178 "../../mig/lexxer.l"
+#line 178 "/app/mig/lexxer.l"
 RETURN(syColon);
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 179 "../../mig/lexxer.l"
+#line 179 "/app/mig/lexxer.l"
 RETURN(sySemi);
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 180 "../../mig/lexxer.l"
+#line 180 "/app/mig/lexxer.l"
 RETURN(syComma);
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 181 "../../mig/lexxer.l"
+#line 181 "/app/mig/lexxer.l"
 RETURN(syPlus);
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 182 "../../mig/lexxer.l"
+#line 182 "/app/mig/lexxer.l"
 RETURN(syMinus);
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 183 "../../mig/lexxer.l"
+#line 183 "/app/mig/lexxer.l"
 RETURN(syStar);
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 184 "../../mig/lexxer.l"
+#line 184 "/app/mig/lexxer.l"
 RETURN(syDiv);
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 185 "../../mig/lexxer.l"
+#line 185 "/app/mig/lexxer.l"
 RETURN(syLParen);
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 186 "../../mig/lexxer.l"
+#line 186 "/app/mig/lexxer.l"
 RETURN(syRParen);
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 187 "../../mig/lexxer.l"
+#line 187 "/app/mig/lexxer.l"
 RETURN(syEqual);
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 188 "../../mig/lexxer.l"
+#line 188 "/app/mig/lexxer.l"
 RETURN(syCaret);
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 189 "../../mig/lexxer.l"
+#line 189 "/app/mig/lexxer.l"
 RETURN(syTilde);
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 190 "../../mig/lexxer.l"
+#line 190 "/app/mig/lexxer.l"
 RETURN(syLAngle);
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 191 "../../mig/lexxer.l"
+#line 191 "/app/mig/lexxer.l"
 RETURN(syRAngle);
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 192 "../../mig/lexxer.l"
+#line 192 "/app/mig/lexxer.l"
 RETURN(syLBrack);
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 193 "../../mig/lexxer.l"
+#line 193 "/app/mig/lexxer.l"
 RETURN(syRBrack);
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 194 "../../mig/lexxer.l"
+#line 194 "/app/mig/lexxer.l"
 RETURN(syBar);
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 196 "../../mig/lexxer.l"
+#line 196 "/app/mig/lexxer.l"
 { yylval.identifier = strmake(yytext);
 			  RETURN(syIdentifier); }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 198 "../../mig/lexxer.l"
+#line 198 "/app/mig/lexxer.l"
 { yylval.number = atoi(yytext); RETURN(syNumber); }
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 200 "../../mig/lexxer.l"
+#line 200 "/app/mig/lexxer.l"
 { yylval.string = strmake(yytext);
 			  BEGIN Normal; RETURN(syString); }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 202 "../../mig/lexxer.l"
+#line 202 "/app/mig/lexxer.l"
 { yylval.string = strmake(yytext);
 			  BEGIN Normal; RETURN(syFileName); }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 204 "../../mig/lexxer.l"
+#line 204 "/app/mig/lexxer.l"
 { yylval.string = strmake(yytext);
 			  BEGIN Normal; RETURN(syQString); }
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 207 "../../mig/lexxer.l"
+#line 207 "/app/mig/lexxer.l"
 { doSharp(yytext+1);
 					  SAVE_BEGIN;
 					  BEGIN SkipToEOL; }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 210 "../../mig/lexxer.l"
+#line 210 "/app/mig/lexxer.l"
 { doSharp(yytext+1);
 					  SAVE_BEGIN;
 					  BEGIN SkipToEOL; }
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 213 "../../mig/lexxer.l"
+#line 213 "/app/mig/lexxer.l"
 { yyerror("illegal # directive");
 					  SAVE_BEGIN;
 					  BEGIN SkipToEOL; }
@@ -1701,33 +1701,33 @@ YY_RULE_SETUP
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 217 "../../mig/lexxer.l"
+#line 217 "/app/mig/lexxer.l"
 RSTR_BEGIN;
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 218 "../../mig/lexxer.l"
+#line 218 "/app/mig/lexxer.l"
 ;
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 220 "../../mig/lexxer.l"
+#line 220 "/app/mig/lexxer.l"
 ;
 	YY_BREAK
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 221 "../../mig/lexxer.l"
+#line 221 "/app/mig/lexxer.l"
 { lineno++; }
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 222 "../../mig/lexxer.l"
+#line 222 "/app/mig/lexxer.l"
 { BEGIN Normal; RETURN(syError); }
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 224 "../../mig/lexxer.l"
+#line 224 "/app/mig/lexxer.l"
 ECHO;
 	YY_BREAK
 #line 1734 "lex.yy.c"
@@ -2743,7 +2743,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 224 "../../mig/lexxer.l"
+#line 224 "/app/mig/lexxer.l"
 
 
 extern void
