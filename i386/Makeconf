@@ -27,21 +27,21 @@
 
 SHELL		= /bin/sh
 
-export CC	= gcc
-export LD	= ld
-export STRIP	= strip
-export AR	= ar
-export RANLIB	= ranlib
+export CC	= -gcc
+export LD	= -ld
+export STRIP	= -strip
+export AR	= -ar
+export RANLIB	= -ranlib
 
 HOST_CC		= gcc
 
 LEX		= flex
 LEXLIB		= -lfl
-YACC		= bison -y
+YACC		= yacc
 AWK		= mawk
 INSTALL		= /usr/bin/install -c
 
-DEFINES		=  -DHAVE_VPRINTF=1 -DHAVE_STRERROR=1
+DEFINES		= -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_VPRINTF=1 -DHAVE_STRERROR=1
 
 # These get set to "yes" if the user specified
 # the corresponding --enable-xxx options to configure.

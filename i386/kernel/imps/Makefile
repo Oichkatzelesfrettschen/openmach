@@ -1,4 +1,3 @@
-# Generated automatically from Makefile.in by configure.
 #
 # Copyright (c) 1994 The University of Utah and
 # the Computer Systems Laboratory (CSL).  All rights reserved.
@@ -24,9 +23,9 @@
 # that supports Intel MP specification-compliant machines.
 #### Start of configuration section ####
 
-GSRCDIR	= ../../..
+GSRCDIR	= @top_gsrcdir@
 MSRCDIR = ../..
-OBJDIR	= ../..
+OBJDIR	= @top_objdir@
 
 prefix = /usr/local
 exec_prefix = ${prefix}
