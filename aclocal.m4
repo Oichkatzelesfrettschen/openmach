@@ -38,7 +38,9 @@ AC_ARG_WITH([$1],[$6],[
 		AC_MSG_ERROR([$3 sources not found in $$2, and no --with-$1 option specified])
 	fi
 ])
-AC_SUBST_SRCPATH($2)
+# Make $2 an absolute path before substituting
+$2=`cd "$$2" && pwd`
+AC_SUBST($2)
 AC_MSG_RESULT($$2)
 ])dnl
 dnl

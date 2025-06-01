@@ -173,6 +173,7 @@ WriteEpilog(FILE *file, const statement_t *stats)
     fprintf(file, "\tOutP->Head.msgh_seqno = 0;\n");
     fprintf(file, "\tOutP->Head.msgh_id = InP->msgh_id + 100;\n");
     fprintf(file, "\n");
+fprintf(stderr, "DEBUG MIG: WriteEpilog: About to call WritePackMsgType\n"); fflush(stderr); fprintf(stderr, "DEBUG MIG: WriteEpilog: left_arg_ptr = [%p] pointing to: \"%s\"\n", (void*)"OutP->RetCodeType", "OutP->RetCodeType"); fflush(stderr); fprintf(stderr, "DEBUG MIG: WriteEpilog: right_arg_ptr = [%p] pointing to: \"%s\"\n", (void*)"RetCodeType", "RetCodeType"); fflush(stderr);
     WritePackMsgType(file, itRetCodeType,
 		     itRetCodeType->itDeallocate, itRetCodeType->itLongForm,
 		     !IsKernelServer, "OutP->RetCodeType", "RetCodeType");
@@ -1229,6 +1230,7 @@ WriteFieldDecl(FILE *file, const argument_t *arg)
 static void
 WriteRoutine(FILE *file, register const routine_t *rt)
 {
+fprintf(stderr, "DEBUG MIG: WriteRoutine: Processing routine: %s, rtRetCode->argName: %s\n", rt->rtName, (rt->rtRetCode && rt->rtRetCode->argName) ? rt->rtRetCode->argName : "NULL"); fflush(stderr);
     fprintf(file, "\n");
 
     fprintf(file, "/* %s %s */\n", rtRoutineKindToStr(rt->rtKind), rt->rtName);

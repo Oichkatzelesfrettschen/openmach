@@ -1,3 +1,4 @@
+#include <string.h>
 /*
  * Mach Operating System
  * Copyright (c) 1993,1991,1990 Carnegie Mellon University
@@ -178,7 +179,7 @@ static void parseArgs(int argc, char **argv) {
       fatal("bad argument: '%s'", *argv);
 }
 
-void main(int argc, char **argv) {
+int main(int argc, char **argv) {
   FILE *uheader, *server, *user;
   FILE *iheader, *sheader;
 
