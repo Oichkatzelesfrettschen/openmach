@@ -65,6 +65,13 @@ do
     echo "DEBUG MIG.SH: Processing $file" >&2
     echo "DEBUG MIG.SH: Original cppflags for mig.sh: $cppflags" >&2
     echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc, no -DMACH): $actual_cppflags_for_main_pass" >&2
+    # Filter -MD for the main preprocessing pass, also filter -nostdinc for testing
+    actual_cppflags_no_md="`echo "$cppflags" | sed 's/-MD//g'`"
+    actual_cppflags_for_main_pass="`echo "$actual_cppflags_no_md" | sed 's/-nostdinc//g'`" # TEST: remove nostdinc
+
+    echo "DEBUG MIG.SH: Processing $file" >&2
+    echo "DEBUG MIG.SH: Original cppflags for mig.sh: $cppflags" >&2
+    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc): $actual_cppflags_for_main_pass" >&2
     echo "DEBUG MIG.SH: Migcom flags: $migflags" >&2
     echo "DEBUG MIG.SH: Preprocessor command to be run: $cpp -E $actual_cppflags_for_main_pass \"$file\"" >&2
 
@@ -102,6 +109,21 @@ do
     else
         "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | "$migcom" $migflags
         exit_status=$? # Here $? is a mix of cpp | migcom; if migcom fails, it should be non-zero.
+        exit_status=${PIPESTATUS[2]}
+
+        if [ -f /tmp/bootstrap_pres_preprocessed.txt ]; then
+            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was created." >&2
+            if [ -s /tmp/bootstrap_pres_preprocessed.txt ]; then
+                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt is NOT empty." >&2
+            else
+                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt IS EMPTY." >&2
+            fi
+        else
+            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was NOT created." >&2
+        fi
+    else
+        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | "$migcom" $migflags
+        exit_status=${PIPESTATUS[1]}
     fi
 
     if [ -s /tmp/mig_cpp_errors.log ]; then
@@ -114,6 +136,9 @@ do
     fi
 
     # Dependency file generation
+        echo "DEBUG MIG.SH: migcom failed for $file with status $exit_status." >&2
+    fi
+
     if [ $sawMD ]; then
         base="`basename "$file"|sed 's%[.][^.]*$%%'`"
         deps=
@@ -136,6 +161,8 @@ do
 
         echo "DEBUG MIG.SH: Generating dependency file ${base}.d for $file (using original cppflags: $cppflags)" >&2
         rm -f /tmp/mig_dep_errors.log
+
+        # Use original cppflags for .d file generation, which includes -MD
         "$cpp" -E $cppflags "$file" > /dev/null 2>/tmp/mig_dep_errors.log
         if [ -s /tmp/mig_dep_errors.log ]; then
             echo "DEBUG MIG.SH: Errors during .d generation for $file:" >&2
