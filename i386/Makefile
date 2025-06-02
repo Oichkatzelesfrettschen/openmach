@@ -19,9 +19,9 @@
 #
 #### Start of configuration section ####
 
-GSRCDIR	= @top_gsrcdir@
+GSRCDIR	= /app
 MSRCDIR = .
-OBJDIR	= @top_objdir@
+OBJDIR	= .
 
 prefix = /usr/local
 exec_prefix = ${prefix}
