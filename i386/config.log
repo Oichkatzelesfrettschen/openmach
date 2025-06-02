@@ -148,6 +148,7 @@ configure:3748: $? = 0
 configure:3761: result: none needed
 configure:3776: checking for library containing yywrap
 configure:3806: gcc -o conftest -g -O2   conftest.c  >&5
+/usr/bin/ld: /tmp/ccf66CAn.o: in function `main':
 /usr/bin/ld: /tmp/ccpW8alP.o: in function `main':
 /app/i386/conftest.c:17:(.text.startup+0xb): undefined reference to `yywrap'
 collect2: error: ld returned 1 exit status

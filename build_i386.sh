@@ -6,7 +6,7 @@ set -x
 cd i386
 
 # Run the configure script
-if ./configure; then
+if ./configure --with-mach4=../; then
   echo "Configure script completed successfully."
 else
   echo "Configure script failed. Exiting."
