@@ -114,23 +114,23 @@ mig_external kern_return_t memory_object_create
 		/* msgt_unused = */		0
 	};
 
-	InP->new_memory_objectType = N\xc1\xb8"V;
+	InP->new_memory_objectType = 0\xde![U;
 
 	InP->new_memory_object = new_memory_objectnew_memory_objectType;
 
-	InP->new_object_sizeType = N\xc1\xb8"V;
+	InP->new_object_sizeType = 0\xde![U;
 
 	InP->new_object_size = new_object_sizenew_object_sizeType;
 
-	InP->new_control_portType = N\xc1\xb8"V;
+	InP->new_control_portType = 0\xde![U;
 
 	InP->new_control_port = new_control_portnew_control_portType;
 
-	InP->new_nameType = N\xc1\xb8"V;
+	InP->new_nameType = 0\xde![U;
 
 	InP->new_name = new_namenew_nameType;
 
-	InP->new_page_sizeType = N\xc1\xb8"V;
+	InP->new_page_sizeType = 0\xde![U;
 
 	InP->new_page_size = new_page_sizenew_page_sizeType;
 
@@ -207,15 +207,15 @@ mig_external kern_return_t memory_object_data_initialize
 		/* msgtl_number = */	0,
 	};
 
-	InP->memory_control_portType = N\xc1\xb8"V;
+	InP->memory_control_portType = 0\xde![U;
 
 	InP->memory_control_port = memory_control_portmemory_control_portType;
 
-	InP->offsetType = N\xc1\xb8"V;
+	InP->offsetType = 0\xde![U;
 
 	InP->offset = offsetoffsetType;
 
-	InP->dataType = N\xc1\xb8"V;
+	InP->dataType = 0\xde![U;
 
 	InP->data = datadataType;
 

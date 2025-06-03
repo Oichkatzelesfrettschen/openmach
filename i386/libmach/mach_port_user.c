@@ -133,9 +133,9 @@ mig_external kern_return_t mach_port_names
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*names = OutP->`\xb2/V;
+	*names = OutP->\x909\xb9U;
 
-	*namesCnt = OutP->`\xb2/V;
+	*namesCnt = OutP->\x909\xb9U;
 
 #if	TypeCheck
 	if ((OutP->typesType.msgtl_header.msgt_inline != FALSE) ||
@@ -145,9 +145,9 @@ mig_external kern_return_t mach_port_names
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*types = OutP->`\xb2/V;
+	*types = OutP->\x909\xb9U;
 
-	*typesCnt = OutP->`\xb2/V;
+	*typesCnt = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -217,7 +217,7 @@ mig_external kern_return_t mach_port_type
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -268,7 +268,7 @@ mig_external kern_return_t mach_port_type
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*ptype = OutP->`\xb2/V;
+	*ptype = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -335,11 +335,11 @@ mig_external kern_return_t mach_port_rename
 		/* msgt_unused = */		0
 	};
 
-	InP->old_nameType = `\xb2/V;
+	InP->old_nameType = \x909\xb9U;
 
 	InP->old_name = old_nameold_nameType;
 
-	InP->new_nameType = `\xb2/V;
+	InP->new_nameType = \x909\xb9U;
 
 	InP->new_name = new_namenew_nameType;
 
@@ -443,11 +443,11 @@ mig_external kern_return_t mig_mach_port_allocate_name
 		/* msgt_unused = */		0
 	};
 
-	InP->rightType = `\xb2/V;
+	InP->rightType = \x909\xb9U;
 
 	InP->right = rightrightType;
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -554,7 +554,7 @@ mig_external kern_return_t mig_mach_port_allocate
 		/* msgt_unused = */		0
 	};
 
-	InP->rightType = `\xb2/V;
+	InP->rightType = \x909\xb9U;
 
 	InP->right = rightrightType;
 
@@ -605,7 +605,7 @@ mig_external kern_return_t mig_mach_port_allocate
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*name = OutP->`\xb2/V;
+	*name = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -659,7 +659,7 @@ mig_external kern_return_t mach_port_destroy
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -750,7 +750,7 @@ mig_external kern_return_t mig_mach_port_deallocate
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -870,11 +870,11 @@ mig_external kern_return_t mach_port_get_refs
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->rightType = `\xb2/V;
+	InP->rightType = \x909\xb9U;
 
 	InP->right = rightrightType;
 
@@ -925,7 +925,7 @@ mig_external kern_return_t mach_port_get_refs
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*refs = OutP->`\xb2/V;
+	*refs = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -1005,15 +1005,15 @@ mig_external kern_return_t mach_port_mod_refs
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->rightType = `\xb2/V;
+	InP->rightType = \x909\xb9U;
 
 	InP->right = rightrightType;
 
-	InP->deltaType = `\xb2/V;
+	InP->deltaType = \x909\xb9U;
 
 	InP->delta = deltadeltaType;
 
@@ -1120,7 +1120,7 @@ mig_external kern_return_t old_mach_port_get_receive_status
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -1171,7 +1171,7 @@ mig_external kern_return_t old_mach_port_get_receive_status
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*status = OutP->`\xb2/V;
+	*status = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -1238,11 +1238,11 @@ mig_external kern_return_t mach_port_set_qlimit
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->qlimitType = `\xb2/V;
+	InP->qlimitType = \x909\xb9U;
 
 	InP->qlimit = qlimitqlimitType;
 
@@ -1346,11 +1346,11 @@ mig_external kern_return_t mach_port_set_mscount
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->mscountType = `\xb2/V;
+	InP->mscountType = \x909\xb9U;
 
 	InP->mscount = mscountmscountType;
 
@@ -1451,7 +1451,7 @@ mig_external kern_return_t mach_port_get_set_status
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -1506,9 +1506,9 @@ mig_external kern_return_t mach_port_get_set_status
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*members = OutP->`\xb2/V;
+	*members = OutP->\x909\xb9U;
 
-	*membersCnt = OutP->`\xb2/V;
+	*membersCnt = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -1575,11 +1575,11 @@ mig_external kern_return_t mach_port_move_member
 		/* msgt_unused = */		0
 	};
 
-	InP->memberType = `\xb2/V;
+	InP->memberType = \x909\xb9U;
 
 	InP->member = membermemberType;
 
-	InP->afterType = `\xb2/V;
+	InP->afterType = \x909\xb9U;
 
 	InP->after = afterafterType;
 
@@ -1727,19 +1727,19 @@ mig_external kern_return_t mach_port_request_notification
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->idType = `\xb2/V;
+	InP->idType = \x909\xb9U;
 
 	InP->id = ididType;
 
-	InP->syncType = `\xb2/V;
+	InP->syncType = \x909\xb9U;
 
 	InP->sync = syncsyncType;
 
-	InP->notifyType = `\xb2/V;
+	InP->notifyType = \x909\xb9U;
 
 	InP->notify = notifynotifyType;
 
@@ -1798,7 +1798,7 @@ mig_external kern_return_t mach_port_request_notification
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*previous = OutP->`\xb2/V;
+	*previous = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -1867,11 +1867,11 @@ mig_external kern_return_t mig_mach_port_insert_right
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->polyType = `\xb2/V;
+	InP->polyType = \x909\xb9U;
 
 	InP->poly = polypolyType;
 
@@ -1992,11 +1992,11 @@ mig_external kern_return_t mach_port_extract_right
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->msgt_nameType = `\xb2/V;
+	InP->msgt_nameType = \x909\xb9U;
 
 	InP->msgt_name = msgt_namemsgt_nameType;
 
@@ -2052,9 +2052,9 @@ mig_external kern_return_t mach_port_extract_right
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*poly = OutP->`\xb2/V;
+	*poly = OutP->\x909\xb9U;
 
-	*polyPoly = OutP->`\xb2/V;
+	*polyPoly = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -2124,7 +2124,7 @@ mig_external kern_return_t mach_port_get_receive_status
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
@@ -2175,7 +2175,7 @@ mig_external kern_return_t mach_port_get_receive_status
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*status = OutP->`\xb2/V;
+	*status = OutP->\x909\xb9U;
 
 	return KERN_SUCCESS;
 }
@@ -2242,11 +2242,11 @@ mig_external kern_return_t mach_port_set_seqno
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType = `\xb2/V;
+	InP->nameType = \x909\xb9U;
 
 	InP->name = namenameType;
 
-	InP->seqnoType = `\xb2/V;
+	InP->seqnoType = \x909\xb9U;
 
 	InP->seqno = seqnoseqnoType;
 

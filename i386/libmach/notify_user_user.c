@@ -61,7 +61,7 @@ mig_external kern_return_t mach_notify_port_deleted
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType =  \xaa\xcb\xe6rU;
+	InP->nameType = @\x8a9`7V;
 
 	InP->name = namenameType;
 
@@ -106,7 +106,7 @@ mig_external kern_return_t mach_notify_msg_accepted
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType =  \xaa\xcb\xe6rU;
+	InP->nameType = @\x8a9`7V;
 
 	InP->name = namenameType;
 
@@ -153,7 +153,7 @@ mig_external kern_return_t mach_notify_port_destroyed
 		/* msgt_unused = */		0
 	};
 
-	InP->rightsType =  \xaa\xcb\xe6rU;
+	InP->rightsType = @\x8a9`7V;
 
 	InP->rights = rightsrightsType;
 
@@ -205,7 +205,7 @@ mig_external kern_return_t mach_notify_no_senders
 		/* msgt_unused = */		0
 	};
 
-	InP->mscountType =  \xaa\xcb\xe6rU;
+	InP->mscountType = @\x8a9`7V;
 
 	InP->mscount = mscountmscountType;
 
@@ -278,7 +278,7 @@ mig_external kern_return_t mach_notify_dead_name
 		/* msgt_unused = */		0
 	};
 
-	InP->nameType =  \xaa\xcb\xe6rU;
+	InP->nameType = @\x8a9`7V;
 
 	InP->name = namenameType;
 

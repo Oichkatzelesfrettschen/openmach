@@ -77,11 +77,11 @@ mig_external kern_return_t ds_device_open_reply
 		/* msgt_unused = */		0
 	};
 
-	InP->return_codeType = \xa0\x9d\xbd\xd0U;
+	InP->return_codeType = \xc0\xc0;
 
 	InP->return_code = return_codereturn_codeType;
 
-	InP->device_portType = \xa0\x9d\xbd\xd0U;
+	InP->device_portType = \xc0\xc0;
 
 	InP->device_port = device_portdevice_portType;
 
@@ -140,11 +140,11 @@ mig_external kern_return_t ds_device_write_reply
 		/* msgt_unused = */		0
 	};
 
-	InP->return_codeType = \xa0\x9d\xbd\xd0U;
+	InP->return_codeType = \xc0\xc0;
 
 	InP->return_code = return_codereturn_codeType;
 
-	InP->bytes_writtenType = \xa0\x9d\xbd\xd0U;
+	InP->bytes_writtenType = \xc0\xc0;
 
 	InP->bytes_written = bytes_writtenbytes_writtenType;
 
@@ -203,11 +203,11 @@ mig_external kern_return_t ds_device_write_reply_inband
 		/* msgt_unused = */		0
 	};
 
-	InP->return_codeType = \xa0\x9d\xbd\xd0U;
+	InP->return_codeType = \xc0\xc0;
 
 	InP->return_code = return_codereturn_codeType;
 
-	InP->bytes_writtenType = \xa0\x9d\xbd\xd0U;
+	InP->bytes_writtenType = \xc0\xc0;
 
 	InP->bytes_written = bytes_writtenbytes_writtenType;
 
@@ -272,15 +272,15 @@ mig_external kern_return_t ds_device_read_reply
 		/* msgtl_number = */	0,
 	};
 
-	InP->return_codeType = \xa0\x9d\xbd\xd0U;
+	InP->return_codeType = \xc0\xc0;
 
 	InP->return_code = return_codereturn_codeType;
 
-	InP->dataType = \xa0\x9d\xbd\xd0U;
+	InP->dataType = \xc0\xc0;
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(reply_portPoly, 0);
@@ -339,11 +339,11 @@ mig_external kern_return_t ds_device_read_reply_inband
 		/* msgt_unused = */		0
 	};
 
-	InP->return_codeType = \xa0\x9d\xbd\xd0U;
+	InP->return_codeType = \xc0\xc0;
 
 	InP->return_code = return_codereturn_codeType;
 
-	InP->dataType = \xa0\x9d\xbd\xd0U;
+	InP->dataType = \xc0\xc0;
 
 	if (dataCnt > 128) {
 		return MIG_ARRAY_TOO_LARGE;
@@ -352,7 +352,7 @@ mig_external kern_return_t ds_device_read_reply_inband
 		memcpy(InP->data, data, dataCnt);
 	}
 
-	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 36 + ((dataCnt + 3) & ~3);
 	InP->Head.msgh_bits =

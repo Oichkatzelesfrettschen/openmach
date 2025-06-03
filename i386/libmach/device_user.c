@@ -120,11 +120,11 @@ mig_external kern_return_t device_open
 		/* msgt_unused = */		0
 	};
 
-	InP->modeType =  \xe88\V;
+	InP->modeType = Px\xd3<V;
 
 	InP->mode = modemodeType;
 
-	InP->nameType =  \xe88\V;
+	InP->nameType = Px\xd3<V;
 
 	(void) mig_strncpy(InP->name, namenameType, 128);
 
@@ -176,7 +176,7 @@ mig_external kern_return_t device_open
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*device = OutP-> \xe88\V;
+	*device = OutP->Px\xd3<V;
 
 	return KERN_SUCCESS;
 }
@@ -352,19 +352,19 @@ mig_external kern_return_t device_write
 		/* msgt_unused = */		0
 	};
 
-	InP->modeType =  \xe88\V;
+	InP->modeType = Px\xd3<V;
 
 	InP->mode = modemodeType;
 
-	InP->recnumType =  \xe88\V;
+	InP->recnumType = Px\xd3<V;
 
 	InP->recnum = recnumrecnumType;
 
-	InP->dataType =  \xe88\V;
+	InP->dataType = Px\xd3<V;
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, 21);
@@ -413,7 +413,7 @@ mig_external kern_return_t device_write
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*bytes_written = OutP-> \xe88\V;
+	*bytes_written = OutP->Px\xd3<V;
 
 	return KERN_SUCCESS;
 }
@@ -508,15 +508,15 @@ mig_external kern_return_t device_write_inband
 		/* msgt_unused = */		0
 	};
 
-	InP->modeType =  \xe88\V;
+	InP->modeType = Px\xd3<V;
 
 	InP->mode = modemodeType;
 
-	InP->recnumType =  \xe88\V;
+	InP->recnumType = Px\xd3<V;
 
 	InP->recnum = recnumrecnumType;
 
-	InP->dataType =  \xe88\V;
+	InP->dataType = Px\xd3<V;
 
 	if (dataCnt > 128) {
 		return MIG_ARRAY_TOO_LARGE;
@@ -525,7 +525,7 @@ mig_external kern_return_t device_write_inband
 		memcpy(InP->data, data, dataCnt);
 	}
 
-	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + ((dataCnt + 3) & ~3);
 	InP->Head.msgh_bits =
@@ -980,7 +980,7 @@ mig_external kern_return_t xxx_device_set_status
 		memcpy(InP->status, status, 4 * statusCnt);
 	}
 
-	InP->statusType.msgtl_number = statusCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->statusType.msgtl_number = statusCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + (4 * statusCnt);
 	InP->Head.msgh_bits =
@@ -1256,7 +1256,7 @@ mig_external kern_return_t xxx_device_set_filter
 		memcpy(InP->filter, filter, 2 * filterCnt);
 	}
 
-	InP->filterType.msgtl_number = filterCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->filterType.msgtl_number = filterCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 52 + ((2 * filterCnt + 3) & ~3);
 	InP->Head.msgh_bits = msgh_simple ?
@@ -1552,7 +1552,7 @@ mig_external kern_return_t device_set_status
 		memcpy(InP->status, status, 4 * statusCnt);
 	}
 
-	InP->statusType.msgt_number = statusCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->statusType.msgt_number = statusCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 36 + (4 * statusCnt);
 	InP->Head.msgh_bits =
@@ -1842,7 +1842,7 @@ mig_external kern_return_t device_set_filter
 		memcpy(InP->filter, filter, 2 * filterCnt);
 	}
 
-	InP->filterType.msgt_number = filterCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->filterType.msgt_number = filterCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + ((2 * filterCnt + 3) & ~3);
 	InP->Head.msgh_bits = msgh_simple ?

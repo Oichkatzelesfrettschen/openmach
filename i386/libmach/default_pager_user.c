@@ -101,7 +101,7 @@ mig_external kern_return_t default_pager_object_create
 		/* msgt_unused = */		0
 	};
 
-	InP->object_sizeType = \xb0yV;
+	InP->object_sizeType = \xd0\xc8\xfb\xa9\xfcU;
 
 	InP->object_size = object_sizeobject_sizeType;
 
@@ -153,7 +153,7 @@ mig_external kern_return_t default_pager_object_create
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*memory_object = OutP->\xb0yV;
+	*memory_object = OutP->\xd0\xc8\xfb\xa9\xfcU;
 
 	return KERN_SUCCESS;
 }
@@ -257,7 +257,7 @@ mig_external kern_return_t default_pager_info
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*info = OutP->\xb0yV;
+	*info = OutP->\xd0\xc8\xfb\xa9\xfcU;
 
 	return KERN_SUCCESS;
 }
@@ -337,14 +337,14 @@ mig_external kern_return_t default_pager_objects
 		/* msgt_unused = */		0
 	};
 
-	InP->objectsCntType = \xb0yV;
+	InP->objectsCntType = \xd0\xc8\xfb\xa9\xfcU;
 
 	if (*objectsCnt < 256)
 		InP->objectsCnt = *objectsCnt;
 	else
 		InP->objectsCnt = 256;
 
-	InP->portsCntType = \xb0yV;
+	InP->portsCntType = \xd0\xc8\xfb\xa9\xfcU;
 
 	if (*portsCnt < 512)
 		InP->portsCnt = *portsCnt;
@@ -419,7 +419,7 @@ mig_external kern_return_t default_pager_objects
 	    memcpy(*objects, OutP->objects, 4 * OutP->objectsType.msgtl_number);
 	}
 
-	*objectsCnt = OutP->objects / 2031738400;
+	*objectsCnt = OutP->objects / -1443127776;
 
 	OutP = (Reply *) ((char *) OutP + msgh_size_delta - 2048);
 

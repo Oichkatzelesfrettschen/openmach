@@ -1,0 +1,1 @@
+Total C/H and .S files processed in ./kernel/kern/: 0

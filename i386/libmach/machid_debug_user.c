@@ -125,15 +125,15 @@ mig_external kern_return_t machid_port_get_srights
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = `\x8f\xe9\xb4U;
+	InP->authType = \x90\xcd\x85*V;
 
 	InP->auth = authauthType;
 
-	InP->taskType = `\x8f\xe9\xb4U;
+	InP->taskType = \x90\xcd\x85*V;
 
 	InP->task = tasktaskType;
 
-	InP->nameType = `\x8f\xe9\xb4U;
+	InP->nameType = \x90\xcd\x85*V;
 
 	InP->name = namenameType;
 
@@ -184,7 +184,7 @@ mig_external kern_return_t machid_port_get_srights
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*srights = OutP->`\x8f\xe9\xb4U;
+	*srights = OutP->\x90\xcd\x85*V;
 
 	return KERN_SUCCESS;
 }
@@ -303,22 +303,22 @@ mig_external kern_return_t machid_port_space_info
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = `\x8f\xe9\xb4U;
+	InP->authType = \x90\xcd\x85*V;
 
 	InP->auth = authauthType;
 
-	InP->taskType = `\x8f\xe9\xb4U;
+	InP->taskType = \x90\xcd\x85*V;
 
 	InP->task = tasktaskType;
 
-	InP->table_infoCntType = `\x8f\xe9\xb4U;
+	InP->table_infoCntType = \x90\xcd\x85*V;
 
 	if (*table_infoCnt < 56)
 		InP->table_infoCnt = *table_infoCnt;
 	else
 		InP->table_infoCnt = 56;
 
-	InP->tree_infoCntType = `\x8f\xe9\xb4U;
+	InP->tree_infoCntType = \x90\xcd\x85*V;
 
 	if (*tree_infoCnt < 46)
 		InP->tree_infoCnt = *tree_infoCnt;
@@ -373,7 +373,7 @@ mig_external kern_return_t machid_port_space_info
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*info = OutP->`\x8f\xe9\xb4U;
+	*info = OutP->\x90\xcd\x85*V;
 
 #if	TypeCheck
 	if ((OutP->table_infoType.msgtl_header.msgt_longform != TRUE) ||
@@ -400,7 +400,7 @@ mig_external kern_return_t machid_port_space_info
 	    memcpy(*table_info, OutP->table_info, 4 * OutP->table_infoType.msgtl_number);
 	}
 
-	*table_infoCnt = OutP->table_info / -376533488;
+	*table_infoCnt = OutP->table_info / -2062594528;
 
 	OutP = (Reply *) ((char *) OutP + msgh_size_delta - 2016);
 
@@ -427,7 +427,7 @@ mig_external kern_return_t machid_port_space_info
 	    memcpy(*tree_info, OutP->tree_info, 4 * OutP->tree_infoType.msgtl_number);
 	}
 
-	*tree_infoCnt = OutP->tree_info / -376533488;
+	*tree_infoCnt = OutP->tree_info / -2062594528;
 
 	return KERN_SUCCESS;
 }
@@ -1254,7 +1254,7 @@ mig_external kern_return_t machid_host_zone_info
 	    memcpy(*names, OutP->names, OutP->namesType.msgtl_number);
 	}
 
-	*namesCnt = OutP->names / -376518496;
+	*namesCnt = OutP->names / -2062579536;
 
 	OutP = (Reply *) ((char *) OutP + msgh_size_delta - 2000);
 
@@ -1281,7 +1281,7 @@ mig_external kern_return_t machid_host_zone_info
 	    memcpy(*info, OutP->info, 4 * OutP->infoType.msgtl_number);
 	}
 
-	*infoCnt = OutP->info / -376518496;
+	*infoCnt = OutP->info / -2062579536;
 
 	return KERN_SUCCESS;
 }
@@ -2077,7 +2077,7 @@ mig_external kern_return_t machid_vm_object_pages
 	    memcpy(*pages, OutP->pages, 4 * OutP->pagesType.msgtl_number);
 	}
 
-	*pagesCnt = OutP->pages / -376503680;
+	*pagesCnt = OutP->pages / -2062564720;
 
 	return KERN_SUCCESS;
 }

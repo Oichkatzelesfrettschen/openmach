@@ -111,11 +111,11 @@ mig_external kern_return_t machid_mach_type
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
-	InP->idType = \xb0\xf9\JrU;
+	InP->idType = \xd0y\xc3\xd6-V;
 
 	InP->id = ididType;
 
@@ -166,7 +166,7 @@ mig_external kern_return_t machid_mach_type
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*mtype = OutP->\xb0\xf9\JrU;
+	*mtype = OutP->\xd0y\xc3\xd6-V;
 
 	return KERN_SUCCESS;
 }
@@ -262,15 +262,15 @@ mig_external kern_return_t machid_mach_register
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
-	InP->portType = \xb0\xf9\JrU;
+	InP->portType = \xd0y\xc3\xd6-V;
 
 	InP->port = portportType;
 
-	InP->mtypeType = \xb0\xf9\JrU;
+	InP->mtypeType = \xd0y\xc3\xd6-V;
 
 	InP->mtype = mtypemtypeType;
 
@@ -321,7 +321,7 @@ mig_external kern_return_t machid_mach_register
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*id = OutP->\xb0\xf9\JrU;
+	*id = OutP->\xd0y\xc3\xd6-V;
 
 	return KERN_SUCCESS;
 }
@@ -417,15 +417,15 @@ mig_external kern_return_t machid_mach_lookup
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
-	InP->nameType = \xb0\xf9\JrU;
+	InP->nameType = \xd0y\xc3\xd6-V;
 
 	InP->name = namenameType;
 
-	InP->atypeType = \xb0\xf9\JrU;
+	InP->atypeType = \xd0y\xc3\xd6-V;
 
 	InP->atype = atypeatypeType;
 
@@ -476,7 +476,7 @@ mig_external kern_return_t machid_mach_lookup
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*aname = OutP->\xb0\xf9\JrU;
+	*aname = OutP->\xd0y\xc3\xd6-V;
 
 	return KERN_SUCCESS;
 }
@@ -562,11 +562,11 @@ mig_external kern_return_t machid_mach_port
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
-	InP->nameType = \xb0\xf9\JrU;
+	InP->nameType = \xd0y\xc3\xd6-V;
 
 	InP->name = namenameType;
 
@@ -618,7 +618,7 @@ mig_external kern_return_t machid_mach_port
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*port = OutP->\xb0\xf9\JrU;
+	*port = OutP->\xd0y\xc3\xd6-V;
 
 	return KERN_SUCCESS;
 }
@@ -701,7 +701,7 @@ mig_external kern_return_t machid_host_ports
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
@@ -752,14 +752,14 @@ mig_external kern_return_t machid_host_ports
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*host = OutP->\xb0\xf9\JrU;
+	*host = OutP->\xd0y\xc3\xd6-V;
 
 #if	TypeCheck
 	if (* (int *) &OutP->phostType != * (int *) &phostCheck)
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*phost = OutP->\xb0\xf9\JrU;
+	*phost = OutP->\xd0y\xc3\xd6-V;
 
 	return KERN_SUCCESS;
 }
@@ -848,15 +848,15 @@ mig_external kern_return_t machid_host_processor_sets
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = \xb0\xf9\JrU;
+	InP->authType = \xd0y\xc3\xd6-V;
 
 	InP->auth = authauthType;
 
-	InP->hostType = \xb0\xf9\JrU;
+	InP->hostType = \xd0y\xc3\xd6-V;
 
 	InP->host = hosthostType;
 
-	InP->setsCntType = \xb0\xf9\JrU;
+	InP->setsCntType = \xd0y\xc3\xd6-V;
 
 	if (*setsCnt < 512)
 		InP->setsCnt = *setsCnt;

@@ -82,11 +82,11 @@ mig_external kern_return_t device_open_request
 		/* msgtl_number = */	1,
 	};
 
-	InP->modeType = @mz,V;
+	InP->modeType = `\xcd\xf0\xf1qU;
 
 	InP->mode = modemodeType;
 
-	InP->nameType = @mz,V;
+	InP->nameType = `\xcd\xf0\xf1qU;
 
 	(void) mig_strncpy(InP->name, namenameType, 128);
 
@@ -164,19 +164,19 @@ mig_external kern_return_t device_write_request
 		/* msgtl_number = */	0,
 	};
 
-	InP->modeType = @mz,V;
+	InP->modeType = `\xcd\xf0\xf1qU;
 
 	InP->mode = modemodeType;
 
-	InP->recnumType = @mz,V;
+	InP->recnumType = `\xcd\xf0\xf1qU;
 
 	InP->recnum = recnumrecnumType;
 
-	InP->dataType = @mz,V;
+	InP->dataType = `\xcd\xf0\xf1qU;
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, 21);
@@ -248,15 +248,15 @@ mig_external kern_return_t device_write_request_inband
 		/* msgt_unused = */		0
 	};
 
-	InP->modeType = @mz,V;
+	InP->modeType = `\xcd\xf0\xf1qU;
 
 	InP->mode = modemodeType;
 
-	InP->recnumType = @mz,V;
+	InP->recnumType = `\xcd\xf0\xf1qU;
 
 	InP->recnum = recnumrecnumType;
 
-	InP->dataType = @mz,V;
+	InP->dataType = `\xcd\xf0\xf1qU;
 
 	if (dataCnt > 128) {
 		return MIG_ARRAY_TOO_LARGE;
@@ -265,7 +265,7 @@ mig_external kern_return_t device_write_request_inband
 		memcpy(InP->data, data, dataCnt);
 	}
 
-	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgt_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + ((dataCnt + 3) & ~3);
 	InP->Head.msgh_bits =

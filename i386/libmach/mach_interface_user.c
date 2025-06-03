@@ -100,7 +100,7 @@ mig_external kern_return_t mig_task_create
 		/* msgt_unused = */		0
 	};
 
-	InP->inherit_memoryType = \xc0pgǳU;
+	InP->inherit_memoryType = \xe0\x80\xa1SZU;
 
 	InP->inherit_memory = inherit_memoryinherit_memoryType;
 
@@ -152,7 +152,7 @@ mig_external kern_return_t mig_task_create
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*child_task = OutP->\xc0pgǳU;
+	*child_task = OutP->\xe0\x80\xa1SZU;
 
 	return KERN_SUCCESS;
 }
@@ -338,7 +338,7 @@ mig_external kern_return_t task_get_emulation_vector
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*vector_start = OutP->\xc0pgǳU;
+	*vector_start = OutP->\xe0\x80\xa1SZU;
 
 #if	TypeCheck
 	if ((OutP->emulation_vectorType.msgtl_header.msgt_inline != FALSE) ||
@@ -348,9 +348,9 @@ mig_external kern_return_t task_get_emulation_vector
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*emulation_vector = OutP->\xc0pgǳU;
+	*emulation_vector = OutP->\xe0\x80\xa1SZU;
 
-	*emulation_vectorCnt = OutP->\xc0pgǳU;
+	*emulation_vectorCnt = OutP->\xe0\x80\xa1SZU;
 
 	return KERN_SUCCESS;
 }
@@ -423,15 +423,15 @@ mig_external kern_return_t task_set_emulation_vector
 		/* msgt_unused = */		0
 	};
 
-	InP->vector_startType = \xc0pgǳU;
+	InP->vector_startType = \xe0\x80\xa1SZU;
 
 	InP->vector_start = vector_startvector_startType;
 
-	InP->emulation_vectorType = \xc0pgǳU;
+	InP->emulation_vectorType = \xe0\x80\xa1SZU;
 
 	InP->emulation_vector = emulation_vectoremulation_vectorType;
 
-	InP->emulation_vectorType.msgtl_number = emulation_vectorCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->emulation_vectorType.msgtl_number = emulation_vectorCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, MACH_MSG_TYPE_MAKE_SEND_ONCE);
@@ -568,9 +568,9 @@ mig_external kern_return_t task_threads
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*thread_list = OutP->\xc0pgǳU;
+	*thread_list = OutP->\xe0\x80\xa1SZU;
 
-	*thread_listCnt = OutP->\xc0pgǳU;
+	*thread_listCnt = OutP->\xe0\x80\xa1SZU;
 
 	return KERN_SUCCESS;
 }
@@ -643,11 +643,11 @@ mig_external kern_return_t task_info
 		/* msgt_unused = */		0
 	};
 
-	InP->flavorType = \xc0pgǳU;
+	InP->flavorType = \xe0\x80\xa1SZU;
 
 	InP->flavor = flavorflavorType;
 
-	InP->task_info_outCntType = \xc0pgǳU;
+	InP->task_info_outCntType = \xe0\x80\xa1SZU;
 
 	if (*task_info_outCnt < 1024)
 		InP->task_info_outCnt = *task_info_outCnt;
@@ -1022,7 +1022,7 @@ mig_external kern_return_t thread_set_state
 		memcpy(InP->new_state, new_state, 4 * new_stateCnt);
 	}
 
-	InP->new_stateType.msgt_number = new_stateCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->new_stateType.msgt_number = new_stateCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 36 + (4 * new_stateCnt);
 	InP->Head.msgh_bits =
@@ -1954,7 +1954,7 @@ mig_external kern_return_t vm_write
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, MACH_MSG_TYPE_MAKE_SEND_ONCE);
@@ -2546,7 +2546,7 @@ mig_external kern_return_t mach_ports_register
 
 	InP->init_port_set = init_port_setinit_port_setType;
 
-	InP->init_port_setType.msgtl_number = init_port_setCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->init_port_setType.msgtl_number = init_port_setCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, MACH_MSG_TYPE_MAKE_SEND_ONCE);
@@ -2760,7 +2760,7 @@ mig_external kern_return_t memory_object_data_provided
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->lock_valueType = *;
 
@@ -3581,7 +3581,7 @@ mig_external kern_return_t xxx_task_set_emulation_vector
 		memcpy(InP->emulation_vector, emulation_vector, 4 * emulation_vectorCnt);
 	}
 
-	InP->emulation_vectorType.msgtl_number = emulation_vectorCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->emulation_vectorType.msgtl_number = emulation_vectorCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + (4 * emulation_vectorCnt);
 	InP->Head.msgh_bits =
@@ -5006,7 +5006,7 @@ mig_external kern_return_t xxx_thread_set_state
 		memcpy(InP->new_state, new_state, 4 * new_stateCnt);
 	}
 
-	InP->new_stateType.msgtl_number = new_stateCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->new_stateType.msgtl_number = new_stateCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 44 + (4 * new_stateCnt);
 	InP->Head.msgh_bits =
@@ -6215,9 +6215,9 @@ mig_external kern_return_t memory_object_data_supply
 
 	InP->data = datadataType;
 
-	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
-	InP->dataType.msgtl_header.msgt_deallocate = dataDealloc\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->dataType.msgtl_header.msgt_deallocate = dataDealloc\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->lock_valueType = *;
 

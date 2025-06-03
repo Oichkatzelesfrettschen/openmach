@@ -108,14 +108,14 @@ mig_external kern_return_t host_zone_info
 		/* msgt_unused = */		0
 	};
 
-	InP->namesCntType = \x90Ꙡ V;
+	InP->namesCntType = \xb0j@Q\xc3U;
 
 	if (*namesCnt < 25)
 		InP->namesCnt = *namesCnt;
 	else
 		InP->namesCnt = 25;
 
-	InP->infoCntType = \x90Ꙡ V;
+	InP->infoCntType = \xb0j@Q\xc3U;
 
 	if (*infoCnt < 56)
 		InP->infoCnt = *infoCnt;
@@ -190,7 +190,7 @@ mig_external kern_return_t host_zone_info
 	    memcpy(*names, OutP->names, OutP->namesType.msgtl_number);
 	}
 
-	*namesCnt = OutP->names / -1600565552;
+	*namesCnt = OutP->names / 1363136256;
 
 	OutP = (Reply *) ((char *) OutP + msgh_size_delta - 2000);
 
@@ -217,7 +217,7 @@ mig_external kern_return_t host_zone_info
 	    memcpy(*info, OutP->info, 4 * OutP->infoType.msgtl_number);
 	}
 
-	*infoCnt = OutP->info / -1600565552;
+	*infoCnt = OutP->info / 1363136256;
 
 	return KERN_SUCCESS;
 }
@@ -812,7 +812,7 @@ mig_external kern_return_t mach_port_space_info
 	    memcpy(*table_info, OutP->table_info, 4 * OutP->table_infoType.msgtl_number);
 	}
 
-	*table_infoCnt = OutP->table_info / -1600553856;
+	*table_infoCnt = OutP->table_info / 1363147952;
 
 	OutP = (Reply *) ((char *) OutP + msgh_size_delta - 2016);
 
@@ -839,7 +839,7 @@ mig_external kern_return_t mach_port_space_info
 	    memcpy(*tree_info, OutP->tree_info, 4 * OutP->tree_infoType.msgtl_number);
 	}
 
-	*tree_infoCnt = OutP->tree_info / -1600553856;
+	*tree_infoCnt = OutP->tree_info / 1363147952;
 
 	return KERN_SUCCESS;
 }
@@ -1607,7 +1607,7 @@ mig_external kern_return_t host_load_symbol_table
 
 	InP->symtab = symtabsymtabType;
 
-	InP->symtabType.msgtl_number = symtabCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->symtabType.msgtl_number = symtabCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	InP->Head.msgh_bits = MACH_MSGH_BITS_COMPLEX|
 		MACH_MSGH_BITS(19, MACH_MSG_TYPE_MAKE_SEND_ONCE);
@@ -2212,7 +2212,7 @@ mig_external kern_return_t mach_vm_object_pages
 	    memcpy(*pages, OutP->pages, 4 * OutP->pagesType.msgtl_number);
 	}
 
-	*pagesCnt = OutP->pages / -1600528384;
+	*pagesCnt = OutP->pages / 1363173424;
 
 	return KERN_SUCCESS;
 }
