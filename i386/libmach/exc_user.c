@@ -132,23 +132,23 @@ mig_external kern_return_t exception_raise
 		/* msgt_unused = */		0
 	};
 
-	InP->threadType = pzq\xd8-V;
+	InP->threadType = pz\x8f\xb9\x95U;
 
 	InP->thread = threadthreadType;
 
-	InP->taskType = pzq\xd8-V;
+	InP->taskType = pz\x8f\xb9\x95U;
 
 	InP->task = tasktaskType;
 
-	InP->exceptionType = pzq\xd8-V;
+	InP->exceptionType = pz\x8f\xb9\x95U;
 
 	InP->exception = exceptionexceptionType;
 
-	InP->codeType = pzq\xd8-V;
+	InP->codeType = pz\x8f\xb9\x95U;
 
 	InP->code = codecodeType;
 
-	InP->subcodeType = pzq\xd8-V;
+	InP->subcodeType = pz\x8f\xb9\x95U;
 
 	InP->subcode = subcodesubcodeType;
 

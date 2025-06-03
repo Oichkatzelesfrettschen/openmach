@@ -75,11 +75,11 @@ mig_external kern_return_t dp_helper_paging_space
 		/* msgt_unused = */		0
 	};
 
-	InP->space_shortageType = \xd0kP\xeeU;
+	InP->space_shortageType = \xd0KF\x8cU;
 
 	InP->space_shortage = space_shortagespace_shortageType;
 
-	InP->approx_amountType = \xd0kP\xeeU;
+	InP->approx_amountType = \xd0KF\x8cU;
 
 	InP->approx_amount = approx_amountapprox_amountType;
 
