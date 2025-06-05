@@ -21,7 +21,7 @@
 
 #### Start of configuration section ####
 
-GSRCDIR	= /app
+GSRCDIR	= /app/mach4
 MSRCDIR = ..
 OBJDIR	= ..
 

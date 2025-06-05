@@ -129,9 +129,9 @@ mig_external kern_return_t host_processors
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*processor_list = OutP->\xdb+\xeaV;
+	*processor_list = OutP->@\x9b\xb0\xb3`U;
 
-	*processor_listCnt = OutP->\xdb+\xeaV;
+	*processor_listCnt = OutP->@\x9b\xb0\xb3`U;
 
 	return KERN_SUCCESS;
 }
@@ -192,7 +192,7 @@ mig_external kern_return_t yyy_host_info
 		/* msgt_unused = */		0
 	};
 
-	InP->flavorType = \xdb+\xeaV;
+	InP->flavorType = @\x9b\xb0\xb3`U;
 
 	InP->flavor = flavorflavorType;
 
@@ -631,7 +631,7 @@ mig_external kern_return_t yyy_processor_control
 		memcpy(InP->processor_cmd, processor_cmd, 4 * processor_cmdCnt);
 	}
 
-	InP->processor_cmdType.msgtl_number = processor_cmdCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->processor_cmdType.msgtl_number = processor_cmdCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 36 + (4 * processor_cmdCnt);
 	InP->Head.msgh_bits =
@@ -4596,7 +4596,7 @@ mig_external kern_return_t processor_control
 		memcpy(InP->processor_cmd, processor_cmd, 4 * processor_cmdCnt);
 	}
 
-	InP->processor_cmdType.msgt_number = processor_cmdCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dL9;
+	InP->processor_cmdType.msgt_number = processor_cmdCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
 	msgh_size = 28 + (4 * processor_cmdCnt);
 	InP->Head.msgh_bits =

@@ -26,7 +26,10 @@
 #
 
 migcom=${MIGDIR-/usr/local/lib}/migcom
-cpp="${CPP-gcc}" # This should be just "gcc" or similar
+# cpp="${CPP-gcc}" # This should be just "gcc" or similar
+# Use CC from environment, which should be clang-14
+# Explicitly use clang-14 -E to avoid issues with CC not being propagated
+cpp="clang-14 -E"
 
 cppflags=
 migflags=
@@ -59,71 +62,74 @@ do
     actual_cppflags_no_md="`echo "$cppflags" | sed 's/-MD//g'`"
     # Also filter -nostdinc (as per previous test, though it didn't help)
     actual_cppflags_no_nostdinc="`echo "$actual_cppflags_no_md" | sed 's/-nostdinc//g'`"
-    # TEST: Further filter out -DMACH
-    actual_cppflags_for_main_pass="`echo "$actual_cppflags_no_nostdinc" | sed 's/-DMACH//g'`"
+    # TEST: Filter out -I-
+    actual_cppflags_for_main_pass_stage1="`echo "$actual_cppflags_no_nostdinc" | sed 's/-I-//g'`"
+    # KEEP -DMACH for this pass, remove other TEST filters for now for clarity
+    actual_cppflags_for_main_pass="$actual_cppflags_for_main_pass_stage1"
+
 
     echo "DEBUG MIG.SH: Processing $file" >&2
     echo "DEBUG MIG.SH: Original cppflags for mig.sh: $cppflags" >&2
-    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc, no -DMACH): $actual_cppflags_for_main_pass" >&2
+    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc, no -I-): $actual_cppflags_for_main_pass" >&2
     # Filter -MD for the main preprocessing pass, also filter -nostdinc for testing
     actual_cppflags_no_md="`echo "$cppflags" | sed 's/-MD//g'`"
-    actual_cppflags_for_main_pass="`echo "$actual_cppflags_no_md" | sed 's/-nostdinc//g'`" # TEST: remove nostdinc
+    # actual_cppflags_for_main_pass is now set above. The original line was:
+    # actual_cppflags_for_main_pass="`echo "$actual_cppflags_no_md" | sed 's/-nostdinc//g'`"
 
     echo "DEBUG MIG.SH: Processing $file" >&2
     echo "DEBUG MIG.SH: Original cppflags for mig.sh: $cppflags" >&2
-    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (no -MD, no -nostdinc): $actual_cppflags_for_main_pass" >&2
+    echo "DEBUG MIG.SH: Actual cppflags for preprocessor (Final for $cpp -E): $actual_cppflags_for_main_pass" >&2
     echo "DEBUG MIG.SH: Migcom flags: $migflags" >&2
-    echo "DEBUG MIG.SH: Preprocessor command to be run: $cpp -E $actual_cppflags_for_main_pass \"$file\"" >&2
+    echo "DEBUG MIG.SH: Preprocessor command to be run: $cpp $actual_cppflags_for_main_pass \"$file\"" >&2
 
     rm -f /tmp/mig_cpp_errors.log
 
     exit_status=0
-    if [ "$file" = "/app/libmach/bootstrap.pres" ]; then
-        echo "DEBUG MIG.SH: Special handling for /app/libmach/bootstrap.pres" >&2
-        rm -f /tmp/bootstrap_pres_preprocessed.txt
+    # Generic handling for all files: save preprocessed output
+    base_name_for_log="`basename "$file" .pres`"
+    preprocessed_output_file="/tmp/${base_name_for_log}_preprocessed.txt"
+    echo "DEBUG MIG.SH: Preprocessed output will be saved to $preprocessed_output_file" >&2
+    rm -f "$preprocessed_output_file"
 
-        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | tee /tmp/bootstrap_pres_preprocessed.txt | "$migcom" $migflags
-        # Corrected PIPESTATUS index for migcom (it's the 3rd command in the pipe if tee is present)
-        # However, PIPESTATUS is bash-specific. For sh, this might not be reliable.
-        # Let's get tee's exit status first, then try to infer migcom's if possible, or just check migcom's effect.
-        # A simpler way for now is to assume if migcom fails, it writes to stderr or exits non-zero.
-        # The makefile will catch the non-zero exit of the overall pipe if migcom fails.
-        # The previous exit_status=${PIPESTATUS[2]} was causing "Bad substitution"
-        # Let's just capture the direct exit status of the whole pipe. If migcom fails, it should be non-zero.
-        pipe_exit_status=$?
-        if [ -f /tmp/bootstrap_pres_preprocessed.txt ]; then # Check if tee worked
-            if [ ! -s /tmp/bootstrap_pres_preprocessed.txt ] && [ $pipe_exit_status -eq 0 ]; then
-                 # If tee worked, output is empty, but pipe succeeded, then migcom probably got empty input and failed silently to the pipe
-                 # This case is tricky. The make rule expects migcom to fail with non-zero if it has issues.
-                 echo "DEBUG MIG.SH: bootstrap_pres_preprocessed.txt IS EMPTY, but pipe status was 0 (migcom might have failed silently to pipe)." >&2
-            elif [ -s /tmp/bootstrap_pres_preprocessed.txt ]; then
-                 echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt is NOT empty." >&2
-            else # Not -s (empty) and pipe_exit_status != 0
-                 echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt IS EMPTY (and pipe status was $pipe_exit_status)." >&2
-            fi
-            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was created (size: $(stat -c%s /tmp/bootstrap_pres_preprocessed.txt 2>/dev/null || echo 0))." >&2
-        else
-            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was NOT created." >&2
-        fi
-        exit_status=$pipe_exit_status # Use overall pipe status
-    else
-        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | "$migcom" $migflags
-        exit_status=$? # Here $? is a mix of cpp | migcom; if migcom fails, it should be non-zero.
-        exit_status=${PIPESTATUS[2]}
+    # 1. Preprocess and save to temp file
+    cat "$file" | $cpp $actual_cppflags_for_main_pass - 2>>/tmp/mig_cpp_errors.log | tee "$preprocessed_output_file"
+    # We don't care about exit status of tee itself, but rather if the file was created.
+    # migcom's exit status is what matters later.
 
-        if [ -f /tmp/bootstrap_pres_preprocessed.txt ]; then
-            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was created." >&2
-            if [ -s /tmp/bootstrap_pres_preprocessed.txt ]; then
-                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt is NOT empty." >&2
-            else
-                echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt IS EMPTY." >&2
-            fi
-        else
-            echo "DEBUG MIG.SH: /tmp/bootstrap_pres_preprocessed.txt was NOT created." >&2
-        fi
+    # 2. Conditionally cat preprocessed content to stderr for debugging
+    if [ "$file" = "/app/libmach/mach_host.pres" ] || \
+       [ "$file" = "/app/libmach/mach_interface.pres" ] || \
+       [ "$file" = "/app/libmach/default_pager.pres" ] || \
+       [ "$file" = "/app/libmach/bootstrap.pres" ] || \
+       [ "$file" = "/app/libmach/mach_debug.pres" ]; then
+        echo "---- START content of $preprocessed_output_file for $file ----" >&2
+        cat "$preprocessed_output_file" >&2
+        echo "---- END content of $preprocessed_output_file for $file ----" >&2
+    fi
+
+    # 3. Pipe the preprocessed file to migcom
+    if [ ! -f "$preprocessed_output_file" ]; then
+        echo "DEBUG MIG.SH: ERROR - Preprocessed file $preprocessed_output_file was NOT created. Skipping migcom." >&2
+        exit_status=1 # Indicate failure
     else
-        "$cpp" -E $actual_cppflags_for_main_pass "$file" 2>>/tmp/mig_cpp_errors.log | "$migcom" $migflags
-        exit_status=${PIPESTATUS[1]}
+        cat "$preprocessed_output_file" | "$migcom" $migflags
+        exit_status=$? # $? is from migcom here
+    fi
+
+    # 4. Debug statements about the preprocessed file
+    if [ -f "$preprocessed_output_file" ]; then
+        actual_size=$(stat -c%s "$preprocessed_output_file" 2>/dev/null || echo 0)
+        if [ ! -s "$preprocessed_output_file" ] && [ $exit_status -eq 0 ]; then # File is empty but migcom succeeded (unlikely for real work)
+             echo "DEBUG MIG.SH: $preprocessed_output_file IS EMPTY (size $actual_size), but migcom pipe status was 0." >&2
+        elif [ -s "$preprocessed_output_file" ]; then # File is not empty
+             echo "DEBUG MIG.SH: $preprocessed_output_file is NOT empty (size $actual_size)." >&2
+        else # File is empty and migcom likely failed or did nothing
+             echo "DEBUG MIG.SH: $preprocessed_output_file IS EMPTY (size $actual_size, migcom pipe status $exit_status)." >&2
+        fi
+        # echo "DEBUG MIG.SH: $preprocessed_output_file was created (size: $actual_size)." >&2 # Redundant with above
+    else
+        # This case should be caught by the ! -f check above
+        echo "DEBUG MIG.SH: $preprocessed_output_file was NOT created (this should not happen if previous checks passed)." >&2
     fi
 
     if [ -s /tmp/mig_cpp_errors.log ]; then
@@ -136,8 +142,6 @@ do
     fi
 
     # Dependency file generation
-        echo "DEBUG MIG.SH: migcom failed for $file with status $exit_status." >&2
-    fi
 
     if [ $sawMD ]; then
         base="`basename "$file"|sed 's%[.][^.]*$%%'`"
@@ -163,9 +167,13 @@ do
         rm -f /tmp/mig_dep_errors.log
 
         # Use original cppflags for .d file generation, which includes -MD
-        "$cpp" -E $cppflags "$file" > /dev/null 2>/tmp/mig_dep_errors.log
+        # Also use $CC -E for consistency here for .d file generation
+        # Filter out -I- from cppflags for .d generation as clang doesn't like it
+        cppflags_for_d_gen="`echo "$cppflags" | sed 's/-I-//g'`"
+        echo "DEBUG MIG.SH: cppflags for .d generation (no -I-): $cppflags_for_d_gen" >&2
+        $cpp $cppflags_for_d_gen "$file" > /dev/null 2>/tmp/mig_dep_errors.log # Input via filename for -MD
         if [ -s /tmp/mig_dep_errors.log ]; then
-            echo "DEBUG MIG.SH: Errors during .d generation for $file:" >&2
+            echo "DEBUG MIG.SH: Errors during .d generation for $file (using $cpp $cppflags_for_d_gen):" >&2
             cat /tmp/mig_dep_errors.log >&2
         fi
 

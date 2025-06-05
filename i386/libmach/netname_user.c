@@ -112,15 +112,15 @@ mig_external kern_return_t netname_check_in
 		/* msgt_unused = */		0
 	};
 
-	InP->port_nameType = \xd0;
+	InP->port_nameType = ;
 
 	(void) mig_strncpy(InP->port_name, port_nameport_nameType, 80);
 
-	InP->signatureType = \xd0;
+	InP->signatureType = ;
 
 	InP->signature = signaturesignatureType;
 
-	InP->port_idType = \xd0;
+	InP->port_idType = ;
 
 	InP->port_id = port_idport_idType;
 
@@ -253,11 +253,11 @@ mig_external kern_return_t netname_look_up
 		/* msgt_unused = */		0
 	};
 
-	InP->host_nameType = \xd0;
+	InP->host_nameType = ;
 
 	(void) mig_strncpy(InP->host_name, host_namehost_nameType, 80);
 
-	InP->port_nameType = \xd0;
+	InP->port_nameType = ;
 
 	(void) mig_strncpy(InP->port_name, port_nameport_nameType, 80);
 
@@ -309,7 +309,7 @@ mig_external kern_return_t netname_look_up
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*port_id = OutP->\xd0;
+	*port_id = OutP->;
 
 	return KERN_SUCCESS;
 }
@@ -381,11 +381,11 @@ mig_external kern_return_t netname_check_out
 		/* msgt_unused = */		0
 	};
 
-	InP->port_nameType = \xd0;
+	InP->port_nameType = ;
 
 	(void) mig_strncpy(InP->port_name, port_nameport_nameType, 80);
 
-	InP->signatureType = \xd0;
+	InP->signatureType = ;
 
 	InP->signature = signaturesignatureType;
 
@@ -520,7 +520,7 @@ mig_external kern_return_t netname_version
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	(void) mig_strncpy(version, OutP->\xd0, 80);
+	(void) mig_strncpy(version, OutP->, 80);
 
 	return KERN_SUCCESS;
 }

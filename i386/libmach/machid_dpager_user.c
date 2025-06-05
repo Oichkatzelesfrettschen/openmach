@@ -112,11 +112,11 @@ mig_external kern_return_t machid_default_pager_info
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = `R\xeaH^U;
+	InP->authType = \xb0\xd2p\xefgU;
 
 	InP->auth = authauthType;
 
-	InP->default_pagerType = `R\xeaH^U;
+	InP->default_pagerType = \xb0\xd2p\xefgU;
 
 	InP->default_pager = default_pagerdefault_pagerType;
 
@@ -167,7 +167,7 @@ mig_external kern_return_t machid_default_pager_info
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*info = OutP->`R\xeaH^U;
+	*info = OutP->\xb0\xd2p\xefgU;
 
 	return KERN_SUCCESS;
 }
@@ -256,15 +256,15 @@ mig_external kern_return_t machid_default_pager_objects
 		/* msgt_unused = */		0
 	};
 
-	InP->authType = `R\xeaH^U;
+	InP->authType = \xb0\xd2p\xefgU;
 
 	InP->auth = authauthType;
 
-	InP->default_pagerType = `R\xeaH^U;
+	InP->default_pagerType = \xb0\xd2p\xefgU;
 
 	InP->default_pager = default_pagerdefault_pagerType;
 
-	InP->objectsCntType = `R\xeaH^U;
+	InP->objectsCntType = \xb0\xd2p\xefgU;
 
 	if (*objectsCnt < 256)
 		InP->objectsCnt = *objectsCnt;
@@ -337,7 +337,7 @@ mig_external kern_return_t machid_default_pager_objects
 	    memcpy(*objects, OutP->objects, 4 * OutP->objectsType.msgtl_number);
 	}
 
-	*objectsCnt = OutP->objects / 1223309568;
+	*objectsCnt = OutP->objects / -277825232;
 
 	return KERN_SUCCESS;
 }

@@ -88,15 +88,15 @@ mig_external kern_return_t memory_object_init
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->memory_object_nameType = pL\xb5\xf1\xc1U;
+	InP->memory_object_nameType = \x90L\xd52V;
 
 	InP->memory_object_name = memory_object_namememory_object_nameType;
 
-	InP->memory_object_page_sizeType = pL\xb5\xf1\xc1U;
+	InP->memory_object_page_sizeType = \x90L\xd52V;
 
 	InP->memory_object_page_size = memory_object_page_sizememory_object_page_sizeType;
 
@@ -154,11 +154,11 @@ mig_external kern_return_t memory_object_terminate
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->memory_object_nameType = pL\xb5\xf1\xc1U;
+	InP->memory_object_nameType = \x90L\xd52V;
 
 	InP->memory_object_name = memory_object_namememory_object_nameType;
 
@@ -242,19 +242,19 @@ mig_external kern_return_t memory_object_copy
 		/* msgt_unused = */		0
 	};
 
-	InP->old_memory_controlType = pL\xb5\xf1\xc1U;
+	InP->old_memory_controlType = \x90L\xd52V;
 
 	InP->old_memory_control = old_memory_controlold_memory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->lengthType = pL\xb5\xf1\xc1U;
+	InP->lengthType = \x90L\xd52V;
 
 	InP->length = lengthlengthType;
 
-	InP->new_memory_objectType = pL\xb5\xf1\xc1U;
+	InP->new_memory_objectType = \x90L\xd52V;
 
 	InP->new_memory_object = new_memory_objectnew_memory_objectType;
 
@@ -338,19 +338,19 @@ mig_external kern_return_t memory_object_data_request
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->lengthType = pL\xb5\xf1\xc1U;
+	InP->lengthType = \x90L\xd52V;
 
 	InP->length = lengthlengthType;
 
-	InP->desired_accessType = pL\xb5\xf1\xc1U;
+	InP->desired_accessType = \x90L\xd52V;
 
 	InP->desired_access = desired_accessdesired_accessType;
 
@@ -434,19 +434,19 @@ mig_external kern_return_t memory_object_data_unlock
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->lengthType = pL\xb5\xf1\xc1U;
+	InP->lengthType = \x90L\xd52V;
 
 	InP->length = lengthlengthType;
 
-	InP->desired_accessType = pL\xb5\xf1\xc1U;
+	InP->desired_accessType = \x90L\xd52V;
 
 	InP->desired_access = desired_accessdesired_accessType;
 
@@ -523,15 +523,15 @@ mig_external kern_return_t memory_object_data_write
 		/* msgtl_number = */	0,
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->dataType = pL\xb5\xf1\xc1U;
+	InP->dataType = \x90L\xd52V;
 
 	InP->data = datadataType;
 
@@ -605,15 +605,15 @@ mig_external kern_return_t memory_object_lock_completed
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->lengthType = pL\xb5\xf1\xc1U;
+	InP->lengthType = \x90L\xd52V;
 
 	InP->length = lengthlengthType;
 
@@ -711,23 +711,23 @@ mig_external kern_return_t memory_object_supply_completed
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->lengthType = pL\xb5\xf1\xc1U;
+	InP->lengthType = \x90L\xd52V;
 
 	InP->length = lengthlengthType;
 
-	InP->resultType = pL\xb5\xf1\xc1U;
+	InP->resultType = \x90L\xd52V;
 
 	InP->result = resultresultType;
 
-	InP->error_offsetType = pL\xb5\xf1\xc1U;
+	InP->error_offsetType = \x90L\xd52V;
 
 	InP->error_offset = error_offseterror_offsetType;
 
@@ -830,25 +830,25 @@ mig_external kern_return_t memory_object_data_return
 		/* msgt_unused = */		0
 	};
 
-	InP->memory_controlType = pL\xb5\xf1\xc1U;
+	InP->memory_controlType = \x90L\xd52V;
 
 	InP->memory_control = memory_controlmemory_controlType;
 
-	InP->offsetType = pL\xb5\xf1\xc1U;
+	InP->offsetType = \x90L\xd52V;
 
 	InP->offset = offsetoffsetType;
 
-	InP->dataType = pL\xb5\xf1\xc1U;
+	InP->dataType = \x90L\xd52V;
 
 	InP->data = datadataType;
 
 	InP->dataType.msgtl_number = dataCnt\xe9a\xfa\xff\xffL\x8bC(H\x83\xec\xffs M\x89\xe9H\x8dq8;
 
-	InP->dirtyType = pL\xb5\xf1\xc1U;
+	InP->dirtyType = \x90L\xd52V;
 
 	InP->dirty = dirtydirtyType;
 
-	InP->kernel_copyType = pL\xb5\xf1\xc1U;
+	InP->kernel_copyType = \x90L\xd52V;
 
 	InP->kernel_copy = kernel_copykernel_copyType;
 
@@ -907,11 +907,11 @@ mig_external kern_return_t memory_object_change_completed
 		/* msgt_unused = */		0
 	};
 
-	InP->may_cacheType = pL\xb5\xf1\xc1U;
+	InP->may_cacheType = \x90L\xd52V;
 
 	InP->may_cache = may_cachemay_cacheType;
 
-	InP->copy_strategyType = pL\xb5\xf1\xc1U;
+	InP->copy_strategyType = \x90L\xd52V;
 
 	InP->copy_strategy = copy_strategycopy_strategyType;
 

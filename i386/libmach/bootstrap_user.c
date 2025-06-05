@@ -147,14 +147,14 @@ mig_external kern_return_t bootstrap_privileged_ports
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*priv_host = OutP->W\xd9S\xd4U;
+	*priv_host = OutP->@\x87\x9c\xa94V;
 
 #if	TypeCheck
 	if (* (int *) &OutP->priv_deviceType != * (int *) &priv_deviceCheck)
 		return MIG_TYPE_ERROR;
 #endif	/* TypeCheck */
 
-	*priv_device = OutP->W\xd9S\xd4U;
+	*priv_device = OutP->@\x87\x9c\xa94V;
 
 	return KERN_SUCCESS;
 }

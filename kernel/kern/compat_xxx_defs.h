@@ -1,21 +1,6 @@
-/*
- * Mach Operating System
- * Copyright (c) 1991 Carnegie Mellon University.
- * Copyright (c) 1993,1994 The University of Utah and
- * the Computer Systems Laboratory (CSL).
- * All rights reserved.
- *
- * Permission to use, copy, modify and distribute this software and its
- * documentation is hereby granted, provided that both the copyright
- * notice and this permission notice appear in all copies of the
- * software, derivative works or modified versions, and any portions
- * thereof, and that both notices appear in supporting documentation.
- *
- * CARNEGIE MELLON, THE UNIVERSITY OF UTAH AND CSL ALLOW FREE USE OF
- * THIS SOFTWARE IN ITS "AS IS" CONDITION, AND DISCLAIM ANY LIABILITY
- * OF ANY KIND FOR ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF
- * THIS SOFTWARE.
- *
+/* SPDX-License-Identifier: Utah-BSD-Style */
+/* See LICENSE file for full copyright notice */
+
  * Carnegie Mellon requests users of this software to return to
  *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU

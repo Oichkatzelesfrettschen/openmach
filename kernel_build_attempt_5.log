@@ -1,0 +1,2 @@
+kernel/Makefile:39: @top_objdir@/Makeconf: No such file or directory
+make: *** No rule to make target '@top_objdir@/Makeconf'.  Stop.

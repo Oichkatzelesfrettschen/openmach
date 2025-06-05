@@ -1,0 +1,29 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang-14",
+      "-c",
+      "-DPACKAGE_NAME=\"\"",
+      "-DPACKAGE_TARNAME=\"\"",
+      "-DPACKAGE_VERSION=\"\"",
+      "-DPACKAGE_STRING=\"\"",
+      "-DPACKAGE_BUGREPORT=\"\"",
+      "-DPACKAGE_URL=\"\"",
+      "-DYYTEXT_POINTER=1",
+      "-DHAVE_VPRINTF=1",
+      "-DHAVE_STRERROR=1",
+      "-Di386",
+      "-DMACH",
+      "-DCMU",
+      "-I.",
+      "-I/app/mig",
+      "-I../include",
+      "-I/app/include",
+      "-I../include",
+      "-O",
+      "lexxer.c"
+    ],
+    "directory": "/app/i386/mig",
+    "file": "/app/i386/mig/lexxer.c"
+  }
+]

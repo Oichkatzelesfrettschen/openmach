@@ -33,7 +33,7 @@ export STRIP	= -strip
 export AR	= -ar
 export RANLIB	= -ranlib
 
-HOST_CC		= gcc
+HOST_CC		= gcc-11 -m32
 
 LEX		= flex
 LEXLIB		= -lfl

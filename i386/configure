@@ -2394,14 +2394,16 @@ then :
   withval=$with_mach4;
 	gsrcdir=$with_mach4
 	if test ! -r "$gsrcdir/include/mach/mach.defs"; then
-		as_fn_error $? "generic Mach 4 sources not found in directory $gsrcdir" "$LINENO" 5
+		as_fn_error $? "generic Mach 4 sources not found in directory $gsrcdir (looking for $gsrcdir/include/mach/mach.defs)" "$LINENO" 5
 	fi
 
 else $as_nop
 
-	gsrcdir=`echo $srcdir|sed -e 's%[^/][^/]*$%mach4%'`
+	# Default gsrcdir to /app if --with-mach4 is not given, as /app/include/mach/mach.defs exists
+	gsrcdir="/app"
+	# gsrcdir=`echo $srcdir|sed -e 's%[^/][^/]*$%mach4%'`
 	if test ! -r "$gsrcdir/include/mach/mach.defs"; then
-		as_fn_error $? "generic Mach 4 sources not found in $gsrcdir, and no --with-mach4 option specified" "$LINENO" 5
+		as_fn_error $? "generic Mach 4 sources not found in $gsrcdir (looking for $gsrcdir/include/mach/mach.defs), and no --with-mach4 option specified" "$LINENO" 5
 	fi
 
 fi
