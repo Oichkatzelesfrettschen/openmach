@@ -34,6 +34,7 @@ export AR	= -ar
 export RANLIB	= -ranlib
 
 HOST_CC		= gcc-11 -m32
+# Backup: HOST_CC		= clang-14
 
 LEX		= flex
 LEXLIB		= -lfl

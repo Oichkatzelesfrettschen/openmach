@@ -47,6 +47,7 @@ configure:2218:   ./install-sh found
 configure:2236:   ./compile found
 configure:2388: checking for generic Mach 4 sources
 configure:2414: result: /app/mach4
+
 configure:2424: checking for gawk
 configure:2459: result: no
 configure:2424: checking for mawk
@@ -95,6 +96,40 @@ compilation terminated.
 configure:2949: $? = 1
 configure:2969: checking whether the C compiler works
 configure:2991: gcc-11 -m32    conftest.c  >&5
+configure:2544: checking for gcc
+configure:2576: result: clang-14
+configure:2929: checking for C compiler version
+configure:2938: clang-14 --version >&5
+Ubuntu clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+configure:2949: $? = 0
+configure:2938: clang-14 -v >&5
+Ubuntu clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/11
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+configure:2949: $? = 0
+configure:2938: clang-14 -V >&5
+clang: error: argument to '-V' is missing (expected 1 value)
+clang: error: no input files
+configure:2949: $? = 1
+configure:2938: clang-14 -qversion >&5
+clang: error: unknown argument '-qversion'; did you mean '--version'?
+clang: error: no input files
+configure:2949: $? = 1
+configure:2938: clang-14 -version >&5
+clang: error: unknown argument '-version'; did you mean '--version'?
+clang: error: no input files
+configure:2949: $? = 1
+configure:2969: checking whether the C compiler works
+configure:2991: clang-14    conftest.c  >&5
 configure:2995: $? = 0
 configure:3045: result: yes
 configure:3048: checking for C compiler default output file name
@@ -105,6 +140,11 @@ configure:3067: $? = 0
 configure:3090: result:
 configure:3112: checking whether we are cross compiling
 configure:3120: gcc-11 -m32 -o conftest    conftest.c  >&5
+configure:3063: clang-14 -o conftest    conftest.c  >&5
+configure:3067: $? = 0
+configure:3090: result:
+configure:3112: checking whether we are cross compiling
+configure:3120: clang-14 -o conftest    conftest.c  >&5
 configure:3124: $? = 0
 configure:3131: ./conftest
 configure:3135: $? = 0
@@ -132,6 +172,28 @@ configure:3506: gcc-11 -m32 -c conftest.c -o conftest2.o
 configure:3509: $? = 0
 configure:3521: result: yes
 configure:3544: checking whether gcc-11 -m32 understands -c and -o together
+configure:3178: clang-14 -c   conftest.c >&5
+configure:3182: $? = 0
+configure:3204: result: o
+configure:3208: checking whether the compiler supports GNU C
+configure:3228: clang-14 -c   conftest.c >&5
+configure:3228: $? = 0
+configure:3238: result: yes
+configure:3249: checking whether clang-14 accepts -g
+configure:3270: clang-14 -c -g  conftest.c >&5
+configure:3270: $? = 0
+configure:3314: result: yes
+configure:3334: checking for clang-14 option to enable C11 features
+configure:3349: clang-14  -c -g -O2  conftest.c >&5
+configure:3349: $? = 0
+configure:3367: result: none needed
+configure:3483: checking whether clang-14 understands -c and -o together
+configure:3506: clang-14 -c conftest.c -o conftest2.o
+configure:3509: $? = 0
+configure:3506: clang-14 -c conftest.c -o conftest2.o
+configure:3509: $? = 0
+configure:3521: result: yes
+configure:3544: checking whether clang-14 understands -c and -o together
 configure:3582: result: yes
 configure:3604: checking for flex
 configure:3625: found /usr/bin/flex
@@ -149,6 +211,14 @@ configure:3808: gcc-11 -m32 -o conftest -g -O2   conftest.c  >&5
 /usr/bin/ld: /tmp/ccR4O7eS.o: in function `main':
 /app/i386/conftest.c:17:(.text.startup+0x13): undefined reference to `yywrap'
 collect2: error: ld returned 1 exit status
+configure:3750: clang-14 -o conftest -g -O2   conftest.c  >&5
+configure:3750: $? = 0
+configure:3763: result: none needed
+configure:3778: checking for library containing yywrap
+configure:3808: clang-14 -o conftest -g -O2   conftest.c  >&5
+/usr/bin/ld: /tmp/conftest-ccb2bf.o: in function `main':
+/app/i386/conftest.c:17:(.text+0x4): undefined reference to `yywrap'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:3808: $? = 1
 configure: failed program was:
 | /* confdefs.h */
@@ -177,6 +247,9 @@ configure:3808: gcc-11 -m32 -o conftest -g -O2   conftest.c -lfl   >&5
 /usr/bin/ld: cannot find -lfl: No such file or directory
 /usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libfl.so when searching for -lfl
 collect2: error: ld returned 1 exit status
+configure:3808: clang-14 -o conftest -g -O2   conftest.c -lfl   >&5
+/usr/bin/ld: /lib/x86_64-linux-gnu/libfl.so: undefined reference to `yylex'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:3808: $? = 1
 configure: failed program was:
 | /* confdefs.h */
@@ -228,6 +301,11 @@ configure: failed program was:
 configure:3828: result: no
 configure:3844: checking whether yytext is a pointer
 configure:3860: gcc-11 -m32 -c -g -O2  conftest.c >&5
+configure:3808: clang-14 -o conftest -g -O2   conftest.c -ll   >&5
+configure:3808: $? = 0
+configure:3828: result: -ll
+configure:3844: checking whether yytext is a pointer
+configure:3860: clang-14 -c -g -O2  conftest.c >&5
 configure:3860: $? = 0
 configure:3867: result: yes
 configure:3883: checking for bison
@@ -295,6 +373,64 @@ configure:4897: $? = 0
 configure:4897: result: yes
 configure:4919: checking for strerror
 configure:4919: gcc-11 -m32 -o conftest -g -O2   conftest.c  >&5
+configure:4091: checking for gcc
+configure:4123: result: clang-14
+configure:4476: checking for C compiler version
+configure:4485: clang-14 --version >&5
+Ubuntu clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+configure:4496: $? = 0
+configure:4485: clang-14 -v >&5
+Ubuntu clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/11
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/13
+Candidate multilib: .;@m64
+Selected multilib: .;@m64
+configure:4496: $? = 0
+configure:4485: clang-14 -V >&5
+clang: error: argument to '-V' is missing (expected 1 value)
+clang: error: no input files
+configure:4496: $? = 1
+configure:4485: clang-14 -qversion >&5
+clang: error: unknown argument '-qversion'; did you mean '--version'?
+clang: error: no input files
+configure:4496: $? = 1
+configure:4485: clang-14 -version >&5
+clang: error: unknown argument '-version'; did you mean '--version'?
+clang: error: no input files
+configure:4496: $? = 1
+configure:4500: checking whether the compiler supports GNU C
+configure:4530: result: yes
+configure:4541: checking whether clang-14 accepts -g
+configure:4606: result: yes
+configure:4626: checking for clang-14 option to enable C11 features
+configure:4659: result: none needed
+configure:4775: checking whether clang-14 understands -c and -o together
+configure:4813: result: yes
+configure:4836: checking whether clang-14 understands -c and -o together
+configure:4874: result: yes
+configure:4897: checking for vprintf
+configure:4897: clang-14 -o conftest -g -O2   conftest.c  >&5
+conftest.c:26:6: warning: incompatible redeclaration of library function 'vprintf' [-Wincompatible-library-redeclaration]
+char vprintf ();
+     ^
+conftest.c:26:6: note: 'vprintf' is a builtin with type 'int (const char *, struct __va_list_tag *)'
+1 warning generated.
+configure:4897: $? = 0
+configure:4897: result: yes
+configure:4919: checking for strerror
+configure:4919: clang-14 -o conftest -g -O2   conftest.c  >&5
+conftest.c:27:6: warning: incompatible redeclaration of library function 'strerror' [-Wincompatible-library-redeclaration]
+char strerror ();
+     ^
+conftest.c:27:6: note: 'strerror' is a builtin with type 'char *(int)'
+1 warning generated.
 configure:4919: $? = 0
 configure:4919: result: yes
 configure:5226: creating ./config.status
@@ -337,6 +473,7 @@ config.status:739: creating Makeconf
 ac_cv_c_compiler_gnu=yes
 ac_cv_env_CC_set=set
 ac_cv_env_CC_value='gcc-11 -m32'
+ac_cv_env_CC_value=clang-14
 ac_cv_env_CFLAGS_set=
 ac_cv_env_CFLAGS_value=
 ac_cv_env_CPPFLAGS_set=
@@ -364,6 +501,7 @@ ac_cv_prog_AWK=mawk
 ac_cv_prog_CC='gcc-11 -m32'
 ac_cv_prog_LEX=flex
 ac_cv_prog_YACC='bison -y'
+ac_cv_prog_ac_ct_CC=clang-14
 ac_cv_prog_cc_c11=
 ac_cv_prog_cc_g=yes
 ac_cv_prog_cc_stdc=
@@ -387,6 +525,7 @@ ECHO_N='-n'
 ECHO_T=''
 EXEEXT=''
 HOST_CC='gcc-11 -m32'
+HOST_CC='clang-14'
 INSTALL_DATA='${INSTALL} -m 644'
 INSTALL_PROGRAM='${INSTALL}'
 INSTALL_SCRIPT='${INSTALL}'
@@ -413,6 +552,7 @@ STRIP='-strip'
 YACC='bison -y'
 YFLAGS=''
 ac_ct_CC=''
+ac_ct_CC='clang-14'
 am__quote=''
 bindir='${exec_prefix}/bin'
 build_alias=''
