@@ -29,9 +29,13 @@
 
 #### Start of configuration section ####
 
-GSRCDIR	= @top_gsrcdir@
-MSRCDIR = @top_srcdir@
-OBJDIR	= @top_objdir@
+GSRCDIR	= @gsrcdir@
+# MSRCDIR should point to the true top of the source tree (/app)
+# abs_builddir is /app/i386 when configure is run there.
+MSRCDIR = @abs_builddir@/..
+# OBJDIR should point to where Makeconf is, relative to this Makefile's location if Makeconf is included relatively,
+# or an absolute path. @abs_builddir@ is /app/i386.
+OBJDIR	= @top_builddir@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@

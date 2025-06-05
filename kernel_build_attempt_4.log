@@ -1,0 +1,2 @@
+/app/i386/kernel/Makerules:64: /app/mach4/kernel/Makerules: No such file or directory
+make: *** No rule to make target '/app/mach4/kernel/Makerules'.  Stop.

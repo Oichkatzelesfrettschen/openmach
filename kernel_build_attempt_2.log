@@ -1,0 +1,2 @@
+../kernel/Makerules:60: @top_gsrcdir@/Makerules: No such file or directory
+make: *** No rule to make target '@top_gsrcdir@/Makerules'.  Stop.
