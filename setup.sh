@@ -14,7 +14,7 @@ packages=(
     cmake make automake autoconf libtool pkg-config
     gdb valgrind git curl wget python3 python3-pip
     libffi-dev libssl-dev nodejs npm shellcheck
-    graphviz doxygen tlaplus coq coqide libcoq-ocaml-dev
+    graphviz doxygen python3-sphinx tlaplus coq coqide libcoq-ocaml-dev
     coq-theories isabelle openjdk-11-jre-headless
     llvm-bolt polly
 )
