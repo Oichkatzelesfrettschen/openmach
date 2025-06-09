@@ -1,29 +1,29 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
-#if 0  /* is this file needed anymore?  */
+#if 0 /* is this file needed anymore?  */
 
 #include <mach.h>
 #include <mach/message.h>
@@ -35,10 +35,11 @@
  *	It should eventually be changed to use bootstrap_privileged_ports.
  */
 
-kern_return_t
-get_privileged_ports(privileged_host_port, device_server_port)
-	mach_port_t *privileged_host_port;
-	mach_port_t *device_server_port;
+/**
+ * @brief Retrieve privileged host and device ports from bootstrap.
+ */
+kern_return_t get_privileged_ports(mach_port_t *privileged_host_port,
+                                   mach_port_t *device_server_port)
 {
 	mach_port_t bootstrap_port;
 	mach_port_t reply_port;
