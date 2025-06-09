@@ -27,64 +27,64 @@
  * the rights to redistribute these changes.
  */
 
-#include <mach.h>
 #include <device/device.h>
+#include <mach.h>
 #include <stdarg.h>
 
 extern mach_port_t __libmach_console_port;
 
-safe_gets(str, maxlen)
-	char *str;
-	int  maxlen;
-{
-	register char *lp;
-	register int c;
+/**
+ * @brief Read a line from the console with rudimentary editing.
+ *
+ * @param str    Buffer to store the line.
+ * @param maxlen Maximum length of the buffer.
+ */
+void safe_gets(char *str, int maxlen) {
+  register char *lp;
+  register int c;
 
-	char	inbuf[IO_INBAND_MAX];
-	mach_msg_type_number_t count;
-	register char *ip;
-	char *strmax = str + maxlen - 1; /* allow space for trailing 0 */
+  char inbuf[IO_INBAND_MAX];
+  mach_msg_type_number_t count;
+  register char *ip;
+  char *strmax = str + maxlen - 1; /* allow space for trailing 0 */
 
-	lp = str;
-	for (;;) {
-	    count = IO_INBAND_MAX;
-	    (void) device_read_inband(__libmach_console_port,
-	    			      (dev_mode_t)0, (recnum_t)0,
-				      sizeof(inbuf), inbuf, &count);
-	    for (ip = inbuf; ip < &inbuf[count]; ip++) {
-		c = *ip;
-		switch (c) {
-		    case '\n':
-		    case '\r':
-			printf("\n");
-			*lp++ = 0;
-			return;
+  lp = str;
+  for (;;) {
+    count = IO_INBAND_MAX;
+    (void)device_read_inband(__libmach_console_port, (dev_mode_t)0, (recnum_t)0,
+                             sizeof(inbuf), inbuf, &count);
+    for (ip = inbuf; ip < &inbuf[count]; ip++) {
+      c = *ip;
+      switch (c) {
+      case '\n':
+      case '\r':
+        printf("\n");
+        *lp++ = 0;
+        return;
 
-		    case '\b':
-		    case '#':
-		    case '\177':
-			if (lp > str) {
-			    printf("\b \b");
-			    lp--;
-			}
-			continue;
-		    case '@':
-		    case 'u'&037:
-			lp = str;
-			printf("\n\r");
-			continue;
-		    default:
-			if (c >= ' ' && c < '\177') {
-			    if (lp < strmax) {
-				*lp++ = c;
-				printf("%c", c);
-			    }
-			    else {
-				printf("%c", '\007'); /* beep */
-			    }
-			}
-		}
-	    }
-	}
+      case '\b':
+      case '#':
+      case '\177':
+        if (lp > str) {
+          printf("\b \b");
+          lp--;
+        }
+        continue;
+      case '@':
+      case 'u' & 037:
+        lp = str;
+        printf("\n\r");
+        continue;
+      default:
+        if (c >= ' ' && c < '\177') {
+          if (lp < strmax) {
+            *lp++ = c;
+            printf("%c", c);
+          } else {
+            printf("%c", '\007'); /* beep */
+          }
+        }
+      }
+    }
+  }
 }
-

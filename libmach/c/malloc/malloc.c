@@ -25,6 +25,12 @@
 
 lmm_t malloc_lmm = LMM_INITIALIZER;
 
+/**
+ * @brief Allocate memory from the simple allocator.
+ *
+ * @param size Number of bytes to allocate.
+ * @return Pointer to allocated memory or @c NULL on failure.
+ */
 void *malloc(size_t size)
 {
 	size_t *chunk;

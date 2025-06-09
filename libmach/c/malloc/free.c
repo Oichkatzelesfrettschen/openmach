@@ -23,6 +23,11 @@
 
 #include "malloc.h"
 
+/**
+ * @brief Release memory allocated by malloc.
+ *
+ * @param chunk_ptr Pointer previously returned by malloc/calloc/realloc.
+ */
 void free(void *chunk_ptr)
 {
 	size_t *chunk = (size_t*)chunk_ptr - 1;

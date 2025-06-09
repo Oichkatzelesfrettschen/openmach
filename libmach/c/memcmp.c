@@ -40,6 +40,14 @@
 
 #include <sys/types.h>
 
+/**
+ * @brief Compare two memory regions.
+ *
+ * @param s1v  Pointer to first memory block.
+ * @param s2v  Pointer to second memory block.
+ * @param size Number of bytes to compare.
+ * @return Zero if equal, otherwise difference of first mismatched bytes.
+ */
 int
 memcmp(const void *s1v, const void *s2v, size_t size)
 {

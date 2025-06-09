@@ -39,6 +39,11 @@ struct printf_state {
 };
 
 static void
+/**
+ * @brief Output buffered characters.
+ *
+ * @param state Formatter state containing the buffer.
+ */
 flush(struct printf_state *state)
 {
 	int i;
@@ -50,9 +55,15 @@ flush(struct printf_state *state)
 }
 
 static void
+/**
+ * @brief Callback used by _doprnt to emit characters.
+ *
+ * @param arg Pointer to struct printf_state.
+ * @param c   Character to output.
+ */
 printf_char(arg, c)
-	char *arg;
-	int c;
+        char *arg;
+        int c;
 {
 	struct printf_state *state = (struct printf_state *) arg;
 
@@ -77,6 +88,12 @@ printf_char(arg, c)
 /*
  * Printing (to console)
  */
+/**
+ * @brief Print formatted output to the console.
+ *
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 vprintf(char *fmt, ...)
 {
 	struct printf_state state;
@@ -90,6 +107,12 @@ vprintf(char *fmt, ...)
 	    flush(&state);
 }
 
+/**
+ * @brief Print formatted output using variable arguments.
+ *
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 int
 printf(char *fmt, ...)
 {

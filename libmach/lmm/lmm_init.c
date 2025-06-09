@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,8 +23,12 @@
 
 #include "lmm.h"
 
-void lmm_init(lmm_t *lmm)
-{
-	lmm->regions = 0;
-}
-
+/**
+ * @brief Initialise an LMM arena structure.
+ *
+ * Sets the region list to empty so that regions can later be added with
+ * lmm_add_region().
+ *
+ * @param lmm Arena object to initialise.
+ */
+void lmm_init(lmm_t *lmm) { lmm->regions = 0; }

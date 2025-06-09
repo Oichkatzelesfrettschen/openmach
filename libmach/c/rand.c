@@ -1,13 +1,16 @@
 /* SPDX-License-Identifier: Utah-BSD-Style */
 /* See LICENSE file for full copyright notice */
 
- */
-
 #include <sys/types.h>
 #include <stdlib.h>
 
 static unsigned seed[2];
 
+/**
+ * @brief Pseudo-random number generator.
+ *
+ * @return A random integer in the range [0, RAND_MAX].
+ */
 int
 rand(void)
 {
@@ -17,6 +20,11 @@ rand(void)
 	return seed[0] % ((u_long)RAND_MAX + 1);
 }
 
+/**
+ * @brief Seed the pseudo-random number generator.
+ *
+ * @param new_seed Initial seed value.
+ */
 void
 srand(unsigned new_seed)
 {

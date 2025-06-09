@@ -32,6 +32,12 @@ typedef void (*void_function_ptr)();
 void_function_ptr _atexit_functions[32];
 int _atexit_index = 0;
 
+/**
+ * @brief Register a function to run at program exit.
+ *
+ * @param function Callback to invoke when exiting.
+ * @return 0 on success or -1 if the table is full.
+ */
 int _atexit(function)
      void (*function)();
 {
@@ -46,6 +52,12 @@ int _atexit(function)
      return 0;
 }
      
+/**
+ * @brief Standard atexit wrapper.
+ *
+ * @param function Callback to register.
+ * @return Result of ::_atexit.
+ */
 int atexit(function)
      void (*function)();
 {
@@ -55,6 +67,9 @@ int atexit(function)
 /*
  * Call atexit functions in reverse order.
  */
+/**
+ * @brief Execute registered atexit callbacks.
+ */
 void _run_atexits()
 {
      int i;
@@ -63,6 +78,11 @@ void _run_atexits()
          (*_atexit_functions[i])();
 }
 
+/**
+ * @brief Exit the process after running atexit handlers.
+ *
+ * @param code Exit status code.
+ */
 void exit(code)
     int code;
 {

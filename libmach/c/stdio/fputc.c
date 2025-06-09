@@ -24,6 +24,13 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * @brief Write a character to a stream.
+ *
+ * @param c      Character to write.
+ * @param stream Output stream.
+ * @return The written character or -1 on error.
+ */
 int fputc(int c, FILE *stream)
 {
 	char ch = c;

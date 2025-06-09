@@ -29,25 +29,22 @@
 
 #include <stdio.h>
 
-int
-puts(const char *s)
-{
-	const char *ss;
+/**
+ * @brief Write a string followed by a newline to the console.
+ */
+int puts(const char *s) {
+  const char *ss;
 
-	for (ss = s; ; ss++)
-	{
-		if (*ss == 0)
-		{
-			__libmach_console_write(s, ss - s);
-			putchar('\n');
-			return 0;
-		}
-		if (*ss == '\n')
-		{
-			__libmach_console_write(s, ss - s);
-			putchar('\n');
-			s = ss+1;
-		}
-	}
+  for (ss = s;; ss++) {
+    if (*ss == 0) {
+      __libmach_console_write(s, ss - s);
+      putchar('\n');
+      return 0;
+    }
+    if (*ss == '\n') {
+      __libmach_console_write(s, ss - s);
+      putchar('\n');
+      s = ss + 1;
+    }
+  }
 }
-

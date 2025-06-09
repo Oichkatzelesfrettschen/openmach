@@ -23,6 +23,13 @@
 
 #include <malloc.h>
 
+/**
+ * @brief Allocate and zero memory for an array.
+ *
+ * @param nelt     Number of elements.
+ * @param eltsize  Size of each element in bytes.
+ * @return Pointer to zero-initialized memory or @c NULL on failure.
+ */
 void *calloc(vm_size_t nelt, vm_size_t eltsize)
 {
 	vm_size_t allocsize = nelt * eltsize;

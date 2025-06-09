@@ -24,6 +24,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * @brief Write records from a buffer to a stream.
+ *
+ * @param buf    Source buffer.
+ * @param size   Size of each element.
+ * @param count  Number of elements to write.
+ * @param stream Output stream.
+ * @return Number of bytes written.
+ */
 int fwrite(void *buf, int size, int count, FILE *stream)
 {
 	return write(stream->fd, buf, size * count);

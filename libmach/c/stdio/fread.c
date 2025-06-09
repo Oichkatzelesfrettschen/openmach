@@ -24,6 +24,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * @brief Read records from a stream into a buffer.
+ *
+ * @param buf    Destination buffer.
+ * @param size   Size of each element.
+ * @param count  Number of elements to read.
+ * @param stream Input stream.
+ * @return Number of bytes read.
+ */
 int fread(void *buf, int size, int count, FILE *stream)
 {
 	return read(stream->fd, buf, size * count);

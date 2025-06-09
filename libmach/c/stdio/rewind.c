@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995-1994 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,8 +23,11 @@
 
 #include <stdio.h>
 
-void rewind(FILE *stream)
-{
-	fseek(stream, 0, SEEK_SET);
-}
-
+/**
+ * @brief Reset the position indicator of a stream to the beginning.
+ *
+ * @param stream The FILE stream to rewind.
+ *
+ * @return No return value.
+ */
+void rewind(FILE *stream) { fseek(stream, 0, SEEK_SET); }

@@ -25,6 +25,13 @@
 #include <stdarg.h>
 
 int
+/**
+ * @brief Print formatted output to a file stream.
+ *
+ * @param stream Destination stream.
+ * @param fmt    Format string.
+ * @return Number of characters printed, or a negative value on error.
+ */
 fprintf(FILE *stream, const char *fmt, ...)
 {
 	va_list	args;

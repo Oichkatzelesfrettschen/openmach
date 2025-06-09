@@ -24,6 +24,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * @brief Return the current file position of a stream.
+ *
+ * @param stream The stream to query.
+ * @return Current offset, or -1 on failure.
+ */
 long ftell(FILE *stream)
 {
 	return lseek(stream->fd, 0, SEEK_CUR);

@@ -25,6 +25,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+/**
+ * @brief Close a file stream.
+ *
+ * @param stream Stream to close.
+ * @return Zero on success.
+ */
 int fclose(FILE *stream)
 {
 	close(stream->fd);

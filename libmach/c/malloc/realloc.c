@@ -26,6 +26,13 @@
 #include "malloc.h"
 
 /* XX could be made smarter, so it doesn't always copy to a new block.  */
+/**
+ * @brief Resize a memory block.
+ *
+ * @param buf       Pointer to existing allocation or @c NULL.
+ * @param new_size  Desired size in bytes.
+ * @return Pointer to reallocated memory or @c NULL on failure.
+ */
 void *realloc(void *buf, vm_size_t new_size)
 {
 	vm_size_t *op;

@@ -40,6 +40,16 @@ typedef int boolean_t;
  * All I need is a miracle ...
  * to keep this from growing like all the other sscanf!
  */
+/**
+ * @brief Core scanning routine used by sscanf.
+ *
+ * @param fmt       Format string.
+ * @param vp        Argument list to store results.
+ * @param getc      Input character callback.
+ * @param ungetc    Character pushback callback.
+ * @param getc_arg  Argument for callbacks.
+ * @return Number of successfully scanned fields.
+ */
 int
 _doscan(const unsigned char *fmt, va_list vp,
 	int (*getc)(void *getc_arg),
