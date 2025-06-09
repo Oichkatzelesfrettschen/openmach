@@ -27,18 +27,29 @@
 #include <mach.h>
 #include <mach/message.h>
 
+/**
+ * @brief Allocate a Mach port, falling back to MIG when interrupted.
+ *
+ * This wrapper around the system call retries the allocation using the
+ * MIG stub if the first attempt is interrupted.
+ *
+ * @param task    Task on whose behalf to allocate the port.
+ * @param right   The type of right requested.
+ * @param namep   Out-parameter receiving the allocated port name.
+ * @return KERN_SUCCESS on success or a Mach error code otherwise.
+ */
 kern_return_t
 mach_port_allocate(task, right, namep)
-	task_t task;
-	mach_port_right_t right;
-	mach_port_t *namep;
+        task_t task;
+        mach_port_right_t right;
+        mach_port_t *namep;
 {
-	kern_return_t kr;
+        kern_return_t kr;
 
-	kr = syscall_mach_port_allocate(task, right, namep);
-	if (kr == MACH_SEND_INTERRUPTED)
-		kr = mig_mach_port_allocate(task, right, namep);
+        kr = syscall_mach_port_allocate(task, right, namep);
+        if (kr == MACH_SEND_INTERRUPTED)
+                kr = mig_mach_port_allocate(task, right, namep);
 
-	return kr;
+        return kr;
 }
 

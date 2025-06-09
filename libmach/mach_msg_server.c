@@ -32,13 +32,18 @@
 
 extern void *malloc(unsigned int);
 
-/*
- *	Routine:	mach_msg_server
- *	Purpose:
- *		A simple generic server function.
+/**
+ * @brief Generic server loop processing Mach IPC messages.
+ *
+ * This function repeatedly receives requests on @p rcv_name and dispatches
+ * them using the supplied @p demux function. Replies are sent to the
+ * port specified in each request message.
+ *
+ * @param demux    Function to dispatch incoming requests.
+ * @param max_size Maximum message size supported.
+ * @param rcv_name Port on which to receive requests.
+ * @return Mach message return code from the last send/receive operation.
  */
-
-mach_msg_return_t
 mach_msg_server(demux, max_size, rcv_name)
     boolean_t (*demux)();
     mach_msg_size_t max_size;
