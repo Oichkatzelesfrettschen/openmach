@@ -24,14 +24,15 @@
  *
  */
 
-#ifndef	_MACH_ALERT_H_
+#ifndef _MACH_ALERT_H_
 #define _MACH_ALERT_H_
 
-#define ALERT_BITS		32		/* Minimum; more may actually be available */
+#define ALERT_BITS 32 /* Minimum; more may actually be available */
 
-#define ALERT_ABORT_STRONG	0x00000001	/* Request to abort _all_ operations */
-#define ALERT_ABORT_SAFE	0x00000002	/* Request to abort restartable operations */
+#define ALERT_ABORT_STRONG 0x00000001 /* Request to abort _all_ operations */
+#define ALERT_ABORT_SAFE                                                       \
+  0x00000002 /* Request to abort restartable operations */
 
-#define ALERT_USER		0xffff0000	/* User-defined alert bits */
+#define ALERT_USER 0xffff0000 /* User-defined alert bits */
 
-#endif	_MACH_ALERT_H_
+#endif _MACH_ALERT_H_
