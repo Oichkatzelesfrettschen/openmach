@@ -33,3 +33,6 @@ tags
 
 # Object directory
 obj/
+# Build caches
+ccache/
+buildcache/
