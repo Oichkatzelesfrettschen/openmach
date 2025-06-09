@@ -27,52 +27,48 @@
  * the rights to redistribute these changes.
  */
 
-#include <mach.h>
 #include <device/device.h>
+#include <mach.h>
 
 mach_port_t __libmach_console_port = MACH_PORT_NULL;
 
 static int dropped_print = FALSE;
 
-void
-printf_init(device_server_port)
-	mach_port_t device_server_port;
-{
-	(void) device_open(device_server_port,
-			   (dev_mode_t)0,
-			   "console",
-			   &__libmach_console_port);
-	return;
+/**
+ * @brief Initialize the console port using the given device server.
+ *
+ * @param device_server_port Device server to query for the "console" device.
+ */
+void printf_init(mach_port_t device_server_port) {
+  (void)device_open(device_server_port, (dev_mode_t)0, "console",
+                    &__libmach_console_port);
+  return;
 }
 
-void
-__libmach_console_write(char *buf, int len)
-{
-	int amt;
+/**
+ * @brief Write a buffer to the Mach console.
+ */
+void __libmach_console_write(char *buf, int len) {
+  int amt;
 
-	if (__libmach_console_port == MACH_PORT_NULL)
-	{
-		dropped_print = TRUE;
-		return;
-	}
+  if (__libmach_console_port == MACH_PORT_NULL) {
+    dropped_print = TRUE;
+    return;
+  }
 
-	if (dropped_print)
-	{
-		char *s = "Text written to the libmach console was lost\r\n"
-			  "before the console was initialized.\r\n";
+  if (dropped_print) {
+    char *s = "Text written to the libmach console was lost\r\n"
+              "before the console was initialized.\r\n";
 
-		dropped_print = FALSE;
-		__libmach_console_write(s, strlen(s));
-	}
+    dropped_print = FALSE;
+    __libmach_console_write(s, strlen(s));
+  }
 
-	while (len > 0)
-	{
-		if (device_write_inband(__libmach_console_port, (dev_mode_t)0,
-					(recnum_t)0, buf, len, &amt)
-		    != D_SUCCESS)
-			break;
-		buf += amt;
-		len -= amt;
-	}
+  while (len > 0) {
+    if (device_write_inband(__libmach_console_port, (dev_mode_t)0, (recnum_t)0,
+                            buf, len, &amt) != D_SUCCESS)
+      break;
+    buf += amt;
+    len -= amt;
+  }
 }
-

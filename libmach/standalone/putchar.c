@@ -29,14 +29,14 @@
 
 #include <stdio.h>
 
-int
-putchar(int c)
-{
-	char cc = c;
+/**
+ * @brief Output a single character to the console.
+ */
+int putchar(int c) {
+  char cc = c;
 
-	if (c == '\n')
-		__libmach_console_write("\r", 1);
-	__libmach_console_write(&cc, 1);
-	return 0;
+  if (c == '\n')
+    __libmach_console_write("\r", 1);
+  __libmach_console_write(&cc, 1);
+  return 0;
 }
-
