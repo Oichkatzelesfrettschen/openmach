@@ -27,13 +27,26 @@
 #include <stdarg.h>
 
 static void
+/**
+ * @brief Output function used by vsprintf.
+ *
+ * @param arg Pointer to the destination string pointer.
+ * @param c   Character to append.
+ */
 savechar(arg, c)
-	char *arg;
-	int c;
+        char *arg;
+        int c;
 {
 	*(*(char **)arg)++ = c;
 }
 
+/**
+ * @brief Format a string using a variable argument list.
+ *
+ * @param s   Destination buffer.
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 vsprintf(char *s, char *fmt, ...)
 {
 	va_list args;
@@ -44,6 +57,13 @@ vsprintf(char *s, char *fmt, ...)
 }
 
 /*VARARGS2*/
+/**
+ * @brief Format a string and store the result.
+ *
+ * @param s   Destination buffer.
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 sprintf(char *s, char *fmt, ...)
 {
 	va_list	args;

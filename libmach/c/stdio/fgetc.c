@@ -23,6 +23,12 @@
 
 #include <stdio.h>
 
+/**
+ * @brief Read a character from a stream.
+ *
+ * @param stream Input stream.
+ * @return Character read or -1 on EOF/error.
+ */
 int fgetc(FILE *stream)
 {
 	unsigned char c;

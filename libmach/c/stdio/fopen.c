@@ -27,6 +27,13 @@
 #include <fcntl.h>
 
 FILE *
+/**
+ * @brief Open a file and return a stream.
+ *
+ * @param name Path to the file.
+ * @param mode Mode string as in standard fopen.
+ * @return New FILE structure or @c NULL on failure.
+ */
 fopen(const char *name, const char *mode)
 {
 	int base_mode = O_RDONLY, flags = 0;

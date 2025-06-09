@@ -24,6 +24,14 @@
 #include <sys/types.h>
 
 void *
+/**
+ * @brief Fill memory with a constant byte.
+ *
+ * @param tov Pointer to the destination memory block.
+ * @param c   Byte value to set.
+ * @param len Number of bytes to write.
+ * @return The original destination pointer.
+ */
 memset(void *tov, int c, size_t len)
 {
         char *to = tov;

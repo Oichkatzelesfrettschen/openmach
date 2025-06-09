@@ -25,6 +25,11 @@
 #include <stdarg.h>
 
 void
+/**
+ * @brief Print a panic message and abort.
+ *
+ * @param fmt printf-style format string followed by arguments.
+ */
 panic(const char *fmt, ...)
 {
 	va_list args;

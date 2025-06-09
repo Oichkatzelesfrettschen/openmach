@@ -23,6 +23,15 @@
 
 #include "malloc.h"
 
+/**
+ * @brief Request additional memory from the system.
+ *
+ * The current implementation does not provide more memory and
+ * simply returns zero.
+ *
+ * @param size Requested size in bytes.
+ * @return Non-zero on success, otherwise 0.
+ */
 int morecore(size_t size)
 {
 	return 0;
