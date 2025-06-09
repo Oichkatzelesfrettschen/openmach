@@ -13,8 +13,10 @@ packages=(
     build-essential clang clang-tools lld lldb llvm
     cmake make automake autoconf libtool pkg-config
     gdb valgrind git curl wget python3 python3-pip
-    libffi-dev libssl-dev nodejs npm shellcheck
-    graphviz doxygen python3-sphinx tlaplus coq coqide libcoq-ocaml-dev
+    libffi-dev libssl-dev nodejs npm shellcheck cloc tmux
+    qemu-system-x86 qemu-utils qemu-nox
+    graphviz doxygen python3-sphinx python3-breathe sphinx-rtd-theme
+    tlaplus coq coqide libcoq-ocaml-dev
     coq-theories isabelle openjdk-11-jre-headless
     llvm-bolt polly
 )
