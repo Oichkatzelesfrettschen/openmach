@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -25,43 +25,48 @@
 
 #ifdef DEBUG
 
-void lmm_dump(lmm_t *lmm)
-{
-	struct lmm_region *reg;
+/**
+ * @brief Dump the internal state of an LMM arena for debugging.
+ *
+ * When compiled with DEBUG defined, this function prints detailed
+ * information about each region and free block managed by @p lmm.
+ *
+ * @param lmm Arena whose state should be printed.
+ */
+void lmm_dump(lmm_t *lmm) {
+  struct lmm_region *reg;
 
-	printf("lmm_dump(lmm=%08x)\n", lmm);
+  printf("lmm_dump(lmm=%08x)\n", lmm);
 
-	for (reg = lmm->regions; reg; reg = reg->next)
-	{
-		struct lmm_node *node;
-		vm_size_t free_check;
+  for (reg = lmm->regions; reg; reg = reg->next) {
+    struct lmm_node *node;
+    vm_size_t free_check;
 
-		printf(" region %08x-%08x size=%08x flags=%08x pri=%d free=%08x\n",
-			reg, (vm_offset_t)reg + reg->size, reg->size,
-			reg->flags, reg->pri, reg->free);
+    printf(" region %08x-%08x size=%08x flags=%08x pri=%d free=%08x\n", reg,
+           (vm_offset_t)reg + reg->size, reg->size, reg->flags, reg->pri,
+           reg->free);
 
-		assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg+1));
-		assert(reg->free <= reg->size - sizeof(struct lmm_region));
+    assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg + 1));
+    assert(reg->free <= reg->size - sizeof(struct lmm_region));
 
-		free_check = 0;
-		for (node = reg->nodes; node; node = node->next)
-		{
-			printf("  node %08x-%08x size=%08x next=%08x\n", 
-				node, (vm_offset_t)node + node->size, node->size, node->next);
+    free_check = 0;
+    for (node = reg->nodes; node; node = node->next) {
+      printf("  node %08x-%08x size=%08x next=%08x\n", node,
+             (vm_offset_t)node + node->size, node->size, node->next);
 
-			assert(((vm_offset_t)node & ALIGN_MASK) == 0);
-			assert(((vm_offset_t)node->size & ALIGN_MASK) == 0);
-			assert((node->next == 0) || (node->next > node));
-			assert((vm_offset_t)node < (vm_offset_t)reg + reg->size);
+      assert(((vm_offset_t)node & ALIGN_MASK) == 0);
+      assert(((vm_offset_t)node->size & ALIGN_MASK) == 0);
+      assert((node->next == 0) || (node->next > node));
+      assert((vm_offset_t)node < (vm_offset_t)reg + reg->size);
 
-			free_check += node->size;
-		}
+      free_check += node->size;
+    }
 
-		printf(" free_check=%08x\n", free_check);
-		assert(reg->free == free_check);
-	}
+    printf(" free_check=%08x\n", free_check);
+    assert(reg->free == free_check);
+  }
 
-	printf("lmm_dump done\n");
+  printf("lmm_dump done\n");
 }
 
 #endif /* DEBUG */

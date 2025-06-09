@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,56 +23,61 @@
 
 #include "lmm.h"
 
-void *lmm_alloc(lmm_t *lmm, vm_size_t size, lmm_flags_t flags)
-{
-	struct lmm_region *reg;
+/**
+ * @brief Allocate memory from an LMM arena.
+ *
+ * This routine searches the list of regions maintained in @p lmm for a
+ * free block that satisfies @p size and @p flags.  If a suitable chunk is
+ * found it is removed from the free list and returned.
+ *
+ * @param lmm   The LMM arena to allocate from.
+ * @param size  Minimum number of bytes requested.
+ * @param flags Allocation constraints for the memory block.
+ *
+ * @return Pointer to the allocated block or NULL on failure.
+ */
+void *lmm_alloc(lmm_t *lmm, vm_size_t size, lmm_flags_t flags) {
+  struct lmm_region *reg;
 
-	size = (size + ALIGN_MASK) & ~ALIGN_MASK;
+  size = (size + ALIGN_MASK) & ~ALIGN_MASK;
 
-	for (reg = lmm->regions; reg; reg = reg->next)
-	{
-		struct lmm_node **nodep, *node;
+  for (reg = lmm->regions; reg; reg = reg->next) {
+    struct lmm_node **nodep, *node;
 
-		assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg+1));
-		assert(reg->free <= reg->size - sizeof(struct lmm_region));
+    assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg + 1));
+    assert(reg->free <= reg->size - sizeof(struct lmm_region));
 
-		if (flags & ~reg->flags)
-			continue;
+    if (flags & ~reg->flags)
+      continue;
 
-		for (nodep = &reg->nodes; node = *nodep; nodep = &node->next)
-		{
-			assert(((vm_offset_t)node & ALIGN_MASK) == 0);
-			assert(((vm_offset_t)node->size & ALIGN_MASK) == 0);
-			assert((node->next == 0) || (node->next > node));
-			assert((vm_offset_t)node < (vm_offset_t)reg + reg->size);
+    for (nodep = &reg->nodes; node = *nodep; nodep = &node->next) {
+      assert(((vm_offset_t)node & ALIGN_MASK) == 0);
+      assert(((vm_offset_t)node->size & ALIGN_MASK) == 0);
+      assert((node->next == 0) || (node->next > node));
+      assert((vm_offset_t)node < (vm_offset_t)reg + reg->size);
 
-			if (node->size >= size)
-			{
-				if (node->size > size)
-				{
-					struct lmm_node *newnode;
+      if (node->size >= size) {
+        if (node->size > size) {
+          struct lmm_node *newnode;
 
-					/* Split the node and return its head.  */
-					newnode = (struct lmm_node*)((void*)node + size);
-					newnode->next = node->next;
-					newnode->size = node->size - size;
-					*nodep = newnode;
-				}
-				else
-				{
-					/* Remove and return the entire node.  */
-					*nodep = node->next;
-				}
+          /* Split the node and return its head.  */
+          newnode = (struct lmm_node *)((void *)node + size);
+          newnode->next = node->next;
+          newnode->size = node->size - size;
+          *nodep = newnode;
+        } else {
+          /* Remove and return the entire node.  */
+          *nodep = node->next;
+        }
 
-				/* Adjust the region's free memory counter.  */
-				assert(reg->free >= size);
-				reg->free -= size;
+        /* Adjust the region's free memory counter.  */
+        assert(reg->free >= size);
+        reg->free -= size;
 
-				return (void*)node;
-			}
-		}
-	}
+        return (void *)node;
+      }
+    }
+  }
 
-	return 0;
+  return 0;
 }
-

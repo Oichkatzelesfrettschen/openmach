@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,25 +23,33 @@
 
 #include "lmm.h"
 
-vm_size_t lmm_avail(lmm_t *lmm, lmm_flags_t flags)
-{
-	struct lmm_region *reg;
-	vm_size_t count;
+/**
+ * @brief Compute the total free space available in an LMM arena.
+ *
+ * Iterates over the regions and sums the free memory in regions that
+ * satisfy the given @p flags mask.
+ *
+ * @param lmm   The LMM arena to inspect.
+ * @param flags Flags that selected regions must contain.
+ *
+ * @return Number of free bytes meeting the criteria.
+ */
+vm_size_t lmm_avail(lmm_t *lmm, lmm_flags_t flags) {
+  struct lmm_region *reg;
+  vm_size_t count;
 
-	count = 0;
-	for (reg = lmm->regions; reg; reg = reg->next)
-	{
-		/* Don't count inapplicable regions.  */
-		if (flags & ~reg->flags)
-			continue;
+  count = 0;
+  for (reg = lmm->regions; reg; reg = reg->next) {
+    /* Don't count inapplicable regions.  */
+    if (flags & ~reg->flags)
+      continue;
 
-		count += reg->free;
+    count += reg->free;
 
-		assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg+1));
-		assert(reg->free <= reg->size - sizeof(struct lmm_region));
+    assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg + 1));
+    assert(reg->free <= reg->size - sizeof(struct lmm_region));
 
-		/* XXX sanity-check the region's free count */
-	}
-	return count;
+    /* XXX sanity-check the region's free count */
+  }
+  return count;
 }
-

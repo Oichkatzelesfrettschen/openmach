@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -25,9 +25,18 @@
 
 #include "lmm.h"
 
-void *lmm_alloc_page(lmm_t *lmm, lmm_flags_t flags)
-{
-	return lmm_alloc_gen(lmm, PAGE_SIZE, flags, PAGE_SHIFT, 0,
-			     (vm_offset_t)0, (vm_size_t)-1);
+/**
+ * @brief Allocate a single hardware page from an LMM arena.
+ *
+ * Convenience wrapper that requests a page-sized block aligned to the system
+ * page size.
+ *
+ * @param lmm   The LMM arena to allocate from.
+ * @param flags Allocation constraints for the memory block.
+ *
+ * @return Pointer to the allocated page or NULL on failure.
+ */
+void *lmm_alloc_page(lmm_t *lmm, lmm_flags_t flags) {
+  return lmm_alloc_gen(lmm, PAGE_SIZE, flags, PAGE_SHIFT, 0, (vm_offset_t)0,
+                       (vm_size_t)-1);
 }
-
