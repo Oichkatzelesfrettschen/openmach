@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,11 +23,22 @@
 
 #include "lmm.h"
 
+/**
+ * @brief Allocate memory with an alignment constraint.
+ *
+ * Delegates to lmm_alloc_gen() requesting that the returned address be
+ * aligned according to @p align_bits and @p align_ofs.
+ *
+ * @param lmm        The LMM arena to allocate from.
+ * @param size       Minimum number of bytes requested.
+ * @param flags      Allocation constraints.
+ * @param align_bits Alignment expressed as log₂ of the boundary.
+ * @param align_ofs  Offset from the alignment boundary.
+ *
+ * @return Pointer to the allocated block or NULL on failure.
+ */
 void *lmm_alloc_aligned(lmm_t *lmm, vm_size_t size, lmm_flags_t flags,
-			int align_bits, vm_offset_t align_ofs)
-{
-	return lmm_alloc_gen(lmm, size, flags,
-			     align_bits, align_ofs,
-			     (vm_offset_t)0, (vm_size_t)-1);
+                        int align_bits, vm_offset_t align_ofs) {
+  return lmm_alloc_gen(lmm, size, flags, align_bits, align_ofs, (vm_offset_t)0,
+                       (vm_size_t)-1);
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -24,6 +24,12 @@
 
 #include "lmm.h"
 
+/**
+ * @brief Placeholder for availability query within a range.
+ *
+ * This function is currently disabled but documents the intended
+ * parameters for future implementation.
+ */
 void lmm_avail_in(unsigned flags, vm_offset_t addr, vm_size_t size)
 {
 }

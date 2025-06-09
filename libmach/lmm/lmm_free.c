@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -23,73 +23,75 @@
 
 #include "lmm.h"
 
-void lmm_free(lmm_t *lmm, void *block, vm_size_t size)
-{
-	struct lmm_region *reg;
-	struct lmm_node *node = (struct lmm_node*)((vm_offset_t)block & ~ALIGN_MASK);
-	struct lmm_node *prevnode, *nextnode;
+/**
+ * @brief Return memory to an LMM arena.
+ *
+ * The block specified by @p block and @p size is inserted back into the free
+ * list of the region that owns it.  Adjacent free blocks are coalesced to
+ * minimise fragmentation.
+ *
+ * @param lmm   Arena into which the block will be freed.
+ * @param block Pointer to the start of the block being freed.
+ * @param size  Size in bytes of the block.
+ */
+void lmm_free(lmm_t *lmm, void *block, vm_size_t size) {
+  struct lmm_region *reg;
+  struct lmm_node *node = (struct lmm_node *)((vm_offset_t)block & ~ALIGN_MASK);
+  struct lmm_node *prevnode, *nextnode;
 
-	size = (((vm_offset_t)block & ALIGN_MASK) + size + ALIGN_MASK) & ~ALIGN_MASK;
+  size = (((vm_offset_t)block & ALIGN_MASK) + size + ALIGN_MASK) & ~ALIGN_MASK;
 
-	/* First find the region to add this block to.  */
-	for (reg = lmm->regions; ; reg = reg->next)
-	{
-		assert(reg != 0);
-		assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg+1));
-		assert(reg->free <= reg->size - sizeof(struct lmm_region));
+  /* First find the region to add this block to.  */
+  for (reg = lmm->regions;; reg = reg->next) {
+    assert(reg != 0);
+    assert((vm_offset_t)reg->nodes >= (vm_offset_t)(reg + 1));
+    assert(reg->free <= reg->size - sizeof(struct lmm_region));
 
-		if (((vm_offset_t)node >= (vm_offset_t)reg)
-		    && ((vm_offset_t)node < (vm_offset_t)reg + reg->size))
-			break;
-	}
+    if (((vm_offset_t)node >= (vm_offset_t)reg) &&
+        ((vm_offset_t)node < (vm_offset_t)reg + reg->size))
+      break;
+  }
 
-	/* Record the newly freed space in the region's free space counter.  */
-	reg->free += size;
-	assert(reg->free <= reg->size - sizeof(struct lmm_region));
+  /* Record the newly freed space in the region's free space counter.  */
+  reg->free += size;
+  assert(reg->free <= reg->size - sizeof(struct lmm_region));
 
-	/* Now find the location in that region's free list at which to add the node.  */
-	for (prevnode = 0, nextnode = reg->nodes;
-	     (nextnode != 0) && (nextnode < node);
-	     prevnode = nextnode, nextnode = nextnode->next);
+  /* Now find the location in that region's free list at which to add the node.
+   */
+  for (prevnode = 0, nextnode = reg->nodes;
+       (nextnode != 0) && (nextnode < node);
+       prevnode = nextnode, nextnode = nextnode->next)
+    ;
 
-	/* Coalesce the new free chunk into the previous chunk if possible.  */
-	if ((prevnode) && ((vm_offset_t)prevnode + prevnode->size >= (vm_offset_t)node))
-	{
-		assert((vm_offset_t)prevnode + prevnode->size == (vm_offset_t)node);
+  /* Coalesce the new free chunk into the previous chunk if possible.  */
+  if ((prevnode) &&
+      ((vm_offset_t)prevnode + prevnode->size >= (vm_offset_t)node)) {
+    assert((vm_offset_t)prevnode + prevnode->size == (vm_offset_t)node);
 
-		/* Coalesce prevnode with nextnode if possible.  */
-		if ((vm_offset_t)node + size >= (vm_offset_t)nextnode)
-		{
-			assert((vm_offset_t)node + size == (vm_offset_t)nextnode);
+    /* Coalesce prevnode with nextnode if possible.  */
+    if ((vm_offset_t)node + size >= (vm_offset_t)nextnode) {
+      assert((vm_offset_t)node + size == (vm_offset_t)nextnode);
 
-			prevnode->size += size + nextnode->size;
-			prevnode->next = nextnode->next;
-		}
-		else
-		{
-			/* Not possible - just grow prevnode around newly freed memory.  */
-			prevnode->size += size;
-		}
-	}
-	else
-	{
-		/* Insert the new node into the free list.  */
-		if (prevnode)
-			prevnode->next = node;
-		else
-			reg->nodes = node;
+      prevnode->size += size + nextnode->size;
+      prevnode->next = nextnode->next;
+    } else {
+      /* Not possible - just grow prevnode around newly freed memory.  */
+      prevnode->size += size;
+    }
+  } else {
+    /* Insert the new node into the free list.  */
+    if (prevnode)
+      prevnode->next = node;
+    else
+      reg->nodes = node;
 
-		/* Try coalescing the new node with the nextnode.  */
-		if ((vm_offset_t)node + size >= (vm_offset_t)nextnode)
-		{
-			node->size = size + nextnode->size;
-			node->next = nextnode->next;
-		}
-		else
-		{
-			node->size = size;
-			node->next = nextnode;
-		}
-	}
+    /* Try coalescing the new node with the nextnode.  */
+    if ((vm_offset_t)node + size >= (vm_offset_t)nextnode) {
+      node->size = size + nextnode->size;
+      node->next = nextnode->next;
+    } else {
+      node->size = size;
+      node->next = nextnode;
+    }
+  }
 }
-

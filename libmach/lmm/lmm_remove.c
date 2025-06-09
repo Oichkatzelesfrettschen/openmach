@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -24,6 +24,13 @@
 
 #include "lmm.h"
 
+/**
+ * @brief Remove a region of memory from the LMM allocator.
+ *
+ * This routine is disabled.  It was intended to clip the allocator's free list
+ * so that addresses in the range [@p rstart, @p rstart + @p rsize) are no longer
+ * usable.
+ */
 void lmm_remove(vm_offset_t rstart, vm_size_t rsize)
 {
 	vm_offset_t rend = rstart + rsize;
