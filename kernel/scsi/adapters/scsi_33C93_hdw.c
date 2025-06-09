@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990,1989 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS AS-IS
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -56,43 +56,44 @@ Code that probably makes some sense is from here to "TILL HERE"
  */
 
 #include <sbic.h>
-#if	NSBIC > 0
+#if NSBIC > 0
 #include <platforms.h>
 
-#ifdef	IRIS
-#define	PAD(n)		char n[3]	/* or whatever */
-#define	SBIC_MUX_ADDRESSING		/* comment out if wrong */
-#define	SBIC_CLOCK_FREQUENCY	20	/* FIXME FIXME FIXME */
-#define	SBIC_MACHINE_DMA_MODE	SBIC_CTL_DMA	/* FIXME FIXME FIXME */
+#ifdef IRIS
+#define PAD(n) char n[3]                   /* or whatever */
+#define SBIC_MUX_ADDRESSING                /* comment out if wrong */
+#define SBIC_CLOCK_FREQUENCY 20            /* FIXME FIXME FIXME */
+#define SBIC_MACHINE_DMA_MODE SBIC_CTL_DMA /* FIXME FIXME FIXME */
 
-#define	SBIC_SET_RST_ADDR	/*SCSI_INIT_ADDR*/
-#define	SBIC_CLR_RST_ADDR	/*SCSI_RDY_ADDR*/
-#define	SBIC_MACHINE_RESET_SCSIBUS(regs,per)				\
-	{	int temp;						\
-		temp = *(volatile unsigned int *)SBIC_SET_RST_ADDR;	\
-		delay(per);						\
-		temp = *(volatile unsigned int *)SBIC_CLR_RST_ADDR;	\
-	}
+#define SBIC_SET_RST_ADDR /*SCSI_INIT_ADDR*/
+#define SBIC_CLR_RST_ADDR /*SCSI_RDY_ADDR*/
+#define SBIC_MACHINE_RESET_SCSIBUS(regs, per)                                  \
+  {                                                                            \
+    int temp;                                                                  \
+    temp = *(volatile unsigned int *)SBIC_SET_RST_ADDR;                        \
+    delay(per);                                                                \
+    temp = *(volatile unsigned int *)SBIC_CLR_RST_ADDR;                        \
+  }
 
 #endif
 
-#include <machine/machspl.h>		/* spl definitions */
-#include <mach/std_types.h>
-#include <sys/types.h>
 #include <chips/busses.h>
+#include <mach/std_types.h>
+#include <machine/machspl.h> /* spl definitions */
 #include <scsi/compat_30.h>
+#include <sys/types.h>
 
 #include <scsi/scsi.h>
 #include <scsi/scsi2.h>
 
 #include <scsi/adapters/scsi_33C93.h>
-#include <scsi/scsi_defs.h>
 #include <scsi/adapters/scsi_dma.h>
+#include <scsi/scsi_defs.h>
 
 /*
  * Spell out all combinations of padded/nopadded and mux/nomux
  */
-#ifdef	PAD
+#ifdef PAD
 typedef struct {
 
 	volatile unsigned char	sbic_myid;	/* rw: My SCSI id */
@@ -171,186 +172,191 @@ typedef struct {
 	PAD(pad1);
 } sbic_padded_ind_regmap_t;
 
-#else	/* !PAD */
+#else /* !PAD */
 
 typedef sbic_mux_regmap_t	sbic_padded_mux_regmap_t;
 typedef sbic_ind_regmap_t	sbic_padded_ind_regmap_t;
 
-#endif	/* !PAD */
+#endif /* !PAD */
 
 /*
  * Could have used some non-ANSIsm in the following :-))
  */
-#ifdef	SBIC_MUX_ADDRESSING
+#ifdef SBIC_MUX_ADDRESSING
 
 typedef sbic_padded_mux_regmap_t	sbic_padded_regmap_t;
 
-#define	SET_SBIC_myid(regs,val)		(regs)->sbic_myid = (val)
-#define	GET_SBIC_myid(regs,val)		(val) = (regs)->sbic_myid
-#define	SET_SBIC_cdbsize(regs,val)	(regs)->sbic_cdbsize = (val)
-#define	GET_SBIC_cdbsize(regs,val)	(val) = (regs)->sbic_cdbsize
-#define	SET_SBIC_control(regs,val)	(regs)->sbic_control = (val)
-#define	GET_SBIC_control(regs,val)	(val) = (regs)->sbic_control
-#define	SET_SBIC_timeo(regs,val)	(regs)->sbic_timeo = (val)
-#define	GET_SBIC_timeo(regs,val)	(val) = (regs)->sbic_timeo
-#define	SET_SBIC_cdb1(regs,val)		(regs)->sbic_cdb1 = (val)
-#define	GET_SBIC_cdb1(regs,val)		(val) = (regs)->sbic_cdb1
-#define	SET_SBIC_cdb2(regs,val)		(regs)->sbic_cdb2 = (val)
-#define	GET_SBIC_cdb2(regs,val)		(val) = (regs)->sbic_cdb2
-#define	SET_SBIC_cdb3(regs,val)		(regs)->sbic_cdb3 = (val)
-#define	GET_SBIC_cdb3(regs,val)		(val) = (regs)->sbic_cdb3
-#define	SET_SBIC_cdb4(regs,val)		(regs)->sbic_cdb4 = (val)
-#define	GET_SBIC_cdb4(regs,val)		(val) = (regs)->sbic_cdb4
-#define	SET_SBIC_cdb5(regs,val)		(regs)->sbic_cdb5 = (val)
-#define	GET_SBIC_cdb5(regs,val)		(val) = (regs)->sbic_cdb5
-#define	SET_SBIC_cdb6(regs,val)		(regs)->sbic_cdb6 = (val)
-#define	GET_SBIC_cdb6(regs,val)		(val) = (regs)->sbic_cdb6
-#define	SET_SBIC_cdb7(regs,val)		(regs)->sbic_cdb7 = (val)
-#define	GET_SBIC_cdb7(regs,val)		(val) = (regs)->sbic_cdb7
-#define	SET_SBIC_cdb8(regs,val)		(regs)->sbic_cdb8 = (val)
-#define	GET_SBIC_cdb8(regs,val)		(val) = (regs)->sbic_cdb8
-#define	SET_SBIC_cdb9(regs,val)		(regs)->sbic_cdb9 = (val)
-#define	GET_SBIC_cdb9(regs,val)		(val) = (regs)->sbic_cdb9
-#define	SET_SBIC_cdb10(regs,val)	(regs)->sbic_cdb10 = (val)
-#define	GET_SBIC_cdb10(regs,val)	(val) = (regs)->sbic_cdb10
-#define	SET_SBIC_cdb11(regs,val)	(regs)->sbic_cdb11 = (val)
-#define	GET_SBIC_cdb11(regs,val)	(val) = (regs)->sbic_cdb11
-#define	SET_SBIC_cdb12(regs,val)	(regs)->sbic_cdb12 = (val)
-#define	GET_SBIC_cdb12(regs,val)	(val) = (regs)->sbic_cdb12
-#define	SET_SBIC_tlun(regs,val)		(regs)->sbic_tlun = (val)
-#define	GET_SBIC_tlun(regs,val)		(val) = (regs)->sbic_tlun
-#define	SET_SBIC_cmd_phase(regs,val)	(regs)->sbic_cmd_phase = (val)
-#define	GET_SBIC_cmd_phase(regs,val)	(val) = (regs)->sbic_cmd_phase
-#define	SET_SBIC_syn(regs,val)		(regs)->sbic_syn = (val)
-#define	GET_SBIC_syn(regs,val)		(val) = (regs)->sbic_syn
-#define	SET_SBIC_count_hi(regs,val)	(regs)->sbic_count_hi = (val)
-#define	GET_SBIC_count_hi(regs,val)	(val) = (regs)->sbic_count_hi
-#define	SET_SBIC_count_med(regs,val)	(regs)->sbic_count_med = (val)
-#define	GET_SBIC_count_med(regs,val)	(val) = (regs)->sbic_count_med
-#define	SET_SBIC_count_lo(regs,val)	(regs)->sbic_count_lo = (val)
-#define	GET_SBIC_count_lo(regs,val)	(val) = (regs)->sbic_count_lo
-#define	SET_SBIC_selid(regs,val)	(regs)->sbic_selid = (val)
-#define	GET_SBIC_selid(regs,val)	(val) = (regs)->sbic_selid
-#define	SET_SBIC_rselid(regs,val)	(regs)->sbic_rselid = (val)
-#define	GET_SBIC_rselid(regs,val)	(val) = (regs)->sbic_rselid
-#define	SET_SBIC_csr(regs,val)		(regs)->sbic_csr = (val)
-#define	GET_SBIC_csr(regs,val)		(val) = (regs)->sbic_csr
-#define	SET_SBIC_cmd(regs,val)		(regs)->sbic_cmd = (val)
-#define	GET_SBIC_cmd(regs,val)		(val) = (regs)->sbic_cmd
-#define	SET_SBIC_data(regs,val)		(regs)->sbic_data = (val)
-#define	GET_SBIC_data(regs,val)		(val) = (regs)->sbic_data
+#define SET_SBIC_myid(regs, val) (regs)->sbic_myid = (val)
+#define GET_SBIC_myid(regs, val) (val) = (regs)->sbic_myid
+#define SET_SBIC_cdbsize(regs, val) (regs)->sbic_cdbsize = (val)
+#define GET_SBIC_cdbsize(regs, val) (val) = (regs)->sbic_cdbsize
+#define SET_SBIC_control(regs, val) (regs)->sbic_control = (val)
+#define GET_SBIC_control(regs, val) (val) = (regs)->sbic_control
+#define SET_SBIC_timeo(regs, val) (regs)->sbic_timeo = (val)
+#define GET_SBIC_timeo(regs, val) (val) = (regs)->sbic_timeo
+#define SET_SBIC_cdb1(regs, val) (regs)->sbic_cdb1 = (val)
+#define GET_SBIC_cdb1(regs, val) (val) = (regs)->sbic_cdb1
+#define SET_SBIC_cdb2(regs, val) (regs)->sbic_cdb2 = (val)
+#define GET_SBIC_cdb2(regs, val) (val) = (regs)->sbic_cdb2
+#define SET_SBIC_cdb3(regs, val) (regs)->sbic_cdb3 = (val)
+#define GET_SBIC_cdb3(regs, val) (val) = (regs)->sbic_cdb3
+#define SET_SBIC_cdb4(regs, val) (regs)->sbic_cdb4 = (val)
+#define GET_SBIC_cdb4(regs, val) (val) = (regs)->sbic_cdb4
+#define SET_SBIC_cdb5(regs, val) (regs)->sbic_cdb5 = (val)
+#define GET_SBIC_cdb5(regs, val) (val) = (regs)->sbic_cdb5
+#define SET_SBIC_cdb6(regs, val) (regs)->sbic_cdb6 = (val)
+#define GET_SBIC_cdb6(regs, val) (val) = (regs)->sbic_cdb6
+#define SET_SBIC_cdb7(regs, val) (regs)->sbic_cdb7 = (val)
+#define GET_SBIC_cdb7(regs, val) (val) = (regs)->sbic_cdb7
+#define SET_SBIC_cdb8(regs, val) (regs)->sbic_cdb8 = (val)
+#define GET_SBIC_cdb8(regs, val) (val) = (regs)->sbic_cdb8
+#define SET_SBIC_cdb9(regs, val) (regs)->sbic_cdb9 = (val)
+#define GET_SBIC_cdb9(regs, val) (val) = (regs)->sbic_cdb9
+#define SET_SBIC_cdb10(regs, val) (regs)->sbic_cdb10 = (val)
+#define GET_SBIC_cdb10(regs, val) (val) = (regs)->sbic_cdb10
+#define SET_SBIC_cdb11(regs, val) (regs)->sbic_cdb11 = (val)
+#define GET_SBIC_cdb11(regs, val) (val) = (regs)->sbic_cdb11
+#define SET_SBIC_cdb12(regs, val) (regs)->sbic_cdb12 = (val)
+#define GET_SBIC_cdb12(regs, val) (val) = (regs)->sbic_cdb12
+#define SET_SBIC_tlun(regs, val) (regs)->sbic_tlun = (val)
+#define GET_SBIC_tlun(regs, val) (val) = (regs)->sbic_tlun
+#define SET_SBIC_cmd_phase(regs, val) (regs)->sbic_cmd_phase = (val)
+#define GET_SBIC_cmd_phase(regs, val) (val) = (regs)->sbic_cmd_phase
+#define SET_SBIC_syn(regs, val) (regs)->sbic_syn = (val)
+#define GET_SBIC_syn(regs, val) (val) = (regs)->sbic_syn
+#define SET_SBIC_count_hi(regs, val) (regs)->sbic_count_hi = (val)
+#define GET_SBIC_count_hi(regs, val) (val) = (regs)->sbic_count_hi
+#define SET_SBIC_count_med(regs, val) (regs)->sbic_count_med = (val)
+#define GET_SBIC_count_med(regs, val) (val) = (regs)->sbic_count_med
+#define SET_SBIC_count_lo(regs, val) (regs)->sbic_count_lo = (val)
+#define GET_SBIC_count_lo(regs, val) (val) = (regs)->sbic_count_lo
+#define SET_SBIC_selid(regs, val) (regs)->sbic_selid = (val)
+#define GET_SBIC_selid(regs, val) (val) = (regs)->sbic_selid
+#define SET_SBIC_rselid(regs, val) (regs)->sbic_rselid = (val)
+#define GET_SBIC_rselid(regs, val) (val) = (regs)->sbic_rselid
+#define SET_SBIC_csr(regs, val) (regs)->sbic_csr = (val)
+#define GET_SBIC_csr(regs, val) (val) = (regs)->sbic_csr
+#define SET_SBIC_cmd(regs, val) (regs)->sbic_cmd = (val)
+#define GET_SBIC_cmd(regs, val) (val) = (regs)->sbic_cmd
+#define SET_SBIC_data(regs, val) (regs)->sbic_data = (val)
+#define GET_SBIC_data(regs, val) (val) = (regs)->sbic_data
 
-#define	SBIC_TC_SET(regs,val)	{				\
-		(regs)->sbic_count_hi = ((val)>>16));		\
-		(regs)->sbic_count_med = (val)>>8;		\
-		(regs)->sbic_count_lo = (val);			\
-	}
-#define	SBIC_TC_GET(regs,val)	{				\
-		(val) = ((regs)->sbic_count_hi << 16) |		\
-			((regs)->sbic_count_med << 8) |		\
-			((regs)->sbic_count_lo);		\
-	}
+#define SBIC_TC_SET(regs, val)                                                 \
+  {                                                                            \
+                (regs)->sbic_count_hi = ((val)>>16));                          \
+    (regs)->sbic_count_med = (val) >> 8;                                       \
+    (regs)->sbic_count_lo = (val);                                             \
+  }
+#define SBIC_TC_GET(regs, val)                                                 \
+  {                                                                            \
+    (val) = ((regs)->sbic_count_hi << 16) | ((regs)->sbic_count_med << 8) |    \
+            ((regs)->sbic_count_lo);                                           \
+  }
 
-#define	SBIC_LOAD_COMMAND(regs,cmd,cmdsize)	{		\
-		register char *ptr = (char*)(cmd);		\
-		(regs)->cis_cdb1 = *ptr++;			\
-		(regs)->cis_cdb2 = *ptr++;			\
-		(regs)->cis_cdb3 = *ptr++;			\
-		(regs)->cis_cdb4 = *ptr++;			\
-		(regs)->cis_cdb5 = *ptr++;			\
-		(regs)->cis_cdb6 = *ptr++;			\
-		if (cmdsize > 6) {				\
-			(regs)->cis_cdb7 = *ptr++;		\
-			(regs)->cis_cdb8 = *ptr++;		\
-			(regs)->cis_cdb9 = *ptr++;		\
-			(regs)->cis_cdb10 = *ptr++;		\
-		}						\
-		if (cmdsize > 10) {				\
-			(regs)->cis_cdb11 = *ptr++;		\
-			(regs)->cis_cdb12 = *ptr;		\
-		}						\
-	}
+#define SBIC_LOAD_COMMAND(regs, cmd, cmdsize)                                  \
+  {                                                                            \
+    register char *ptr = (char *)(cmd);                                        \
+    (regs)->cis_cdb1 = *ptr++;                                                 \
+    (regs)->cis_cdb2 = *ptr++;                                                 \
+    (regs)->cis_cdb3 = *ptr++;                                                 \
+    (regs)->cis_cdb4 = *ptr++;                                                 \
+    (regs)->cis_cdb5 = *ptr++;                                                 \
+    (regs)->cis_cdb6 = *ptr++;                                                 \
+    if (cmdsize > 6) {                                                         \
+      (regs)->cis_cdb7 = *ptr++;                                               \
+      (regs)->cis_cdb8 = *ptr++;                                               \
+      (regs)->cis_cdb9 = *ptr++;                                               \
+      (regs)->cis_cdb10 = *ptr++;                                              \
+    }                                                                          \
+    if (cmdsize > 10) {                                                        \
+      (regs)->cis_cdb11 = *ptr++;                                              \
+      (regs)->cis_cdb12 = *ptr;                                                \
+    }                                                                          \
+  }
 
-#else	/*SBIC_MUX_ADDRESSING*/
+#else /*SBIC_MUX_ADDRESSING*/
 
 typedef sbic_padded_ind_regmap_t	sbic_padded_regmap_t;
 
-#define	SET_SBIC_myid(regs,val)		sbic_write_reg(regs,SBIC_myid,val)
-#define	GET_SBIC_myid(regs,val)		sbic_read_reg(regs,SBIC_myid,val)
-#define	SET_SBIC_cdbsize(regs,val)	sbic_write_reg(regs,SBIC_cdbsize,val)
-#define	GET_SBIC_cdbsize(regs,val)	sbic_read_reg(regs,SBIC_cdbsize,val)
-#define	SET_SBIC_control(regs,val)	sbic_write_reg(regs,SBIC_control,val)
-#define	GET_SBIC_control(regs,val)	sbic_read_reg(regs,SBIC_control,val)
-#define	SET_SBIC_timeo(regs,val)	sbic_write_reg(regs,SBIC_timeo,val)
-#define	GET_SBIC_timeo(regs,val)	sbic_read_reg(regs,SBIC_timeo,val)
-#define	SET_SBIC_cdb1(regs,val)		sbic_write_reg(regs,SBIC_cdb1,val)
-#define	GET_SBIC_cdb1(regs,val)		sbic_read_reg(regs,SBIC_cdb1,val)
-#define	SET_SBIC_cdb2(regs,val)		sbic_write_reg(regs,SBIC_cdb2,val)
-#define	GET_SBIC_cdb2(regs,val)		sbic_read_reg(regs,SBIC_cdb2,val)
-#define	SET_SBIC_cdb3(regs,val)		sbic_write_reg(regs,SBIC_cdb3,val)
-#define	GET_SBIC_cdb3(regs,val)		sbic_read_reg(regs,SBIC_cdb3,val)
-#define	SET_SBIC_cdb4(regs,val)		sbic_write_reg(regs,SBIC_cdb4,val)
-#define	GET_SBIC_cdb4(regs,val)		sbic_read_reg(regs,SBIC_cdb4,val)
-#define	SET_SBIC_cdb5(regs,val)		sbic_write_reg(regs,SBIC_cdb5,val)
-#define	GET_SBIC_cdb5(regs,val)		sbic_read_reg(regs,SBIC_cdb5,val)
-#define	SET_SBIC_cdb6(regs,val)		sbic_write_reg(regs,SBIC_cdb6,val)
-#define	GET_SBIC_cdb6(regs,val)		sbic_read_reg(regs,SBIC_cdb6,val)
-#define	SET_SBIC_cdb7(regs,val)		sbic_write_reg(regs,SBIC_cdb7,val)
-#define	GET_SBIC_cdb7(regs,val)		sbic_read_reg(regs,SBIC_cdb7,val)
-#define	SET_SBIC_cdb8(regs,val)		sbic_write_reg(regs,SBIC_cdb8,val)
-#define	GET_SBIC_cdb8(regs,val)		sbic_read_reg(regs,SBIC_cdb8,val)
-#define	SET_SBIC_cdb9(regs,val)		sbic_write_reg(regs,SBIC_cdb9,val)
-#define	GET_SBIC_cdb9(regs,val)		sbic_read_reg(regs,SBIC_cdb9,val)
-#define	SET_SBIC_cdb10(regs,val)	sbic_write_reg(regs,SBIC_cdb10,val)
-#define	GET_SBIC_cdb10(regs,val)	sbic_read_reg(regs,SBIC_cdb10,val)
-#define	SET_SBIC_cdb11(regs,val)	sbic_write_reg(regs,SBIC_cdb11,val)
-#define	GET_SBIC_cdb11(regs,val)	sbic_read_reg(regs,SBIC_cdb11,val)
-#define	SET_SBIC_cdb12(regs,val)	sbic_write_reg(regs,SBIC_cdb12,val)
-#define	GET_SBIC_cdb12(regs,val)	sbic_read_reg(regs,SBIC_cdb12,val)
-#define	SET_SBIC_tlun(regs,val)		sbic_write_reg(regs,SBIC_tlun,val)
-#define	GET_SBIC_tlun(regs,val)		sbic_read_reg(regs,SBIC_tlun,val)
-#define	SET_SBIC_cmd_phase(regs,val)	sbic_write_reg(regs,SBIC_cmd_phase,val)
-#define	GET_SBIC_cmd_phase(regs,val)	sbic_read_reg(regs,SBIC_cmd_phase,val)
-#define	SET_SBIC_syn(regs,val)		sbic_write_reg(regs,SBIC_syn,val)
-#define	GET_SBIC_syn(regs,val)		sbic_read_reg(regs,SBIC_syn,val)
-#define	SET_SBIC_count_hi(regs,val)	sbic_write_reg(regs,SBIC_count_hi,val)
-#define	GET_SBIC_count_hi(regs,val)	sbic_read_reg(regs,SBIC_count_hi,val)
-#define	SET_SBIC_count_med(regs,val)	sbic_write_reg(regs,SBIC_count_med,val)
-#define	GET_SBIC_count_med(regs,val)	sbic_read_reg(regs,SBIC_count_med,val)
-#define	SET_SBIC_count_lo(regs,val)	sbic_write_reg(regs,SBIC_count_lo,val)
-#define	GET_SBIC_count_lo(regs,val)	sbic_read_reg(regs,SBIC_count_lo,val)
-#define	SET_SBIC_selid(regs,val)	sbic_write_reg(regs,SBIC_selid,val)
-#define	GET_SBIC_selid(regs,val)	sbic_read_reg(regs,SBIC_selid,val)
-#define	SET_SBIC_rselid(regs,val)	sbic_write_reg(regs,SBIC_rselid,val)
-#define	GET_SBIC_rselid(regs,val)	sbic_read_reg(regs,SBIC_rselid,val)
-#define	SET_SBIC_csr(regs,val)		sbic_write_reg(regs,SBIC_csr,val)
-#define	GET_SBIC_csr(regs,val)		sbic_read_reg(regs,SBIC_csr,val)
-#define	SET_SBIC_cmd(regs,val)		sbic_write_reg(regs,SBIC_cmd,val)
-#define	GET_SBIC_cmd(regs,val)		sbic_read_reg(regs,SBIC_cmd,val)
-#define	SET_SBIC_data(regs,val)		sbic_write_reg(regs,SBIC_data,val)
-#define	GET_SBIC_data(regs,val)		sbic_read_reg(regs,SBIC_data,val)
+#define SET_SBIC_myid(regs, val) sbic_write_reg(regs, SBIC_myid, val)
+#define GET_SBIC_myid(regs, val) sbic_read_reg(regs, SBIC_myid, val)
+#define SET_SBIC_cdbsize(regs, val) sbic_write_reg(regs, SBIC_cdbsize, val)
+#define GET_SBIC_cdbsize(regs, val) sbic_read_reg(regs, SBIC_cdbsize, val)
+#define SET_SBIC_control(regs, val) sbic_write_reg(regs, SBIC_control, val)
+#define GET_SBIC_control(regs, val) sbic_read_reg(regs, SBIC_control, val)
+#define SET_SBIC_timeo(regs, val) sbic_write_reg(regs, SBIC_timeo, val)
+#define GET_SBIC_timeo(regs, val) sbic_read_reg(regs, SBIC_timeo, val)
+#define SET_SBIC_cdb1(regs, val) sbic_write_reg(regs, SBIC_cdb1, val)
+#define GET_SBIC_cdb1(regs, val) sbic_read_reg(regs, SBIC_cdb1, val)
+#define SET_SBIC_cdb2(regs, val) sbic_write_reg(regs, SBIC_cdb2, val)
+#define GET_SBIC_cdb2(regs, val) sbic_read_reg(regs, SBIC_cdb2, val)
+#define SET_SBIC_cdb3(regs, val) sbic_write_reg(regs, SBIC_cdb3, val)
+#define GET_SBIC_cdb3(regs, val) sbic_read_reg(regs, SBIC_cdb3, val)
+#define SET_SBIC_cdb4(regs, val) sbic_write_reg(regs, SBIC_cdb4, val)
+#define GET_SBIC_cdb4(regs, val) sbic_read_reg(regs, SBIC_cdb4, val)
+#define SET_SBIC_cdb5(regs, val) sbic_write_reg(regs, SBIC_cdb5, val)
+#define GET_SBIC_cdb5(regs, val) sbic_read_reg(regs, SBIC_cdb5, val)
+#define SET_SBIC_cdb6(regs, val) sbic_write_reg(regs, SBIC_cdb6, val)
+#define GET_SBIC_cdb6(regs, val) sbic_read_reg(regs, SBIC_cdb6, val)
+#define SET_SBIC_cdb7(regs, val) sbic_write_reg(regs, SBIC_cdb7, val)
+#define GET_SBIC_cdb7(regs, val) sbic_read_reg(regs, SBIC_cdb7, val)
+#define SET_SBIC_cdb8(regs, val) sbic_write_reg(regs, SBIC_cdb8, val)
+#define GET_SBIC_cdb8(regs, val) sbic_read_reg(regs, SBIC_cdb8, val)
+#define SET_SBIC_cdb9(regs, val) sbic_write_reg(regs, SBIC_cdb9, val)
+#define GET_SBIC_cdb9(regs, val) sbic_read_reg(regs, SBIC_cdb9, val)
+#define SET_SBIC_cdb10(regs, val) sbic_write_reg(regs, SBIC_cdb10, val)
+#define GET_SBIC_cdb10(regs, val) sbic_read_reg(regs, SBIC_cdb10, val)
+#define SET_SBIC_cdb11(regs, val) sbic_write_reg(regs, SBIC_cdb11, val)
+#define GET_SBIC_cdb11(regs, val) sbic_read_reg(regs, SBIC_cdb11, val)
+#define SET_SBIC_cdb12(regs, val) sbic_write_reg(regs, SBIC_cdb12, val)
+#define GET_SBIC_cdb12(regs, val) sbic_read_reg(regs, SBIC_cdb12, val)
+#define SET_SBIC_tlun(regs, val) sbic_write_reg(regs, SBIC_tlun, val)
+#define GET_SBIC_tlun(regs, val) sbic_read_reg(regs, SBIC_tlun, val)
+#define SET_SBIC_cmd_phase(regs, val) sbic_write_reg(regs, SBIC_cmd_phase, val)
+#define GET_SBIC_cmd_phase(regs, val) sbic_read_reg(regs, SBIC_cmd_phase, val)
+#define SET_SBIC_syn(regs, val) sbic_write_reg(regs, SBIC_syn, val)
+#define GET_SBIC_syn(regs, val) sbic_read_reg(regs, SBIC_syn, val)
+#define SET_SBIC_count_hi(regs, val) sbic_write_reg(regs, SBIC_count_hi, val)
+#define GET_SBIC_count_hi(regs, val) sbic_read_reg(regs, SBIC_count_hi, val)
+#define SET_SBIC_count_med(regs, val) sbic_write_reg(regs, SBIC_count_med, val)
+#define GET_SBIC_count_med(regs, val) sbic_read_reg(regs, SBIC_count_med, val)
+#define SET_SBIC_count_lo(regs, val) sbic_write_reg(regs, SBIC_count_lo, val)
+#define GET_SBIC_count_lo(regs, val) sbic_read_reg(regs, SBIC_count_lo, val)
+#define SET_SBIC_selid(regs, val) sbic_write_reg(regs, SBIC_selid, val)
+#define GET_SBIC_selid(regs, val) sbic_read_reg(regs, SBIC_selid, val)
+#define SET_SBIC_rselid(regs, val) sbic_write_reg(regs, SBIC_rselid, val)
+#define GET_SBIC_rselid(regs, val) sbic_read_reg(regs, SBIC_rselid, val)
+#define SET_SBIC_csr(regs, val) sbic_write_reg(regs, SBIC_csr, val)
+#define GET_SBIC_csr(regs, val) sbic_read_reg(regs, SBIC_csr, val)
+#define SET_SBIC_cmd(regs, val) sbic_write_reg(regs, SBIC_cmd, val)
+#define GET_SBIC_cmd(regs, val) sbic_read_reg(regs, SBIC_cmd, val)
+#define SET_SBIC_data(regs, val) sbic_write_reg(regs, SBIC_data, val)
+#define GET_SBIC_data(regs, val) sbic_read_reg(regs, SBIC_data, val)
 
-#define	SBIC_TC_SET(regs,val)	{				\
-		sbic_write_reg(regs,SBIC_count_hi,((val)>>16));	\
-		(regs)->sbic_value = (val)>>8;	wbflush();	\
-		(regs)->sbic_value = (val);			\
-	}
-#define	SBIC_TC_GET(regs,val)	{				\
-		sbic_read_reg(regs,SBIC_count_hi,(val));	\
-		(val) = ((val)<<8) | (regs)->sbic_value;	\
-		(val) = ((val)<<8) | (regs)->sbic_value;	\
-	}
+#define SBIC_TC_SET(regs, val)                                                 \
+  {                                                                            \
+    sbic_write_reg(regs, SBIC_count_hi, ((val) >> 16));                        \
+    (regs)->sbic_value = (val) >> 8;                                           \
+    wbflush();                                                                 \
+    (regs)->sbic_value = (val);                                                \
+  }
+#define SBIC_TC_GET(regs, val)                                                 \
+  {                                                                            \
+    sbic_read_reg(regs, SBIC_count_hi, (val));                                 \
+    (val) = ((val) << 8) | (regs)->sbic_value;                                 \
+    (val) = ((val) << 8) | (regs)->sbic_value;                                 \
+  }
 
-#define	SBIC_LOAD_COMMAND(regs,cmd,cmdsize)	{
+#define SBIC_LOAD_COMMAND(regs, cmd, cmdsize) {
 		register int n=cmdsize-1;			\
 		register char *ptr = (char*)(cmd);		\
 		sbic_write_reg(regs,SBIC_cdb1,*ptr++);		\
 		while (n-- > 0) (regs)->sbic_value = *ptr++;	\
 	}
 
-#endif	/*SBIC_MUX_ADDRESSING*/
+#endif /*SBIC_MUX_ADDRESSING*/
 
-#define	GET_SBIC_asr(regs,val)		(val) = (regs)->sbic_asr
+#define GET_SBIC_asr(regs, val) (val) = (regs)->sbic_asr
 
 
 /*
@@ -374,10 +380,9 @@ typedef struct script {
 } *script_t;
 
 /* Matching on the condition value */
-#define	ANY				0xff
-#define	SCRIPT_MATCH(csr,pha,cond)	\
-		(((cond).csr == (csr)) && \
-		 (((cond).pha == (pha)) || ((cond).pha==ANY)))
+#define ANY 0xff
+#define SCRIPT_MATCH(csr, pha, cond)                                           \
+  (((cond).csr == (csr)) && (((cond).pha == (pha)) || ((cond).pha == ANY)))
 
 
 /* forward decls of script actions */
@@ -420,11 +425,11 @@ struct sbic_softc {
 	int		out_count;	/* amnt we are going to ship */
 
 	volatile char	state;
-#define	SBIC_STATE_BUSY		0x01	/* selecting or currently connected */
-#define SBIC_STATE_TARGET	0x04	/* currently selected as target */
-#define SBIC_STATE_COLLISION	0x08	/* lost selection attempt */
-#define SBIC_STATE_DMA_IN	0x10	/* tgt --> initiator xfer */
-#define	SBIC_STATE_AM_MODE	0x20	/* 33c93A with advanced mode (AM) */
+#define SBIC_STATE_BUSY 0x01      /* selecting or currently connected */
+#define SBIC_STATE_TARGET 0x04    /* currently selected as target */
+#define SBIC_STATE_COLLISION 0x08 /* lost selection attempt */
+#define SBIC_STATE_DMA_IN 0x10    /* tgt --> initiator xfer */
+#define SBIC_STATE_AM_MODE 0x20   /* 33c93A with advanced mode (AM) */
 
 	unsigned char	ntargets;	/* how many alive on this scsibus */
 	unsigned char	done;
@@ -483,7 +488,7 @@ int scsi_period_to_sbic(regs,p)
 	return (ret >= 8) ? 0 : ret;
 }
 
-#define	u_min(a,b)	(((a) < (b)) ? (a) : (b))
+#define u_min(a, b) (((a) < (b)) ? (a) : (b))
 
 /*
  * Definition of the controller for the auto-configuration program.
@@ -520,11 +525,12 @@ sbic_script_try_synch[] = {	/* started with SEL */
 	{{SBIC_CSR_S_XFERRED, 0x60}, sbic_get_status},
 };
 
-
 #define DEBUG
-#ifdef	DEBUG
+#ifdef DEBUG
 
-#define	PRINT(x)	if (scsi_debug) printf x
+#define PRINT(x)                                                               \
+  if (scsi_debug)                                                              \
+  printf x
 
 sbic_state(regs, overrule)
 	sbic_padded_regmap_t	*regs;
@@ -625,9 +631,14 @@ sbic_script_state(unit)
 #define TRMAX 200
 int tr[TRMAX+3];
 int trpt, trpthi;
-#define	TR(x)	tr[trpt++] = x
-#define TRWRAP	trpthi = trpt; trpt = 0;
-#define TRCHECK	if (trpt > TRMAX) {TRWRAP}
+#define TR(x) tr[trpt++] = x
+#define TRWRAP                                                                 \
+  trpthi = trpt;                                                               \
+  trpt = 0;
+#define TRCHECK                                                                \
+  if (trpt > TRMAX) {                                                          \
+    TRWRAP                                                                     \
+  }
 
 #define TRACE
 
@@ -637,7 +648,7 @@ int trpt, trpthi;
 int sbic_logpt;
 char sbic_log[LOGSIZE];
 
-#define MAXLOG_VALUE	0x1e
+#define MAXLOG_VALUE 0x1e
 struct {
 	char *name;
 	unsigned int count;
@@ -682,17 +693,17 @@ sbic_print_stat()
 	}
 }
 
-#else	/*TRACE*/
-#define	LOG(e,f)
+#else /*TRACE*/
+#define LOG(e, f)
 #define LOGSIZE
-#endif	/*TRACE*/
+#endif /*TRACE*/
 
-#else	/*DEBUG*/
+#else /*DEBUG*/
 #define PRINT(x)
-#define	LOG(e,f)
+#define LOG(e, f)
 #define LOGSIZE
 
-#endif	/*DEBUG*/
+#endif /*DEBUG*/
 
 
 /*
@@ -727,10 +738,10 @@ sbic_probe(reg, ui)
 	if (check_memory(reg, 0))
 		return 0;
 
-#if	MAPPABLE
+#if MAPPABLE
 	/* Mappable version side */
 	SBIC_probe(reg, ui);
-#endif	/*MAPPABLE*/
+#endif /*MAPPABLE*/
 
 	/*
 	 * Initialize hw descriptor, cache some pointers
@@ -754,7 +765,7 @@ sbic_probe(reg, ui)
 	sc->probe = sbic_probe_target;
 	sbic->wd.reset = sbic_reset_scsibus;
 
-#ifdef	MACH_KERNEL
+#ifdef MACH_KERNEL
 	sc->max_dma_data = -1;
 #else
 	sc->max_dma_data = scsi_per_target_virtual;
@@ -776,7 +787,7 @@ sbic_probe(reg, ui)
 	 * can be changed as boot arg.  Otherwise we keep
 	 * what the prom used.
 	 */
-#ifdef	unneeded
+#ifdef unneeded
 	SET_SBIC_myid(regs, (scsi_initiator_id[unit] & 0x7));
 	sbic_reset(regs, TRUE);
 #endif
@@ -1159,7 +1170,7 @@ sbic_attempt_selection(sbic)
 	SET_SBIC_syn(regs,SBIC_SYN(tgt->sync_offset,tgt->sync_period));
 
 	/* ugly little help for compiler */
-#define	command	out_count
+#define command out_count
 	if (tgt->flags & TGT_DID_SYNCH) {
 		command = (tgt->transient_state.identify == 0xff) ?
 				SBIC_CMD_SEL_XFER :
@@ -1179,7 +1190,7 @@ sbic_attempt_selection(sbic)
 
 	SET_SBIC_cmd_phase(regs, 0);	/* not a resume */
 	SET_SBIC_cmd(regs, command);
-#undef	command
+#undef command
 }
 
 /*
@@ -1197,12 +1208,12 @@ sbic_intr(unit, spllevel)
 	register script_t	scp;
 	register int		asr, csr, pha;
 	register sbic_padded_regmap_t	*regs;
-#if	MAPPABLE
+#if MAPPABLE
 	extern boolean_t	rz_use_mapped_interface;
 
 	if (rz_use_mapped_interface)
 		return SBIC_intr(unit,spllevel);
-#endif	/*MAPPABLE*/
+#endif /*MAPPABLE*/
 
 	sbic = sbic_softc[unit];
 	regs = sbic->regs;
@@ -1608,7 +1619,7 @@ quickie:
 	}
 	return advance_script;
 }
-#endif	/*0*/
+#endif /*0*/
 
 boolean_t
 sbic_dosynch(sbic, csr, pha)
@@ -2073,6 +2084,6 @@ sbic_reset_scsibus(sbic)
 	}
 }
 
-#endif	NSBIC > 0
+#endif NSBIC> 0
 
 #endif 0

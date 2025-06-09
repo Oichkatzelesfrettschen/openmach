@@ -1,26 +1,26 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992,1991 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
- * any improvements or extensions that they make and grant Carnegie Mellon 
+ *
+ * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
 /*
@@ -56,26 +56,26 @@
  *
  * Known Headaches/Features with this chip.
  *
- * (1) After the interrupt raised by select, the phase sense (psns) 
+ * (1) After the interrupt raised by select, the phase sense (psns)
  *     and SPC status (ssts) registers do not display the correct values
- *     until the REQ line (via psns) is high. (danner@cs.cmu.edu 6/11/91) 
+ *     until the REQ line (via psns) is high. (danner@cs.cmu.edu 6/11/91)
  *
  * (2) After a data in phase, the command complete interrupt may be raised
  *     before the psns, ssts, and transfer counter registers settle. The reset
- *     acknowledge or request command should not be issued until they settle. 
- *     (danner@cs.cmu.edu 6/14/91)  
- * 
- * (3) In general, an interrupt can be raised before the psns and ssts have 
- *     meaningful values. One should wait for the psns to show the REQ bit (0x80)
- *     set before expecting meaningful values, with the exception of (2) above. 
- *     Currently this is handled by spc_err_generic ("Late REQ"). (This problem
- *     is really a refinement of (1)). (danner@cs.cmu.edu 6/14/91)  
+ *     acknowledge or request command should not be issued until they settle.
+ *     (danner@cs.cmu.edu 6/14/91)
+ *
+ * (3) In general, an interrupt can be raised before the psns and ssts have
+ *     meaningful values. One should wait for the psns to show the REQ bit
+ * (0x80) set before expecting meaningful values, with the exception of (2)
+ * above. Currently this is handled by spc_err_generic ("Late REQ"). (This
+ * problem is really a refinement of (1)). (danner@cs.cmu.edu 6/14/91)
  *
  * (4) When issuing a multibyte command after a select with attention,
  *     The chip will automatically drop ATN before sending the last byte of the
- *     message, in accordance with the ANSI SCSI standard. This requires, of course,
- *     the transfer counter be an accurate representation of the amount of data to be
- *     transfered. (danner@cs.cmu.edu 6/14/91)  
+ *     message, in accordance with the ANSI SCSI standard. This requires, of
+ * course, the transfer counter be an accurate representation of the amount of
+ * data to be transfered. (danner@cs.cmu.edu 6/14/91)
  *
  */
 
@@ -85,28 +85,28 @@
 
 #include <scsi.h>
 
-#if	NSCSI > 0
+#if NSCSI > 0
 
-#include <mach/std_types.h>
-#include <sys/types.h>
 #include <chips/busses.h>
+#include <mach/std_types.h>
+#include <scsi/adapters/scsi_89352.h>
 #include <scsi/compat_30.h>
-#include <sys/syslog.h>
 #include <scsi/scsi.h>
 #include <scsi/scsi2.h>
 #include <scsi/scsi_defs.h>
-#include <scsi/adapters/scsi_89352.h>
+#include <sys/syslog.h>
+#include <sys/types.h>
 
+#include <ddb/db_sym.h>         /*4proto*/
 #include <machine/db_machdep.h> /*4proto*/
-#include <ddb/db_sym.h> /*4proto*/
 
-#ifdef	LUNA88K
+#ifdef LUNA88K
 #include <luna88k/board.h>
-#define	SPC_DEFAULT_ADDRESS	(caddr_t) SCSI_ADDR
+#define SPC_DEFAULT_ADDRESS (caddr_t) SCSI_ADDR
 #endif
 
-#ifndef	SPC_DEFAULT_ADDRESS	/* cross compile check */
-#define	SPC_DEFAULT_ADDRESS	(caddr_t) 0
+#ifndef SPC_DEFAULT_ADDRESS /* cross compile check */
+#define SPC_DEFAULT_ADDRESS (caddr_t)0
 #endif
 
 
@@ -117,7 +117,7 @@ void spc_reset(), spc_attempt_selection(), spc_target_intr(), spc_bus_reset();
  * Statically allocated command & temp buffers
  * This way we can attach/detach drives on-fly
  */
-#define	PER_TGT_BUFF_DATA	256
+#define PER_TGT_BUFF_DATA 256
 
 static char	spc_buffer[NSCSI * 8 * PER_TGT_BUFF_DATA];
 
@@ -130,8 +130,9 @@ static char	spc_buffer[NSCSI * 8 * PER_TGT_BUFF_DATA];
   (otherwise the values tend to float/be garbage.
 */
 
-#define SPC_WAIT_PHASE(p)  while(((regs->spc_psns & (SPC_BUS_REQ|SCSI_PHASE_MASK)))  \
-				 != (SPC_BUS_REQ|(p)))
+#define SPC_WAIT_PHASE(p)                                                      \
+  while (((regs->spc_psns & (SPC_BUS_REQ | SCSI_PHASE_MASK))) !=               \
+         (SPC_BUS_REQ | (p)))
 
 /*
   wait until a phase different than p appears in the psns. Since it is only valid
@@ -139,8 +140,12 @@ static char	spc_buffer[NSCSI * 8 * PER_TGT_BUFF_DATA];
   REQ is high or the phase is not p.
 */
 
-#define SPC_WAIT_PHASE_VANISH(p) while(1) { int _psns_ = regs->spc_psns; \
-    if ((_psns_ & SPC_BUS_REQ) && (_psns_ & SCSI_PHASE_MASK)!=p) break; }
+#define SPC_WAIT_PHASE_VANISH(p)                                               \
+  while (1) {                                                                  \
+    int _psns_ = regs->spc_psns;                                               \
+    if ((_psns_ & SPC_BUS_REQ) && (_psns_ & SCSI_PHASE_MASK) != p)             \
+      break;                                                                   \
+  }
 					
 
 
@@ -162,15 +167,16 @@ typedef struct script {
 	int	(*action)();	/* action routine */
 } *script_t;
 
-#define	SCRIPT_MATCH(psns) (SPC_CUR_PHASE((psns))|((psns) & SPC_BUS_BSY))
+#define SCRIPT_MATCH(psns) (SPC_CUR_PHASE((psns)) | ((psns) & SPC_BUS_BSY))
 
 /* ?? */
-#define	SPC_PHASE_DISC	0x0	/* sort of .. */
+#define SPC_PHASE_DISC 0x0 /* sort of .. */
 
 /* The active script is in the state expected right after the issue of a select */
 
-#define SCRIPT_SELECT(scp) (scp->action == spc_issue_command || \
-                            scp->action == spc_issue_ident_and_command)
+#define SCRIPT_SELECT(scp)                                                     \
+  (scp->action == spc_issue_command ||                                         \
+   scp->action == spc_issue_ident_and_command)
 
 /* forward decls of script actions */
 boolean_t
@@ -209,10 +215,10 @@ struct spc_softc {
 	int		out_count;	/* amnt we are going to ship */
 
 	volatile char	state;
-#define	SPC_STATE_BUSY		0x01	/* selecting or currently connected */
-#define SPC_STATE_TARGET	0x04	/* currently selected as target */
-#define SPC_STATE_COLLISION	0x08	/* lost selection attempt */
-#define SPC_STATE_DMA_IN	0x10	/* tgt --> initiator xfer */
+#define SPC_STATE_BUSY 0x01      /* selecting or currently connected */
+#define SPC_STATE_TARGET 0x04    /* currently selected as target */
+#define SPC_STATE_COLLISION 0x08 /* lost selection attempt */
+#define SPC_STATE_DMA_IN 0x10    /* tgt --> initiator xfer */
 
 	unsigned char	ntargets;	/* how many alive on this scsibus */
 	unsigned char	done;
@@ -305,13 +311,10 @@ spc_script_disconnect[] = {
 	{ SPC_PHASE_DISC, spc_disconnected}
 };
 
+#define u_min(a, b) (((a) < (b)) ? (a) : (b))
 
-
-#define	u_min(a,b)	(((a) < (b)) ? (a) : (b))
-
-
-#define	DEBUG
-#ifdef	DEBUG
+#define DEBUG
+#ifdef DEBUG
 
 int spc_state(base)
 	vm_offset_t	base;
@@ -394,14 +397,21 @@ int unit;
 	return 0;
 }
 
-#define	PRINT(x)	if (scsi_debug) printf x
+#define PRINT(x)                                                               \
+  if (scsi_debug)                                                              \
+  printf x
 
 #define TRMAX 200
 int tr[TRMAX+3];
 int trpt, trpthi;
-#define	TR(x)	tr[trpt++] = x
-#define TRWRAP	trpthi = trpt; trpt = 0;
-#define TRCHECK	if (trpt > TRMAX) {TRWRAP}
+#define TR(x) tr[trpt++] = x
+#define TRWRAP                                                                 \
+  trpthi = trpt;                                                               \
+  trpt = 0;
+#define TRCHECK                                                                \
+  if (trpt > TRMAX) {                                                          \
+    TRWRAP                                                                     \
+  }
 
 #define TRACE
 
@@ -411,7 +421,7 @@ int trpt, trpthi;
 int spc_logpt;
 int spc_log[LOGSIZE];
 
-#define MAXLOG_VALUE	0x30
+#define MAXLOG_VALUE 0x30
 struct {
 	char *name;
 	unsigned int count;
@@ -459,17 +469,17 @@ void spc_print_stat()
 	}
 }
 
-#else	/* TRACE */
-#define	LOG(e,f)
-#endif	/* TRACE */
+#else /* TRACE */
+#define LOG(e, f)
+#endif /* TRACE */
 
-#else	/* DEBUG */
-#define	PRINT(x)
-#define	LOG(e,f)
+#else /* DEBUG */
+#define PRINT(x)
+#define LOG(e, f)
 #define TR(x)
 #define TRCHECK
 #define TRWRAP
-#endif	/* DEBUG */
+#endif /* DEBUG */
 
 
 /*
@@ -507,7 +517,7 @@ int spc_probe(reg, ui)
 	if (check_memory((unsigned)regs, 0))
 		return 0;
 
-#if	notyet
+#if notyet
 	/* Mappable version side */
 	SPC_probe(reg, ui);
 #endif
@@ -531,7 +541,7 @@ int spc_probe(reg, ui)
 	sc->watchdog = scsi_watchdog;
 	spc->wd.reset = spc_reset_scsibus;
 
-#ifdef	MACH_KERNEL
+#ifdef MACH_KERNEL
 	sc->max_dma_data = -1;				/* unlimited */
 #else
 	sc->max_dma_data = scsi_per_target_virtual;
@@ -671,10 +681,10 @@ int spc_probe(reg, ui)
 			tgt->cmd_ptr = cmd_ptr;
 			/* "physical" address for dma engine (??) */
 			tgt->dma_ptr = 0;
-#ifdef	MACH_KERNEL
-#else	/*MACH_KERNEL*/
+#ifdef MACH_KERNEL
+#else  /*MACH_KERNEL*/
 			fdma_init(&tgt->fdma, scsi_per_target_virtual);
-#endif	/*MACH_KERNEL*/
+#endif /*MACH_KERNEL*/
 		}
 	}
 	printf(".\n");
@@ -699,10 +709,10 @@ spc_probe_target(tgt, ior)
 					   (tgt->masterno*8*PER_TGT_BUFF_DATA) ];
 		/* "physical" address for dma engine */
 		tgt->dma_ptr = 0;
-#ifdef	MACH_KERNEL
-#else	/*MACH_KERNEL*/
+#ifdef MACH_KERNEL
+#else  /*MACH_KERNEL*/
 		fdma_init(&tgt->fdma, scsi_per_target_virtual);
-#endif	/*MACH_KERNEL*/
+#endif /*MACH_KERNEL*/
 
 	}
 
@@ -731,7 +741,7 @@ spc_select_target(regs, myid, id, with_atn)
 	scsi_ret_t		ret = SCSI_RET_RETRY;
 	int mask;
 
-	if ((regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL)) 
+	if ((regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL))
 #ifdef MIPS
 	    && (regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL)) 
 	    && (regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL))
@@ -756,7 +766,7 @@ spc_select_target(regs, myid, id, with_atn)
 	 (7) Drive select (and optionally attention) onto the bus
 	 (8) Wait 1/4 second for timeout.
 	 */
-	
+
 #if 0
 	regs->spc_psns = SPC_DIAG_ENBL_XFER;          /* (1) */
 #endif
@@ -985,7 +995,7 @@ void spc_reset(regs, quickly)
 	regs->spc_scmd = SPC_SCMD_C_BUS_RLSE;
 	/* regs->spc_tmod = 0; - SANDRO ? */
 	regs->spc_ints = 0xff;/* clear off any pending */
-#if  0
+#if 0
 	regs->spc_pctl = SPC_PCTL_LST_IE; /* useful only on 87033 */
 #else
 	regs->spc_pctl = 0;
@@ -1029,11 +1039,11 @@ spc_go(tgt, cmd_count, in_count, cmd_only)
 	/*
 	 * We cannot do real DMA.
 	 */
-#ifdef	MACH_KERNEL
-#else	/*MACH_KERNEL*/
+#ifdef MACH_KERNEL
+#else  /*MACH_KERNEL*/
 	if (tgt->ior)
 		fdma_map(&tgt->fdma, tgt->ior);
-#endif	/*MACH_KERNEL*/
+#endif /*MACH_KERNEL*/
 
 	if ((tgt->cur_cmd == SCSI_CMD_WRITE) ||
 	    (tgt->cur_cmd == SCSI_CMD_LONG_WRITE)){
@@ -1048,7 +1058,7 @@ spc_go(tgt, cmd_count, in_count, cmd_only)
  
 		/* avoid leaks */
 #if 0
-you`ll have to special case this 
+you`ll have to special case this
 #endif
 			tgt->transient_state.out_count = tgt->block_size;
 		}
@@ -1215,7 +1225,7 @@ void spc_attempt_selection(spc)
 	spc->active_target = tgt;
 
 	/* reselection pending ? */
-	if ((regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL)) 
+	if ((regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL))
 #ifdef MIPS
 	    && (regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL)) 
 	    && (regs->spc_phase & (SPC_BUS_BSY|SPC_BUS_SEL))
@@ -1240,8 +1250,8 @@ void spc_attempt_selection(spc)
 	  if (tgt->flags & TGT_TRY_SYNCH)
 	    atn = 1;
 
-#if  0
-	regs->spc_psns = SPC_DIAG_ENBL_XFER;         
+#if 0
+	regs->spc_psns = SPC_DIAG_ENBL_XFER;
 #endif
 	
 	regs->spc_sctl = SPC_SCTL_ARB_EBL  | SPC_SCTL_PAR_EBL |
@@ -1284,7 +1294,7 @@ int unit;
 	register unsigned	ints, psns, ssts; 
 	register spc_regmap_t	*regs;
 	boolean_t		try_match;
-#if	notyet
+#if notyet
 	extern boolean_t	rz_use_mapped_interface;
 
 	if (rz_use_mapped_interface)
@@ -1521,10 +1531,10 @@ spc_end( spc, ints, psns, serr)
 	    /*		spc->state &= ~SPC_STATE_BUSY; later */
 	  }
 	if (ior = tgt->ior) {
-#ifdef	MACH_KERNEL
-#else	/*MACH_KERNEL*/
+#ifdef MACH_KERNEL
+#else  /*MACH_KERNEL*/
 		fdma_unmap(&tgt->fdma, ior);
-#endif	/*MACH_KERNEL*/
+#endif /*MACH_KERNEL*/
 		LOG(0xA,"ops->restart");
 		(*tgt->dev_ops->restart)( tgt, TRUE);
 		if (csr)
@@ -1866,8 +1876,8 @@ spc_dosynch( spc, ints, psns, ssts)
 	p[2] = 3;
 	p[3] = SCSI_SYNC_XFER_REQUEST;
 	/* We cannot run synchronous */
-#define spc_to_scsi_period(x)	0x7
-#define scsi_period_to_spc(x)	(x)
+#define spc_to_scsi_period(x) 0x7
+#define scsi_period_to_spc(x) (x)
 	off = 0;
 	p[4] = spc_to_scsi_period(spc_min_period);
 	p[5] = off;
@@ -2168,7 +2178,7 @@ void spc_reset_scsibus(spc)
                         spc->in_count, spc->out_count, cnt);
 	}
 #if 0
-	spc->regs->..... 
+	spc->regs->.....
 #endif
         delay(25);
 }
@@ -2187,6 +2197,6 @@ unsigned phase;
   regs->spc_pctl = phase | SPC_PCTL_BFREE_IE;
   return 0;
 }
-#endif	/*NSCSI > 0*/
+#endif /*NSCSI > 0*/
 
 #endif 0

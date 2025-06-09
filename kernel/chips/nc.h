@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990,1989,1988,1987 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -58,7 +58,7 @@ typedef struct nw_tx_headers {
   nw_options options;
   struct nw_tx_headers *next;
 } nw_tx_header_s;
- 
+
 typedef nw_tx_header_s *nw_tx_header_t;
 
 typedef struct nw_rx_headers {
@@ -69,28 +69,24 @@ typedef struct nw_rx_headers {
   struct nw_rx_headers *next;
 } nw_rx_header_s, *nw_rx_header_t;
 
-typedef enum {
-  NW_CONNECTIONLESS,
-  NW_CONNECTION_ORIENTED
-} nw_dev_type;
-
+typedef enum { NW_CONNECTIONLESS, NW_CONNECTION_ORIENTED } nw_dev_type;
 
 typedef struct {
   nw_result (*initialize)(int);
   nw_result (*status)(int);
-  void      (*slow_sweep)(int);
-  void      (*fast_sweep)(int);
-  int       (*poll)(int);
+  void (*slow_sweep)(int);
+  void (*fast_sweep)(int);
+  int (*poll)(int);
   nw_result (*send)(nw_ep, nw_tx_header_t, nw_options);
   nw_buffer_t (*rpc)(nw_ep, nw_tx_header_t, nw_options);
-  void      (*signal)(nw_buffer_t);
+  void (*signal)(nw_buffer_t);
   nw_result (*open)(nw_ep, nw_address_1, nw_address_2, nw_ep);
   nw_result (*accept)(nw_ep, nw_buffer_t, nw_ep_t);
   nw_result (*close)(nw_ep);
   nw_result (*add)(nw_ep, nw_address_1, nw_address_2, nw_ep);
   nw_result (*drop)(nw_ep, nw_address_1, nw_address_2, nw_ep);
 } nw_dev_entry_s, *nw_dev_entry_t;
-  
+
 typedef struct {
   nw_result status;
   nw_dev_type type;
@@ -109,13 +105,13 @@ typedef struct plists {
 } nw_plist_s, *nw_plist_t;
 
 typedef struct nw_unused_buffers {
-  u_int buf_used:1;
-  u_int buf_length:31;
+  u_int buf_used : 1;
+  u_int buf_length : 31;
   struct nw_unused_buffers *next;
   struct nw_unused_buffers *previous;
 } nw_unused_buffer_s, *nw_unused_buffer_t;
 
-typedef struct ecbs{
+typedef struct ecbs {
   nw_protocol protocol;
   nw_acceptance accept;
   nw_state state;
@@ -123,17 +119,17 @@ typedef struct ecbs{
   char *buf_start;
   char *buf_end;
   nw_unused_buffer_t free_buffer;
-  nw_ep id:16;
-  u_int overrun:1;
-  u_int seqno:14;
+  nw_ep id : 16;
+  u_int overrun : 1;
+  u_int seqno : 14;
   nw_tx_header_t tx_first;
   nw_tx_header_t tx_last;
   nw_tx_header_t tx_initial;
   nw_tx_header_t tx_current;
   nw_rx_header_t rx_first;
   nw_rx_header_t rx_last;
-  nw_ep next:16;
-  nw_ep previous:16;
+  nw_ep next : 16;
+  nw_ep previous : 16;
 } nw_ecb, *nw_ecb_t;
 
 extern nw_ecb ect[MAX_EP];
@@ -141,92 +137,120 @@ extern nw_ecb ect[MAX_EP];
 extern int nw_free_ep_first, nw_free_ep_last;
 extern int nw_free_line_first, nw_free_line_last;
 
-typedef enum {
-  NW_RECEIVE,
-  NW_RECEIVE_URGENT,
-  NW_SEND,
-  NW_SIGNAL
-} nw_delivery;
-
+typedef enum { NW_RECEIVE, NW_RECEIVE_URGENT, NW_SEND, NW_SIGNAL } nw_delivery;
 
 /*** System-independent functions implemented in core ***/
 
+/** TODO: Document. */
 extern void nc_initialize();
 
+/** TODO: Document. */
 extern nw_tx_header_t nc_tx_header_allocate();
 
+/** TODO: Document. */
 extern void nc_tx_header_deallocate(nw_tx_header_t header);
 
+/** TODO: Document. */
 extern nw_rx_header_t nc_rx_header_allocate();
 
+/** TODO: Document. */
 extern void nc_rx_header_deallocate(nw_rx_header_t header);
 
+/** TODO: Document. */
 extern nw_plist_t nc_peer_allocate();
 
+/** TODO: Document. */
 extern void nc_peer_deallocate(nw_plist_t peer);
 
-extern nw_result nc_device_register(u_int dev, nw_dev_type type,
-				    char *dev_addr,
-				    nw_dev_entry_t dev_entry_table);
+/** TODO: Document. */
+extern nw_result nc_device_register(u_int dev, nw_dev_type type, char *dev_addr,
+                                    nw_dev_entry_t dev_entry_table);
 
+/** TODO: Document. */
 extern nw_result nc_device_unregister(u_int dev, nw_result status);
 
+/** TODO: Document. */
 extern void nc_fast_sweep();
 
+/** TODO: Document. */
 extern void nc_fast_timer_set();
 
+/** TODO: Document. */
 extern void nc_fast_timer_reset();
 
+/** TODO: Document. */
 extern void nc_slow_sweep();
 
+/** TODO: Document. */
 extern nw_result nc_update(nw_update_type up_type, int *up_info);
 
+/** TODO: Document. */
 extern nw_result nc_lookup(nw_lookup_type lt, int *look_info);
 
+/** TODO: Document. */
 extern nw_result nc_line_update(nw_peer_t peer, nw_ep line);
 
+/** TODO: Document. */
 extern nw_ep nc_line_lookup(nw_peer_t peer);
 
+/** TODO: Document. */
 extern nw_result nc_endpoint_allocate(nw_ep_t epp, nw_protocol protocol,
-				      nw_acceptance accept,
-				      char *buffer_address, u_int buffer_size);
+                                      nw_acceptance accept,
+                                      char *buffer_address, u_int buffer_size);
 
+/** TODO: Document. */
 extern nw_result nc_endpoint_deallocate(nw_ep ep);
 
+/** TODO: Document. */
 extern nw_buffer_t nc_buffer_allocate(nw_ep ep, u_int size);
 
+/** TODO: Document. */
 extern nw_result nc_buffer_deallocate(nw_ep ep, nw_buffer_t buffer);
 
-extern nw_result nc_endpoint_status(nw_ep ep,
-				    nw_state_t state, nw_peer_t peer);
-
+/** TODO: Document. */
+extern nw_result nc_endpoint_status(nw_ep ep, nw_state_t state, nw_peer_t peer);
 
 /* System-dependent function implemented in wrapper*/
 
+/** TODO: Document. */
 extern boolean_t nc_deliver_result(nw_ep ep, nw_delivery type, int result);
 
 /* Support required in wrapper */
 
+/** TODO: Document. */
 extern void h_initialize();
 
+/** TODO: Document. */
 extern void h_fast_timer_set();
 
+/** TODO: Document. */
 extern void h_fast_timer_reset();
-
 
 /* Stubs for device table */
 
+/** TODO: Document. */
 extern nw_result nc_succeed(int);
+/** TODO: Document. */
 extern nw_result nc_fail(int);
+/** TODO: Document. */
 extern void nc_null(int);
+/** TODO: Document. */
 extern int nc_null_poll(int);
+/** TODO: Document. */
 extern nw_result nc_null_send(nw_ep, nw_tx_header_t, nw_options);
+/** TODO: Document. */
 extern nw_buffer_t nc_null_rpc(nw_ep, nw_tx_header_t, nw_options);
+/** TODO: Document. */
 extern nw_result nc_local_send(nw_ep, nw_tx_header_t, nw_options);
+/** TODO: Document. */
 extern nw_buffer_t nc_local_rpc(nw_ep, nw_tx_header_t, nw_options);
+/** TODO: Document. */
 extern void nc_null_signal(nw_buffer_t);
+/** TODO: Document. */
 extern nw_result nc_open_fail(nw_ep, nw_address_1, nw_address_2, nw_ep);
+/** TODO: Document. */
 extern nw_result nc_accept_fail(nw_ep, nw_buffer_t, nw_ep_t);
+/** TODO: Document. */
 extern nw_result nc_close_fail(nw_ep);
 
 #endif /* _NC_H_ */
