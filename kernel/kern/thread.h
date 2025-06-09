@@ -33,6 +33,7 @@
 
 #ifndef	_KERN_THREAD_H_
 #define _KERN_THREAD_H_
+/** \file thread.h \brief Thread structure and APIs. */
 
 #include <mach_ipc_compat.h>
 #include <hw_footprint.h>
@@ -256,7 +257,9 @@ typedef	mach_port_t *thread_array_t;
 #endif	/* _KERN_KERN_TYPES_H_ */
 
 
+/** \brief TODO */
 extern thread_t		active_threads[NCPUS];	/* active threads */
+/** \brief TODO */
 extern vm_offset_t	active_stacks[NCPUS];	/* active kernel stacks */
 
 #ifdef KERNEL
@@ -264,43 +267,55 @@ extern vm_offset_t	active_stacks[NCPUS];	/* active kernel stacks */
  *	User routines
  */
 
+/** \brief TODO */
 extern kern_return_t	thread_create(
 	task_t		parent_task,
 	thread_t	*child_thread);
+/** \brief TODO */
 extern kern_return_t	thread_terminate(
 	thread_t	thread);
+/** \brief TODO */
 extern kern_return_t	thread_suspend(
 	thread_t	thread);
+/** \brief TODO */
 extern kern_return_t	thread_resume(
 	thread_t	thread);
+/** \brief TODO */
 extern kern_return_t	thread_abort(
 	thread_t	thread);
+/** \brief TODO */
 extern kern_return_t	thread_get_state(
 	thread_t	thread,
 	int		flavor,
 	thread_state_t	old_state,
 	natural_t	*old_state_count);
+/** \brief TODO */
 extern kern_return_t	thread_set_state(
 	thread_t	thread,
 	int		flavor,
 	thread_state_t	new_state,
 	natural_t	new_state_count);
+/** \brief TODO */
 extern kern_return_t	thread_get_special_port(
 	thread_t	thread,
 	int		which,
 	struct ipc_port	**portp);
+/** \brief TODO */
 extern kern_return_t	thread_set_special_port(
 	thread_t	thread,
 	int		which,
 	struct ipc_port	*port);
+/** \brief TODO */
 extern kern_return_t	thread_info(
 	thread_t	thread,
 	int		flavor,
 	thread_info_t	thread_info_out,
 	natural_t	*thread_info_count);
+/** \brief TODO */
 extern kern_return_t	thread_assign(
 	thread_t	thread,
 	processor_set_t	new_pset);
+/** \brief TODO */
 extern kern_return_t	thread_assign_default(
 	thread_t	thread);
 #endif
@@ -309,35 +324,50 @@ extern kern_return_t	thread_assign_default(
  *	Kernel-only routines
  */
 
+/** \brief TODO */
 extern void		thread_init(void);
+/** \brief TODO */
 extern void		thread_reference(thread_t);
+/** \brief TODO */
 extern void		thread_deallocate(thread_t);
+/** \brief TODO */
 extern void		thread_hold(thread_t);
+/** \brief TODO */
 extern kern_return_t	thread_dowait(
 	thread_t	thread,
 	boolean_t	must_halt);
+/** \brief TODO */
 extern void		thread_release(thread_t);
+/** \brief TODO */
 extern kern_return_t	thread_halt(
 	thread_t	thread,
 	boolean_t	must_halt);
+/** \brief TODO */
 extern void		thread_halt_self(void);
+/** \brief TODO */
 extern void		thread_force_terminate(thread_t);
+/** \brief TODO */
 extern void		thread_set_own_priority(
 	int		priority);
+/** \brief TODO */
 extern thread_t		kernel_thread(
 	task_t		task,
 	void		(*start)(void),
 	void *		arg);
 
+/** \brief TODO */
 extern void		reaper_thread(void);
 
 #if	MACH_HOST
+/** \brief TODO */
 extern void		thread_freeze(
 	thread_t	thread);
+/** \brief TODO */
 extern void		thread_doassign(
 	thread_t	thread,
 	processor_set_t	new_pset,
 	boolean_t	release_freeze);
+/** \brief TODO */
 extern void		thread_unfreeze(
 	thread_t	thread);
 #endif	/* MACH_HOST */
