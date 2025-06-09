@@ -20,16 +20,24 @@
 #define MACH_RPC_H
 
 #include <mach/kern_return.h>
-#include <mach/message.h>
 #include <mach/machine/rpc.h>
+#include <mach/message.h>
 
-/*
- * Description of a port passed up by the leaky-register RPC path
- * when it needs to perform translation.
+/**
+ * @file rpc.h
+ * @brief RPC helper structures used by the kernel RPC interface.
+ */
+
+/**
+ * @brief Describes a port passed via the leaky-register RPC path when
+ *        translation is required.
  */
 struct rpc_port_desc {
-	mach_port_t name;
-	mach_msg_type_name_t msgt_name;
+  /// Port name that was transferred.
+  mach_port_t name;
+
+  /// Message type associated with the port name.
+  mach_msg_type_name_t msgt_name;
 };
 
-#endif	/* MACH_RPC_H */
+#endif /* MACH_RPC_H */
