@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -29,47 +29,44 @@
 #define _MACH_FLICK_MACH3MIG_H_
 
 #include <mach/boolean.h>
-#include <mach/port.h>
 #include <mach/message.h>
+#include <mach/port.h>
 
-typedef char		mom_char8_t;
-typedef unsigned8_t	mom_unsigned8_t;
-typedef unsigned16_t	mom_unsigned16_t;
-typedef unsigned32_t	mom_unsigned32_t;
-typedef signed8_t	mom_signed8_t;
-typedef signed16_t	mom_signed16_t;
-typedef signed32_t	mom_signed32_t;
+typedef char mom_char8_t;
+typedef unsigned8_t mom_unsigned8_t;
+typedef unsigned16_t mom_unsigned16_t;
+typedef unsigned32_t mom_unsigned32_t;
+typedef signed8_t mom_signed8_t;
+typedef signed16_t mom_signed16_t;
+typedef signed32_t mom_signed32_t;
 
 typedef int mom_key_t;
 
-struct mom_ref
-{
-	mom_refcount_t	count;
-	mach_port_t	port;
+struct mom_ref {
+  mom_refcount_t count;
+  mach_port_t port;
 
-	/* Chain on hash mom_ref hash table,
-	   for canonicalization.  */
-	struct mom_ref	*hash_next;
+  /* Chain on hash mom_ref hash table,
+     for canonicalization.  */
+  struct mom_ref *hash_next;
 
-	/* Array of associations for this reference.  */
-	int assoc_count;
-	void *assoc[0];
+  /* Array of associations for this reference.  */
+  int assoc_count;
+  void *assoc[0];
 };
 typedef struct mom_ref *mom_ref_t;
 
-struct mom_obj
-{
-	void *handle;
+struct mom_obj {
+  void *handle;
 
-	int port_count;
-	mach_port_t port[0];
+  int port_count;
+  mach_port_t port[0];
 };
 typedef struct mom_obj *mom_obj_t;
 
 #define MOM__LABEL_BITS 8
-#define MOM__MAX_LABELS	(1 << MOM__LABEL_BITS)
+#define MOM__MAX_LABELS (1 << MOM__LABEL_BITS)
 
 #define mom_get_label_bits() MOM__LABEL_BITS
-
 
 #endif /* _MACH_FLICK_MACH3MIG_H_ */
