@@ -123,6 +123,14 @@
 #define MAXBUF (sizeof(long int) * 8)		 /* enough for binary */
 
 static
+/**
+ * @brief Output an unsigned number in the specified base.
+ *
+ * @param u         Number to print.
+ * @param base      Radix for conversion.
+ * @param putc      Output callback.
+ * @param putc_arg  Callback argument.
+ */
 printnum(u, base, putc, putc_arg)
 	register unsigned long	u;	/* number to print */
 	register int		base;
@@ -144,6 +152,15 @@ printnum(u, base, putc, putc_arg)
 
 boolean_t	_doprnt_truncates = FALSE;
 
+/**
+ * @brief Core printf engine used by the stdio wrappers.
+ *
+ * @param fmt       Format string.
+ * @param args      Argument list.
+ * @param radix     Default radix for %r.
+ * @param putc      Output callback.
+ * @param putc_arg  Callback argument.
+ */
 _doprnt(fmt, args, radix, putc, putc_arg)
 	register char	*fmt;
 	va_list		args;

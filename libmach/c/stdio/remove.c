@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 1995-1994 The University of Utah and
  * the Computer Systems Laboratory at the University of Utah (CSL).
  * All rights reserved.
@@ -21,8 +21,12 @@
  *      Author: Bryan Ford, University of Utah CSL
  */
 
-int remove(const char *filename)
-{
-	return unlink(filename);
-}
+#include <unistd.h>
 
+/**
+ * @brief Delete a file from the filesystem.
+ *
+ * @param filename Path of the file to remove.
+ * @return Zero on success, -1 on failure.
+ */
+int remove(const char *filename) { return unlink(filename); }

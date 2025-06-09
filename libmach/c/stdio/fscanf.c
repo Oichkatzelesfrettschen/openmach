@@ -38,6 +38,12 @@ typedef struct state
 } state;
 
 static int
+/**
+ * @brief Read a character from the FILE or pushback state.
+ *
+ * @param arg Pointer to state structure.
+ * @return The next character.
+ */
 read_char(void *arg)
 {
 	state *st = (state*)arg;
@@ -52,6 +58,12 @@ read_char(void *arg)
 }
 
 static void
+/**
+ * @brief Push a character back to the input stream.
+ *
+ * @param c   Character to unread.
+ * @param arg Pointer to state structure.
+ */
 unread(int c, void *arg)
 {
 	state *st = (state*)arg;
@@ -72,11 +84,25 @@ unread(int c, void *arg)
 }
 #endif
 
+/**
+ * @brief Parse input from a stream using a va_list.
+ *
+ * @param fh   Input stream.
+ * @param fmt  Format string.
+ * @param args Argument list.
+ */
 vfscanf(FILE *fh, const char *fmt, va_list args)
 {
 	_doscan(fmt, args, read_char, unread, fh);
 }
 
+/**
+ * @brief Read formatted input from a stream.
+ *
+ * @param fh  Input stream.
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 int
 fscanf(FILE *fh, const char *fmt, ...)
 {

@@ -24,6 +24,14 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * @brief Reposition a stream.
+ *
+ * @param stream Stream to reposition.
+ * @param offset Byte offset.
+ * @param whence Seek origin.
+ * @return Zero on success, -1 on failure.
+ */
 int fseek(FILE *stream, long offset, int whence)
 {
 	if (lseek(stream->fd, offset, whence) < 0)

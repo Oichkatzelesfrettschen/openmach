@@ -27,29 +27,55 @@
 #include <stdarg.h>
 
 static int
+/**
+ * @brief Fetch the next input character.
+ *
+ * @param arg Pointer to the input buffer pointer.
+ * @return Next character from the buffer.
+ */
 readchar(arg)
-	void *arg;
+        void *arg;
 {
 	return *(*(unsigned char**)arg)++;
 }
 
 static void
+/**
+ * @brief Push a character back onto the input.
+ *
+ * @param c   Character to unread.
+ * @param arg Pointer to the input buffer pointer.
+ */
 unchar(c, arg)
-	int c;
-	void *arg;
+        int c;
+        void *arg;
 {
 	(*(unsigned char**)arg)--;
 }
 
+/**
+ * @brief Parse a string according to a format string.
+ *
+ * @param s    Input string.
+ * @param fmt  Format string.
+ * @param args Argument list to fill.
+ */
 vsscanf(s, fmt, args)
-	char *s;
-	char *fmt;
-	va_list args;
+        char *s;
+        char *fmt;
+        va_list args;
 {
 	_doscan(fmt, args, readchar, unchar, &s);
 }
 
 /*VARARGS2*/
+/**
+ * @brief sscanf wrapper using variable arguments.
+ *
+ * @param s   Input string.
+ * @param fmt Format string.
+ * @return Unspecified.
+ */
 sscanf(char *s, char *fmt, ...)
 {
 	va_list	args;
