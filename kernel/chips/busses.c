@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1993-1989 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -36,12 +36,9 @@
  *
  */
 
+#include <chips/busses.h>
 #include <mach/boolean.h>
 #include <mach/std_types.h>
-#include <chips/busses.h>
-
-
-
 
 /*
  * configure_bus_master
@@ -56,106 +53,101 @@
  * Returns 0 if the controller is not there.
  *
  */
-boolean_t configure_bus_master(
-	char		*name,
-	vm_offset_t	 virt,
-	vm_offset_t	 phys,
-	int		 adpt_no,
-	char		*bus_name)
-{
-	register struct bus_device *device;
-	register struct bus_ctlr *master;
-	register struct bus_driver *driver;
+/** TODO: Document. */
+boolean_t configure_bus_master(char *name, vm_offset_t virt, vm_offset_t phys,
+                               int adpt_no, char *bus_name) {
+  register struct bus_device *device;
+  register struct bus_ctlr *master;
+  register struct bus_driver *driver;
 
-	int             found = 0;
+  int found = 0;
 
-	/*
-	 * Match the name in the table, then pick the entry that has the
-	 * right adaptor number, or one that has it wildcarded.  Entries
-	 * already allocated are marked alive, skip them. 
-	 */
-	for (master = bus_master_init; master->driver; master++) {
-		if (master->alive)
-			continue;
-		if (((master->adaptor == adpt_no) || (master->adaptor == '?')) &&
-		    (strcmp(master->name, name) == 0)) {
-			found = 1;
-			break;
-		}
-	}
+  /*
+   * Match the name in the table, then pick the entry that has the
+   * right adaptor number, or one that has it wildcarded.  Entries
+   * already allocated are marked alive, skip them.
+   */
+  for (master = bus_master_init; master->driver; master++) {
+    if (master->alive)
+      continue;
+    if (((master->adaptor == adpt_no) || (master->adaptor == '?')) &&
+        (strcmp(master->name, name) == 0)) {
+      found = 1;
+      break;
+    }
+  }
 
-	if (!found)
-		return FALSE;
+  if (!found)
+    return FALSE;
 
-	/*
-	 * Found a match, probe it 
-	 */
-	driver = master->driver;
-	if ((*driver->probe) (virt, master) == 0)
-		return FALSE;
+  /*
+   * Found a match, probe it
+   */
+  driver = master->driver;
+  if ((*driver->probe)(virt, master) == 0)
+    return FALSE;
 
-	master->alive = 1;
-	master->adaptor = adpt_no;
+  master->alive = 1;
+  master->adaptor = adpt_no;
 
-	/*
-	 * Remember which controller this device is attached to 
-	 */
-	driver->minfo[master->unit] = master;
+  /*
+   * Remember which controller this device is attached to
+   */
+  driver->minfo[master->unit] = master;
 
-	printf("%s%d: at %s%d\n", master->name, master->unit, bus_name, adpt_no);
+  printf("%s%d: at %s%d\n", master->name, master->unit, bus_name, adpt_no);
 
-	/*
-	 * Now walk all devices to check those that might be attached to this
-	 * controller.  We match the unallocated ones that have the right
-	 * controller number, or that have a widcarded controller number. 
-	 */
-	for (device = bus_device_init; device->driver; device++) {
-		int	ctlr;
-		if (device->alive || device->driver != driver ||
-		    (device->adaptor != '?' && device->adaptor != adpt_no))
-			continue;
-		ctlr = device->ctlr;
-		if (ctlr == '?') device->ctlr = master->unit;
-		/*
-		 * A matching entry. See if the slave-probing routine is
-		 * happy. 
-		 */
-		if ((device->ctlr != master->unit) ||
-		    ((*driver->slave) (device, virt) == 0)) {
-			device->ctlr = ctlr;
-			continue;
-		}
+  /*
+   * Now walk all devices to check those that might be attached to this
+   * controller.  We match the unallocated ones that have the right
+   * controller number, or that have a widcarded controller number.
+   */
+  for (device = bus_device_init; device->driver; device++) {
+    int ctlr;
+    if (device->alive || device->driver != driver ||
+        (device->adaptor != '?' && device->adaptor != adpt_no))
+      continue;
+    ctlr = device->ctlr;
+    if (ctlr == '?')
+      device->ctlr = master->unit;
+    /*
+     * A matching entry. See if the slave-probing routine is
+     * happy.
+     */
+    if ((device->ctlr != master->unit) ||
+        ((*driver->slave)(device, virt) == 0)) {
+      device->ctlr = ctlr;
+      continue;
+    }
 
-		device->alive = 1;
-		device->adaptor = adpt_no;
-		device->ctlr = master->unit;
+    device->alive = 1;
+    device->adaptor = adpt_no;
+    device->ctlr = master->unit;
 
-		/*
-		 * Save a backpointer to the controller 
-		 */
-		device->mi = master;
+    /*
+     * Save a backpointer to the controller
+     */
+    device->mi = master;
 
-		/*
-		 * ..and to the device 
-		 */
-		driver->dinfo[device->unit] = device;
+    /*
+     * ..and to the device
+     */
+    driver->dinfo[device->unit] = device;
 
-		if (device->slave >= 0)
-			printf(" %s%d: at %s%d slave %d",
-			       device->name, device->unit,
-			       driver->mname, master->unit, device->slave);
-		else
-			printf(" %s%d: at %s%d",
-			       device->name, device->unit,
-			       driver->mname, master->unit);
+    if (device->slave >= 0)
+      printf(" %s%d: at %s%d slave %d", device->name, device->unit,
+             driver->mname, master->unit, device->slave);
+    else
+      printf(" %s%d: at %s%d", device->name, device->unit, driver->mname,
+             master->unit);
 
-		/*
-		 * Now attach this slave 
-		 */
-		(*driver->attach) (device);
-		printf("\n");
-	}
-	return TRUE;
+    /*
+     * Now attach this slave
+     */
+    (*driver->attach)(device);
+    printf("\n");
+  }
+  return TRUE;
 }
 
 /*
@@ -168,63 +160,58 @@ boolean_t configure_bus_master(
  * Returns 0 if the device is not there.
  *
  */
-boolean_t configure_bus_device( 
-	char		*name,
-	vm_offset_t	 virt,
-	vm_offset_t	 phys,
-	int 		 adpt_no,
-	char		*bus_name)
-{
-	register struct bus_device *device;
-	register struct bus_driver *driver;
+/** TODO: Document. */
+boolean_t configure_bus_device(char *name, vm_offset_t virt, vm_offset_t phys,
+                               int adpt_no, char *bus_name) {
+  register struct bus_device *device;
+  register struct bus_driver *driver;
 
-	int             found = 0;
+  int found = 0;
 
-	/*
-	 * Walk all devices to find one with the right name
-	 * and adaptor number (or wildcard).  The entry should
-	 * be unallocated, and also the slave number should
-	 * be wildcarded.
-	 */
-	for (device = bus_device_init; device->driver; device++) {
-		if (device->alive)
-			continue;
-		if (((device->adaptor == adpt_no) || (device->adaptor == '?')) &&
-		    (device->slave == -1) &&
-		    ((!device->phys_address) ||
-		     ((device->phys_address == phys) && (device->address == virt))) &&
-		    (strcmp(device->name, name) == 0)) {
-			found = 1;
-			break;
-		}
-	}
+  /*
+   * Walk all devices to find one with the right name
+   * and adaptor number (or wildcard).  The entry should
+   * be unallocated, and also the slave number should
+   * be wildcarded.
+   */
+  for (device = bus_device_init; device->driver; device++) {
+    if (device->alive)
+      continue;
+    if (((device->adaptor == adpt_no) || (device->adaptor == '?')) &&
+        (device->slave == -1) &&
+        ((!device->phys_address) ||
+         ((device->phys_address == phys) && (device->address == virt))) &&
+        (strcmp(device->name, name) == 0)) {
+      found = 1;
+      break;
+    }
+  }
 
-	if (!found)
-		return FALSE;
+  if (!found)
+    return FALSE;
 
-	/*
-	 * Found an entry, probe the device
-	 */
-	driver = device->driver;
-	if ((*driver->probe) (virt, (struct bus_ctlr *)device) == 0)
-		return FALSE;
+  /*
+   * Found an entry, probe the device
+   */
+  driver = device->driver;
+  if ((*driver->probe)(virt, (struct bus_ctlr *)device) == 0)
+    return FALSE;
 
-	device->alive = 1;
-	device->adaptor = adpt_no;
+  device->alive = 1;
+  device->adaptor = adpt_no;
 
-	printf("%s%d: at %s%d", device->name, device->unit, bus_name, adpt_no);
+  printf("%s%d: at %s%d", device->name, device->unit, bus_name, adpt_no);
 
-	/*
-	 * Remember which driver this device is attached to 
-	 */
-	driver->dinfo[device->unit] = device;
+  /*
+   * Remember which driver this device is attached to
+   */
+  driver->dinfo[device->unit] = device;
 
-	/*
-	 * Attach the device
-	 */
-	(*driver->attach) (device);
-	printf("\n");
+  /*
+   * Attach the device
+   */
+  (*driver->attach)(device);
+  printf("\n");
 
-	return TRUE;
+  return TRUE;
 }
-

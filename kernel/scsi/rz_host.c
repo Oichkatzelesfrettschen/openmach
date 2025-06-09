@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -41,68 +41,76 @@
  */
 
 #include <mach/std_types.h>
-#include <machine/machspl.h>		/* spl definitions */
+#include <machine/machspl.h> /* spl definitions */
 #include <scsi/compat_30.h>
 
+#include <scsi/rz.h>
 #include <scsi/scsi.h>
 #include <scsi/scsi_defs.h>
-#include <scsi/rz.h>
 
-#if  (NSCSI > 0)
+#if (NSCSI > 0)
 /* Since we have invented a new "device" this cannot go into the
    the 'official' scsi_devsw table.  Too bad. */
 
-extern char	*schost_name();
+/** TODO: Document. */
+extern char *schost_name();
 extern scsi_ret_t
-		schost_open(), schost_close();
-extern int	schost_strategy();
-extern void	schost_start();
+/** TODO: Document. */
+/** TODO: Document. */
+schost_open(),
+    schost_close();
+/** TODO: Document. */
+extern int schost_strategy();
+/** TODO: Document. */
+extern void schost_start();
 
-scsi_devsw_t	scsi_host = {
-	schost_name, 0, schost_open, schost_close, schost_strategy,
-	schost_start, 0, 0
-};
+scsi_devsw_t scsi_host = {
+    schost_name, 0, schost_open, schost_close, schost_strategy, schost_start,
+    0,           0};
 
+/** TODO: Document. */
 char *schost_name(internal)
-	boolean_t	internal;
+boolean_t internal;
 {
-	return internal ? "sh" : "host";
+  return internal ? "sh" : "host";
 }
 
 scsi_ret_t
+/** TODO: Document. */
 schost_open(tgt)
-	target_info_t	*tgt;
+target_info_t *tgt;
 {
-	return SCSI_RET_SUCCESS;	/* XXX if this is it, drop it */
+  return SCSI_RET_SUCCESS; /* XXX if this is it, drop it */
 }
 
 scsi_ret_t
+/** TODO: Document. */
 schost_close(tgt)
-	target_info_t	*tgt;
+target_info_t *tgt;
 {
-	return SCSI_RET_SUCCESS;	/* XXX if this is it, drop it */
+  return SCSI_RET_SUCCESS; /* XXX if this is it, drop it */
 }
 
-schost_strategy(ior)
-	register io_req_t	ior;
+/** TODO: Document. */
+schost_strategy(ior) register io_req_t ior;
 {
-	return rz_simpleq_strategy( ior, schost_start);
+  return rz_simpleq_strategy(ior, schost_start);
 }
 
 void
-schost_start( tgt, done)
-	target_info_t	*tgt;
-	boolean_t	done;
+    /** TODO: Document. */
+    schost_start(tgt, done) target_info_t *tgt;
+boolean_t done;
 {
-	io_req_t		head, ior;
-	scsi_ret_t		ret;
+  io_req_t head, ior;
+  scsi_ret_t ret;
 
-	if (done || (!tgt->dev_info.cpu.req_pending)) {
-		sccpu_start( tgt, done);
-		return;
-	}
+  if (done || (!tgt->dev_info.cpu.req_pending)) {
+    sccpu_start(tgt, done);
+    return;
+  }
 
-	ior = tgt->ior;
+  ior = tgt->ior;
 }
 
-#endif  /* NSCSI > 0 */
+#endif /* NSCSI > 0 */

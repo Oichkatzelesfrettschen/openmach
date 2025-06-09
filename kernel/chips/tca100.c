@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1992 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -33,28 +33,28 @@
 #if NATM > 0
 
 #ifndef STUB
-#include <sys/types.h>
-#include <kern/thread.h>
-#include <kern/lock.h>
-#include <kern/eventcount.h>
-#include <machine/machspl.h>		/* spl definitions */
-#include <mips/mips_cpu.h>
-#include <vm/vm_kern.h>
-#include <device/io_req.h>
-#include <device/device_types.h>
-#include <device/net_status.h>
 #include <chips/busses.h>
 #include <chips/nc.h>
 #include <chips/tca100.h>
 #include <chips/tca100_if.h>
+#include <device/device_types.h>
+#include <device/io_req.h>
+#include <device/net_status.h>
+#include <kern/eventcount.h>
+#include <kern/lock.h>
+#include <kern/thread.h>
+#include <machine/machspl.h> /* spl definitions */
+#include <mips/mips_cpu.h>
+#include <sys/types.h>
+#include <vm/vm_kern.h>
 
 decl_simple_lock_data(, atm_simple_lock);
 
 #else
-#include "stub.h"
 #include "nc.h"
-#include "tca100_if.h"
+#include "stub.h"
 #include "tca100.h"
+#include "tca100_if.h"
 
 int atm_simple_lock;
 
@@ -62,11 +62,13 @@ int atm_simple_lock;
 
 struct bus_device *atm_info[NATM];
 
+/** TODO: Document. */
 int atm_probe();
+/** TODO: Document. */
 void atm_attach();
-struct bus_driver atm_driver =
-       { atm_probe, 0, atm_attach, 0, /* csr */ 0, "atm", atm_info,
-       	 "", 0, /* flags */ 0 };	       
+struct bus_driver atm_driver = {
+    atm_probe, 0,        atm_attach, 0, /* csr */ 0,
+    "atm",     atm_info, "",         0, /* flags */ 0};
 
 atm_device_t atmp[NATM] = {NULL};
 u_int atm_open_count[NATM];
@@ -76,6 +78,7 @@ struct evc atm_event_counter[NATM];
 
 #define DEVICE(unit) ((unit == 0) ? NW_TCA100_1 : NW_TCA100_2)
 
+/** TODO: Document. */
 void atm_initialize(int unit) {
 
   atmp[unit]->creg = (CR_RX_RESET | CR_TX_RESET);
@@ -91,30 +94,32 @@ void atm_initialize(int unit) {
 
 /*** Device entry points ***/
 
+/** TODO: Document. */
 int atm_probe(vm_offset_t reg, struct bus_device *ui) {
   int un;
 
   un = ui->unit;
-  if (un >= NATM || check_memory(reg, 0))  {
+  if (un >= NATM || check_memory(reg, 0)) {
     return 0;
   }
 
   atm_info[un] = ui;
-  atmp[un] = (atm_device_t) reg;
+  atmp[un] = (atm_device_t)reg;
   nc_initialize();
-  if (nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED, (char *) reg,
-			 &tca100_entry_table) == NW_SUCCESS &&
+  if (nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED, (char *)reg,
+                         &tca100_entry_table) == NW_SUCCESS &&
       tca100_initialize(DEVICE(un)) == NW_SUCCESS) {
     atm_initialize(un);
     evc_init(&atm_event_counter[un]);
     return 1;
   } else {
     atmp[un] = NULL;
-    (void) nc_device_unregister(DEVICE(un), NW_FAILURE);
+    (void)nc_device_unregister(DEVICE(un), NW_FAILURE);
     return 0;
   }
 }
 
+/** TODO: Document. */
 void atm_attach(struct bus_device *ui) {
   int un;
 
@@ -122,18 +127,19 @@ void atm_attach(struct bus_device *ui) {
   if (un >= NATM) {
     printf("atm: stray attach\n");
   } else {
-    atmp[un]->creg = 
-      atm_control_mask[un] = CR_TX_ENABLE | CR_RX_ENABLE | RX_COUNT_INTR;
-                                              /*Enable ATM interrupts*/
+    atmp[un]->creg = atm_control_mask[un] =
+        CR_TX_ENABLE | CR_RX_ENABLE | RX_COUNT_INTR;
+    /*Enable ATM interrupts*/
   }
 }
 
+/** TODO: Document. */
 void atm_intr(int unit, int spl_level) {
 
   if (unit >= NATM || atmp[unit] == NULL) {
     printf("atm: stray interrupt\n");
   } else {
-    atmp[unit]->creg = CR_TX_ENABLE | CR_RX_ENABLE;  /*Disable ATM interrupts*/
+    atmp[unit]->creg = CR_TX_ENABLE | CR_RX_ENABLE; /*Disable ATM interrupts*/
     wbflush();
     if (atm_mapped[unit]) {
       splx(spl_level);
@@ -148,25 +154,27 @@ void atm_intr(int unit, int spl_level) {
   }
 }
 
+/** TODO: Document. */
 io_return_t atm_open(dev_t dev, int mode, io_req_t ior) {
   int un;
-	
+
   un = minor(dev);
   if (un >= NATM || atmp[un] == NULL) {
     return D_NO_SUCH_DEVICE;
-/*
-  } else if (atm_open_count[un] > 0 && (atm_mapped[un] || (mode & D_WRITE))) {
-    return D_ALREADY_OPEN;
-*/
+    /*
+      } else if (atm_open_count[un] > 0 && (atm_mapped[un] || (mode & D_WRITE)))
+      { return D_ALREADY_OPEN;
+    */
   } else {
     atm_open_count[un]++;
     atm_mapped[un] = ((mode & D_WRITE) != 0);
     if (atm_mapped[un])
-      (void) nc_device_unregister(DEVICE(un), NW_NOT_SERVER);
+      (void)nc_device_unregister(DEVICE(un), NW_NOT_SERVER);
     return D_SUCCESS;
   }
 }
 
+/** TODO: Document. */
 io_return_t atm_close(dev_t dev) {
   int un;
 
@@ -177,9 +185,8 @@ io_return_t atm_close(dev_t dev) {
     return D_INVALID_OPERATION;
   } else {
     if (atm_mapped[un]) {
-      (void) nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED,
-				(char *) atmp[un],
-				&tca100_entry_table);
+      (void)nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED,
+                               (char *)atmp[un], &tca100_entry_table);
       atm_mapped[un] = 0;
     }
     atm_open_count[un]--;
@@ -190,6 +197,7 @@ io_return_t atm_close(dev_t dev) {
 unsigned int *frc = 0xbe801000;
 char data[66000];
 
+/** TODO: Document. */
 io_return_t atm_read(dev_t dev, io_req_t ior) {
   unsigned int ck1, ck2;
   int i, j;
@@ -200,11 +208,12 @@ io_return_t atm_read(dev_t dev, io_req_t ior) {
   for (i = 0, j = 0; i < ior->io_count; i += 4096, j++)
     c[j] = (ior->io_data)[i];
   ck2 = *frc;
-  ((int *) ior->io_data)[0] = ck1;
-  ((int *) ior->io_data)[1] = ck2;
+  ((int *)ior->io_data)[0] = ck1;
+  ((int *)ior->io_data)[1] = ck2;
   return D_SUCCESS;
 }
 
+/** TODO: Document. */
 io_return_t atm_write(dev_t dev, io_req_t ior) {
   int i, j;
   char c[16];
@@ -217,21 +226,22 @@ io_return_t atm_write(dev_t dev, io_req_t ior) {
   return D_SUCCESS;
 }
 
+/** TODO: Document. */
 io_return_t atm_get_status(dev_t dev, int flavor, dev_status_t status,
-			   u_int *status_count) {
+                           u_int *status_count) {
   int un;
 
   un = minor(dev);
   if (un >= NATM || atmp[un] == NULL) {
     return D_NO_SUCH_DEVICE;
   } else {
-    switch ((atm_status) flavor) {
+    switch ((atm_status)flavor) {
     case ATM_MAP_SIZE:
       status[0] = sizeof(atm_device_s);
       *status_count = sizeof(int);
       return D_SUCCESS;
     case ATM_MTU_SIZE:
-      status[0] = 65535;   /*MTU size*/
+      status[0] = 65535; /*MTU size*/
       *status_count = sizeof(int);
       return D_SUCCESS;
     case ATM_EVC_ID:
@@ -249,8 +259,9 @@ io_return_t atm_get_status(dev_t dev, int flavor, dev_status_t status,
   }
 }
 
+/** TODO: Document. */
 io_return_t atm_set_status(dev_t dev, int flavor, dev_status_t status,
-			   u_int status_count) {
+                           u_int status_count) {
   io_return_t rc;
   int un, s;
   nw_pvc_t pvcp;
@@ -260,70 +271,72 @@ io_return_t atm_set_status(dev_t dev, int flavor, dev_status_t status,
   un = minor(dev);
   if (un >= NATM || atmp[un] == NULL) {
     return D_NO_SUCH_DEVICE;
-  } else switch ((atm_status) flavor) {
-  case ATM_INITIALIZE:
-    if (status_count != 0) {
-      return D_INVALID_OPERATION;
-    } else {
-      s = splsched();
-      if (nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED,
-			     (char *) atmp[un],
-			     &tca100_entry_table) == NW_SUCCESS &&
-	  tca100_initialize(DEVICE(un)) == NW_SUCCESS) {
-	atm_initialize(un);
-	rc = D_SUCCESS;
+  } else
+    switch ((atm_status)flavor) {
+    case ATM_INITIALIZE:
+      if (status_count != 0) {
+        return D_INVALID_OPERATION;
       } else {
-	atmp[un] = NULL;
-	(void) nc_device_unregister(DEVICE(un), NW_FAILURE);
-	rc = D_INVALID_OPERATION;
+        s = splsched();
+        if (nc_device_register(DEVICE(un), NW_CONNECTION_ORIENTED,
+                               (char *)atmp[un],
+                               &tca100_entry_table) == NW_SUCCESS &&
+            tca100_initialize(DEVICE(un)) == NW_SUCCESS) {
+          atm_initialize(un);
+          rc = D_SUCCESS;
+        } else {
+          atmp[un] = NULL;
+          (void)nc_device_unregister(DEVICE(un), NW_FAILURE);
+          rc = D_INVALID_OPERATION;
+        }
+        splx(s);
+        return rc;
       }
-      splx(s);
-      return rc;
-    }
-    break;
+      break;
 
 #if PERMANENT_VIRTUAL_CONNECTIONS
-  case ATM_PVC_SET:
-    pvcp = (nw_pvc_t) status;
-    if (status_count != sizeof(nw_pvc_s) || pvcp->pvc.local_ep >= MAX_EP) {
-      rc = D_INVALID_OPERATION;
-    } else if ((pel = nc_peer_allocate()) == NULL) {
-      rc = D_INVALID_OPERATION;
-    } else {
-      lep = pvcp->pvc.local_ep;
-      tct[lep].rx_sar_header = SSM | 1;
-      tct[lep].tx_atm_header = pvcp->tx_vp << ATM_VPVC_SHIFT;
-      tct[lep].tx_sar_header = 1;
-      ect[lep].state = NW_DUPLEX_ACCEPTED;
-      pel->peer = pvcp->pvc;
-      pel->next = NULL;
-      ect[lep].conn = pel;
-      if (pvcp->protocol == NW_LINE) {
-	if (nc_line_update(&pel->peer, lep) == NW_SUCCESS) {
-	  ect[lep].protocol = pvcp->protocol;
-	  if (nw_free_line_last == 0)
-	    nw_free_line_first = lep;
-	  else
-	    ect[nw_free_line_last].next = lep;
-	  ect[lep].previous = nw_free_line_last;
-	  ect[lep].next = 0;
-	  nw_free_line_last = lep;
-	  rc = D_SUCCESS;
-	} else {
-	  rc = D_INVALID_OPERATION;
-	}
+    case ATM_PVC_SET:
+      pvcp = (nw_pvc_t)status;
+      if (status_count != sizeof(nw_pvc_s) || pvcp->pvc.local_ep >= MAX_EP) {
+        rc = D_INVALID_OPERATION;
+      } else if ((pel = nc_peer_allocate()) == NULL) {
+        rc = D_INVALID_OPERATION;
       } else {
-	rc = D_SUCCESS;
+        lep = pvcp->pvc.local_ep;
+        tct[lep].rx_sar_header = SSM | 1;
+        tct[lep].tx_atm_header = pvcp->tx_vp << ATM_VPVC_SHIFT;
+        tct[lep].tx_sar_header = 1;
+        ect[lep].state = NW_DUPLEX_ACCEPTED;
+        pel->peer = pvcp->pvc;
+        pel->next = NULL;
+        ect[lep].conn = pel;
+        if (pvcp->protocol == NW_LINE) {
+          if (nc_line_update(&pel->peer, lep) == NW_SUCCESS) {
+            ect[lep].protocol = pvcp->protocol;
+            if (nw_free_line_last == 0)
+              nw_free_line_first = lep;
+            else
+              ect[nw_free_line_last].next = lep;
+            ect[lep].previous = nw_free_line_last;
+            ect[lep].next = 0;
+            nw_free_line_last = lep;
+            rc = D_SUCCESS;
+          } else {
+            rc = D_INVALID_OPERATION;
+          }
+        } else {
+          rc = D_SUCCESS;
+        }
       }
-    }
-    return rc;
+      return rc;
 #endif
 
-  default:
-    return D_INVALID_OPERATION;
-  }
+    default:
+      return D_INVALID_OPERATION;
+    }
 }
 
+/** TODO: Document. */
 int atm_mmap(dev_t dev, vm_offset_t off, int prot) {
   int un;
   vm_offset_t addr;
@@ -333,28 +346,21 @@ int atm_mmap(dev_t dev, vm_offset_t off, int prot) {
       off >= sizeof(atm_device_s)) {
     return -1;
   } else {
-    return mips_btop(K1SEG_TO_PHYS( (vm_offset_t) atmp[un] ) + off );
+    return mips_btop(K1SEG_TO_PHYS((vm_offset_t)atmp[un]) + off);
   }
 }
 
-io_return_t atm_restart(int u) {
+/** TODO: Document. */
+io_return_t atm_restart(int u) { return D_INVALID_OPERATION; }
 
-  return D_INVALID_OPERATION;
-}
-
+/** TODO: Document. */
 io_return_t atm_setinput(dev_t dev, ipc_port_t receive_port, int priority,
-			 filter_array_t *filter, u_int filter_count) {
+                         filter_array_t *filter, u_int filter_count) {
 
   return D_INVALID_OPERATION;
 }
 
-int atm_portdeath(dev_t dev, mach_port_t port) {
+/** TODO: Document. */
+int atm_portdeath(dev_t dev, mach_port_t port) { return D_INVALID_OPERATION; }
 
-  return D_INVALID_OPERATION;
-}
-
-
-#endif NATM > 0
-
-
-
+#endif NATM> 0

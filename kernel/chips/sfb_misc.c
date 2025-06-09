@@ -54,12 +54,18 @@ typedef pm_softc_t sfb_softc_t;
 
 #ifdef FLAMINGO
 #include <mips/PMAX/pmagb_ba.h> /* Use PMAX mapping on Flamingo */
+
 #endif
 
 /**
  * @brief Initialize the color map for kernel use.
  */
 #define sfb_init_colormap cfb_init_colormap
+
+/*
+ * Position cursor
+ */
+/** TODO: Properly Document. */
 /**
  * @brief Position the hardware cursor.
  *
@@ -79,6 +85,11 @@ sfb_pos_cursor(bt459_regmap_t *regs, int x, int y) {
  * @brief Device specific set status handler.
  */
 #define sfb_set_status cfb_set_status
+
+/*
+ * Hardware initialization
+ */
+/** TODO: Properly Document. */
 /**
  * @brief Initialize the SFB hardware.
  *
@@ -93,27 +104,38 @@ sfb_init_screen(sfb_softc_t *sfb) {
  *
  * @param sc Screen device context.
  */
+/** TODO: Properly Document. */
+
 sfb_soft_reset(screen_softc_t sc) {
   sfb_softc_t *sfb = (sfb_softc_t *)sc->hw_state;
   user_info_t *up = sc->up;
   extern cursor_sprite_t dc503_default_cursor;
 
-  /* Restore parameters in mapped structure. */
+  /*
+   * Restore params in mapped structure
+   */
   pm_init_screen_params(sc, up);
   up->row = up->max_row - 1;
 
   /* Magic hardware fields. */
-  up->dev_dep_2.pm.x26 = 2;
+  up->dev_dep_2.pm.x26 = 2; /* you do not want to know */
   up->dev_dep_1.pm.x18 = (short *)2;
 
-  /* Restore RAMDAC chip to default state. */
+  /*
+   * Restore RAMDAC chip to default state
+   */
   sfb_init_screen(sfb);
 
-  /* Load kernel's cursor sprite. */
+  /*
+   * Load kernel's cursor sprite: just use the same pmax one
+   */
   sfb_small_cursor_to_large(up, dc503_default_cursor);
   bt459_cursor_sprite(sfb->bt459, up->dev_dep_2.pm.cursor_sprite);
 
-  /* Color map and cursor color. */
+  /*
+   * Color map and cursor color
+   */
+
   sfb_init_colormap(sc);
 }
 

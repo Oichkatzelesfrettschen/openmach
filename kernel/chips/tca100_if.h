@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990,1989,1988,1987 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -41,7 +41,6 @@ typedef struct {
   int time_out;
   int retry;
 } nw_control_s, *nw_control_t;
-
 
 typedef struct {
   u_int rx_sar_header;
@@ -67,23 +66,22 @@ extern nw_tcb tct[MAX_EP];
 
 extern nw_dev_entry_s tca100_entry_table;
 
+/** TODO: Document. */
 extern nw_result tca100_initialize(int dev);
 
+/** TODO: Document. */
 extern nw_result tca100_status(int dev);
 
+/** TODO: Document. */
 extern void tca100_timer_sweep(int dev);
 
+/** TODO: Document. */
 extern int tca100_poll(int dev);
 
+/** TODO: Document. */
 extern nw_result tca100_send(nw_ep ep, nw_tx_header_t header,
                              nw_options options);
 
+/** TODO: Document. */
 extern nw_buffer_t tca100_rpc(nw_ep ep, nw_tx_header_t header,
                               nw_options options);
-
-
-
-
-
-
-
