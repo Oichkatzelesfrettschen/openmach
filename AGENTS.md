@@ -4,5 +4,7 @@
 - Attempt to execute `.codex/setup.sh` after modifications. Capture the output in `/tmp/setup.log`. Include the last 20 lines of this log in the PR Testing section.
 - Commit changes with concise messages summarizing the modifications.
 - Decompose, unroll, flatten, factor, and synthesize all modified files
-  into modern and idiomatic forms guided by mathematical principles.
+  into modern and idiomatic forms guided by mathematical principles,
+  regardless of language or dialect or epoch, in the most modern
+  form possible.
 

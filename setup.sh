@@ -15,7 +15,8 @@ packages=(
     gdb valgrind git curl wget python3 python3-pip
     libffi-dev libssl-dev nodejs npm shellcheck cloc tmux
     qemu-system-x86 qemu-utils qemu-nox
-    graphviz doxygen python3-sphinx python3-breathe sphinx-rtd-theme
+    graphviz doxygen python3-sphinx python3-breathe python3-sphinx-rtd-theme
+    python3-dev libncurses-dev libgtk-3-dev
     tlaplus coq coqide libcoq-ocaml-dev
     coq-theories isabelle openjdk-11-jre-headless
     llvm-bolt polly
