@@ -19,11 +19,11 @@ export DEBIAN_FRONTEND=noninteractive
 # Packages required for development.
 # Each package is attempted with apt-get and falls back to pip or npm.
 packages=(
-	build-essential clang clang-tools lld lldb llvm clang-18 bison ccache buildcache
+	build-essential binutils clang clang-tools lld lldb llvm clang-18 bison ccache buildcache
 	cmake make automake autoconf libtool pkg-config
-	gdb valgrind git curl wget python3 python3-pip
-	libffi-dev libssl-dev nodejs npm shellcheck cloc tmux
-	qemu-system-x86 qemu-utils qemu-nox
+	gdb valgrind git curl wget python3 python3-pip golang
+	libffi-dev libssl-dev nodejs npm shellcheck cloc tmux lcov
+	qemu-system-x86 qemu-utils qemu-nox qemu-kvm
 	graphviz doxygen python3-sphinx python3-breathe python3-sphinx-rtd-theme
 	python3-dev libncurses-dev libgtk-3-dev
 	tlaplus coq coqide libcoq-ocaml-dev
@@ -31,9 +31,24 @@ packages=(
 	llvm-bolt polly
 )
 
-# Update package sources.
+## \brief Search for tmux related packages and append them to the packages array.
+##
+## The function queries \c apt-cache for packages beginning with "tmux" and
+## stores the resulting package names into the global \c packages array.
+apt_cache_search_tmux() {
+	mapfile -t tmux_pkgs < <(apt-cache search '^tmux' | awk '{print $1}')
+	packages+=("${tmux_pkgs[@]}")
+}
+
+## Go tools to install using go install.
+go_packages=(
+	golang.org/x/tools/cmd/goimports
+)
+
+# Update package sources and search for additional tmux packages.
 sudo apt-get update -y
 sudo apt-get dist-upgrade -y
+apt_cache_search_tmux
 
 # Install a package using apt-get, then pip, then npm.
 ## \param pkg Package name to install.
@@ -61,8 +76,21 @@ install_pkg() {
 	return 1
 }
 
+## \brief Install a Go package using \c go install if Go is available.
+## \param pkg Go module path to install.
+install_go_pkg() {
+	local pkg="$1"
+	if command -v go >/dev/null; then
+		go install "$pkg@latest"
+	fi
+}
+
 for pkg in "${packages[@]}"; do
 	install_pkg "$pkg" || true
+done
+
+for pkg in "${go_packages[@]}"; do
+	install_go_pkg "$pkg" || true
 done
 
 # Configure build cache directories for modern compilation
