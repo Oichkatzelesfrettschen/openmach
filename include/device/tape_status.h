@@ -49,80 +49,92 @@
  * Tape status
  */
 
-struct tape_status {
-	unsigned int	mt_type;
-	unsigned int	speed;
-	unsigned int	density;
-	unsigned int	flags;
-#	define TAPE_FLG_REWIND	0x1
-#	define TAPE_FLG_WP	0x2
-};
-#define	TAPE_STATUS_COUNT	(sizeof(struct tape_status)/sizeof(int))
-#define	TAPE_STATUS		(('m'<<16) + 1)
-
-/*
- * Constants for mt_type.  These are the same
- * for controllers compatible with the types listed.
+/**
+ * @brief Structure defining tape device status.
  */
-#define	MT_ISTS		0x01		/* TS-11 */
-#define	MT_ISHT		0x02		/* TM03 Massbus: TE16, TU45, TU77 */
-#define	MT_ISTM		0x03		/* TM11/TE10 Unibus */
-#define	MT_ISMT		0x04		/* TM78/TU78 Massbus */
-#define	MT_ISUT		0x05		/* SI TU-45 emulation on Unibus */
-#define	MT_ISCPC	0x06		/* SUN */
-#define	MT_ISAR		0x07		/* SUN */
-#define	MT_ISTMSCP	0x08		/* DEC TMSCP protocol (TU81, TK50) */
-#define	MT_ISCY		0x09		/* CCI Cipher */
-#define	MT_ISSCSI	0x0a		/* SCSI tape (all brands) */
+struct tape_status {
+	unsigned int	mt_type;	///< Type of tape drive (see MT_* constants).
+	unsigned int	speed;		///< Tape speed (controller-specific).
+	unsigned int	density;	///< Tape density (controller-specific).
+	unsigned int	flags;		///< Status flags (see TAPE_FLG_* macros).
+#	define TAPE_FLG_REWIND	0x1	///< Tape will rewind on close.
+#	define TAPE_FLG_WP	0x2	///< Tape is write-protected.
+};
+#define	TAPE_STATUS_COUNT	(sizeof(struct tape_status)/sizeof(int)) ///< Number of integers in tape_status structure.
+#define	TAPE_STATUS		(('m'<<16) + 1) ///< IOCTL command to get tape status.
+
+/** @name Tape Drive Types (tape_status.mt_type)
+ * These are the same for controllers compatible with the types listed.
+ */
+/**@{*/
+#define	MT_ISTS		0x01		///< TS-11.
+#define	MT_ISHT		0x02		///< TM03 Massbus: TE16, TU45, TU77.
+#define	MT_ISTM		0x03		///< TM11/TE10 Unibus.
+#define	MT_ISMT		0x04		///< TM78/TU78 Massbus.
+#define	MT_ISUT		0x05		///< SI TU-45 emulation on Unibus.
+#define	MT_ISCPC	0x06		///< SUN CPC controller.
+#define	MT_ISAR		0x07		///< SUN Archive controller.
+#define	MT_ISTMSCP	0x08		///< DEC TMSCP protocol (TU81, TK50).
+#define	MT_ISCY		0x09		///< CCI Cipher.
+#define	MT_ISSCSI	0x0a		///< SCSI tape (all brands).
+/**@}*/
 
 
 /*
  * Set status parameters
  */
 
+/**
+ * @brief Structure for setting tape operation parameters.
+ */
 struct tape_params {
-	unsigned int	mt_operation;
-	unsigned int	mt_repeat_count;
+	unsigned int	mt_operation;	///< Tape operation to perform (see MT* operation macros).
+	unsigned int	mt_repeat_count;///< Number of times to repeat the operation.
 };
 
-/* operations */
-#define MTWEOF		0	/* write an end-of-file record */
-#define MTFSF		1	/* forward space file */
-#define MTBSF		2	/* backward space file */
-#define MTFSR		3	/* forward space record */
-#define MTBSR		4	/* backward space record */
-#define MTREW		5	/* rewind */
-#define MTOFFL		6	/* rewind and put the drive offline */
-#define MTNOP		7	/* no operation, sets status only */
-#define MTCACHE		8	/* enable controller cache */
-#define MTNOCACHE	9	/* disable controller cache */
+/** @name Tape Operations (tape_params.mt_operation) */
+/**@{*/
+#define MTWEOF		0	///< Write an end-of-file record.
+#define MTFSF		1	///< Forward space over file marks.
+#define MTBSF		2	///< Backward space over file marks.
+#define MTFSR		3	///< Forward space over records.
+#define MTBSR		4	///< Backward space over records.
+#define MTREW		5	///< Rewind.
+#define MTOFFL		6	///< Rewind and put the drive offline.
+#define MTNOP		7	///< No operation, sets status only.
+#define MTCACHE		8	///< Enable controller cache.
+#define MTNOCACHE	9	///< Disable controller cache.
+/**@}*/
 
 
 /*
  * U*x compatibility
  */
 
-/* structure for MTIOCGET - mag tape get status command */
-
+/**
+ * @brief Structure for MTIOCGET - mag tape get status command (Unix compatibility).
+ */
 struct mtget {
-	short	mt_type;	/* type of magtape device */
+	short	mt_type;	///< Type of magtape device.
 /* the following two registers are grossly device dependent */
-	short	mt_dsreg;	/* ``drive status'' register */
-	short	mt_erreg;	/* ``error'' register */
+	short	mt_dsreg;	///< "Drive status" register (device-dependent).
+	short	mt_erreg;	///< "Error" register (device-dependent).
 /* end device-dependent registers */
-	short	mt_resid;	/* residual count */
+	short	mt_resid;	///< Residual count from last I/O operation.
 /* the following two are not yet implemented */
-	unsigned long	mt_fileno;	/* file number of current position */
-	unsigned long	mt_blkno;	/* block number of current position */
+	unsigned long	mt_fileno;	///< File number of current position (not yet implemented).
+	unsigned long	mt_blkno;	///< Block number of current position (not yet implemented).
 /* end not yet implemented */
 };
 
 
-/* mag tape io control commands */
-#define	MTIOCTOP	_IOW('m', 1, struct tape_params)/* do a mag tape op */
-#define	MTIOCGET	_IOR('m', 2, struct mtget)	/* get tape status */
-#define MTIOCIEOT	_IO('m', 3)			/* ignore EOT error */
-#define MTIOCEEOT	_IO('m', 4)			/* enable EOT error */
+/** @name Magnetic Tape IOCTL Commands */
+/**@{*/
+#define	MTIOCTOP	_IOW('m', 1, struct tape_params) ///< Perform a magnetic tape operation.
+#define	MTIOCGET	_IOR('m', 2, struct mtget)	 ///< Get tape status (Unix compatibility).
+#define MTIOCIEOT	_IO('m', 3)			 ///< Ignore End-Of-Tape (EOT) error.
+#define MTIOCEEOT	_IO('m', 4)			 ///< Enable End-Of-Tape (EOT) error.
+/**@}*/
 
 
 #endif	_TAPE_STATUS_H_

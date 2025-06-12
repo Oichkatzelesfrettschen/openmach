@@ -52,20 +52,26 @@
  * to leave room for a bootstrap, etc.
  */
 
-#define LABELSECTOR	0			/* sector containing label */
-#define LABELOFFSET	64			/* offset of label in sector */
-#define DISKMAGIC	((unsigned int) 0x82564557U)	/* The disk magic number */
+#define LABELSECTOR	0			///< Sector number containing the disk label.
+#define LABELOFFSET	64			///< Offset of the label within the sector.
+#define DISKMAGIC	((unsigned int) 0x82564557U)	///< The disk magic number.
 #ifndef MAXPARTITIONS
-#define	MAXPARTITIONS	8
+#define	MAXPARTITIONS	8			///< Maximum number of partitions.
 #endif
 
 
 #ifndef LOCORE
+/**
+ * @brief Disk label structure.
+ *
+ * Contains information about the hardware disk geometry, filesystem partitions,
+ * and drive-specific information.
+ */
 struct disklabel {
-	unsigned int	d_magic;		/* the magic number */
-	short	d_type;			/* drive type */
-	short	d_subtype;		/* controller/d_type specific */
-	char	d_typename[16];		/* type name, e.g. "eagle" */
+	unsigned int	d_magic;		///< The magic number identifying the disk label.
+	short	d_type;			///< Drive type (see DTYPE_* macros).
+	short	d_subtype;		///< Controller/drive type specific information.
+	char	d_typename[16];		///< Type name, e.g., "eagle".
 	/* 
 	 * d_packname contains the pack identifier and is returned when
 	 * the disklabel is read off the disk or in-core copy.
@@ -75,41 +81,44 @@ struct disklabel {
 	 * getdiskbyname(3) to retrieve the values from /etc/disktab.
 	 */
 #if defined(MACH_KERNEL) || defined(STANDALONE)
-	char	d_packname[16];			/* pack identifier */ 
+	char	d_packname[16];			///< Pack identifier.
 #else
 	union {
-		char	un_d_packname[16];	/* pack identifier */ 
+		char	un_d_packname[16];	///< Pack identifier.
 		struct {
-			char *un_d_boot0;	/* primary bootstrap name */
-			char *un_d_boot1;	/* secondary bootstrap name */
+			char *un_d_boot0;	///< Primary bootstrap name.
+			char *un_d_boot1;	///< Secondary bootstrap name.
 		} un_b; 
 	} d_un; 
-#define d_packname	d_un.un_d_packname
-#define d_boot0		d_un.un_b.un_d_boot0
-#define d_boot1		d_un.un_b.un_d_boot1
+#define d_packname	d_un.un_d_packname	///< Pack identifier.
+#define d_boot0		d_un.un_b.un_d_boot0	///< Primary bootstrap name.
+#define d_boot1		d_un.un_b.un_d_boot1	///< Secondary bootstrap name.
 #endif	/* ! MACH_KERNEL or STANDALONE */
-			/* disk geometry: */
-	unsigned int	d_secsize;		/* # of bytes per sector */
-	unsigned int	d_nsectors;		/* # of data sectors per track */
-	unsigned int	d_ntracks;		/* # of tracks per cylinder */
-	unsigned int	d_ncylinders;		/* # of data cylinders per unit */
-	unsigned int	d_secpercyl;		/* # of data sectors per cylinder */
-	unsigned int	d_secperunit;		/* # of data sectors per unit */
+			/** @name Disk Geometry */
+			/**@{*/
+	unsigned int	d_secsize;		///< Number of bytes per sector.
+	unsigned int	d_nsectors;		///< Number of data sectors per track.
+	unsigned int	d_ntracks;		///< Number of tracks per cylinder.
+	unsigned int	d_ncylinders;		///< Number of data cylinders per unit.
+	unsigned int	d_secpercyl;		///< Number of data sectors per cylinder.
+	unsigned int	d_secperunit;		///< Number of data sectors per unit.
 	/*
 	 * Spares (bad sector replacements) below
 	 * are not counted in d_nsectors or d_secpercyl.
 	 * Spare sectors are assumed to be physical sectors
 	 * which occupy space at the end of each track and/or cylinder.
 	 */
-	unsigned short	d_sparespertrack;	/* # of spare sectors per track */
-	unsigned short	d_sparespercyl;		/* # of spare sectors per cylinder */
+	unsigned short	d_sparespertrack;	///< Number of spare sectors per track.
+	unsigned short	d_sparespercyl;		///< Number of spare sectors per cylinder.
 	/*
 	 * Alternate cylinders include maintenance, replacement,
 	 * configuration description areas, etc.
 	 */
-	unsigned int	d_acylinders;		/* # of alt. cylinders per unit */
+	unsigned int	d_acylinders;		///< Number of alternate cylinders per unit.
+			/**@}*/
 
-			/* hardware characteristics: */
+			/** @name Hardware Characteristics */
+			/**@{*/
 	/*
 	 * d_interleave, d_trackskew and d_cylskew describe perturbations
 	 * in the media format used to compensate for a slow controller.
@@ -126,32 +135,38 @@ struct disklabel {
 	 * Finally, d_cylskew is the offset of sector 0 on cylinder N
 	 * relative to sector 0 on cylinder N-1.
 	 */
-	unsigned short	d_rpm;			/* rotational speed */
-	unsigned short	d_interleave;		/* hardware sector interleave */
-	unsigned short	d_trackskew;		/* sector 0 skew, per track */
-	unsigned short	d_cylskew;		/* sector 0 skew, per cylinder */
-	unsigned int	d_headswitch;		/* head switch time, usec */
-	unsigned int	d_trkseek;		/* track-to-track seek, usec */
-	unsigned int	d_flags;		/* generic flags */
-#define NDDATA 5
-	unsigned int	d_drivedata[NDDATA];	/* drive-type specific information */
-#define NSPARE 5
-	unsigned int	d_spare[NSPARE];	/* reserved for future use */
-	unsigned int	d_magic2;		/* the magic number (again) */
-	unsigned short	d_checksum;		/* xor of data incl. partitions */
+	unsigned short	d_rpm;			///< Rotational speed in RPM.
+	unsigned short	d_interleave;		///< Hardware sector interleave.
+	unsigned short	d_trackskew;		///< Sector 0 skew, per track.
+	unsigned short	d_cylskew;		///< Sector 0 skew, per cylinder.
+	unsigned int	d_headswitch;		///< Head switch time, in microseconds.
+	unsigned int	d_trkseek;		///< Track-to-track seek time, in microseconds.
+	unsigned int	d_flags;		///< Generic flags (see D_* macros).
+#define NDDATA 5	///< Number of drive-specific data elements.
+	unsigned int	d_drivedata[NDDATA];	///< Drive-type specific information.
+#define NSPARE 5	///< Number of spare data elements.
+	unsigned int	d_spare[NSPARE];	///< Reserved for future use.
+	unsigned int	d_magic2;		///< The magic number (again) for verification.
+	unsigned short	d_checksum;		///< XOR checksum of data including partitions.
+			/**@}*/
 
-			/* filesystem and partition information: */
-	unsigned short	d_npartitions;		/* number of partitions in following */
-	unsigned int	d_bbsize;		/* size of boot area at sn0, bytes */
-	unsigned int	d_sbsize;		/* max size of fs superblock, bytes */
-	struct	partition {		/* the partition table */
-		unsigned int	p_size;		/* number of sectors in partition */
-		unsigned int	p_offset;	/* starting sector */
-		unsigned int	p_fsize;	/* filesystem basic fragment size */
-		unsigned char	p_fstype;	/* filesystem type, see below */
-		unsigned char	p_frag;		/* filesystem fragments per block */
-		unsigned short	p_cpg;		/* filesystem cylinders per group */
-	} d_partitions[MAXPARTITIONS+1];	/* actually may be more */
+			/** @name Filesystem and Partition Information */
+			/**@{*/
+	unsigned short	d_npartitions;		///< Number of partitions in the following table.
+	unsigned int	d_bbsize;		///< Size of boot area at sector 0, in bytes.
+	unsigned int	d_sbsize;		///< Maximum size of filesystem superblock, in bytes.
+	/**
+	 * @brief Partition table entry.
+	 */
+	struct	partition {
+		unsigned int	p_size;		///< Number of sectors in partition.
+		unsigned int	p_offset;	///< Starting sector of the partition.
+		unsigned int	p_fsize;	///< Filesystem basic fragment size.
+		unsigned char	p_fstype;	///< Filesystem type (see FS_* macros).
+		unsigned char	p_frag;		///< Filesystem fragments per block.
+		unsigned short	p_cpg;		///< Filesystem cylinders per group.
+	} d_partitions[MAXPARTITIONS+1];	///< Partition table, actually may be more.
+			/**@}*/
 
 #if	defined(alpha) && defined(MACH_KERNEL)
 	/*
@@ -165,7 +180,7 @@ struct disklabel {
 	 * I bet the OSF folks stomped into this too, since they use
 	 * the same disgusting hack below.. [whatelse can I do ??]
 	 */
-	int	bugfix;
+	int	bugfix; ///< Bug fix for Alpha alignment issues.
 #endif
 };
 #else LOCORE
@@ -181,16 +196,21 @@ struct disklabel {
 	.set	d_end_,276		/* size of disk label */
 #endif LOCORE
 
-/* d_type values: */
-#define	DTYPE_SMD		1		/* SMD, XSMD; VAX hp/up */
-#define	DTYPE_MSCP		2		/* MSCP */
-#define	DTYPE_DEC		3		/* other DEC (rk, rl) */
-#define	DTYPE_SCSI		4		/* SCSI */
-#define	DTYPE_ESDI		5		/* ESDI interface */
-#define	DTYPE_ST506		6		/* ST506 etc. */
-#define	DTYPE_FLOPPY		10		/* floppy */
+/** @name Drive Types (d_type) */
+/**@{*/
+#define	DTYPE_SMD		1		///< SMD, XSMD; VAX hp/up.
+#define	DTYPE_MSCP		2		///< MSCP.
+#define	DTYPE_DEC		3		///< Other DEC (rk, rl).
+#define	DTYPE_SCSI		4		///< SCSI.
+#define	DTYPE_ESDI		5		///< ESDI interface.
+#define	DTYPE_ST506		6		///< ST506 etc.
+#define	DTYPE_FLOPPY		10		///< Floppy disk.
+/**@}*/
 
 #ifdef DKTYPENAMES
+/**
+ * @brief Array of drive type names.
+ */
 static char *dktypenames[] = {
 	"unknown",
 	"SMD",
@@ -205,25 +225,26 @@ static char *dktypenames[] = {
 	"floppy",
 	0
 };
-#define DKMAXTYPES	(sizeof(dktypenames) / sizeof(dktypenames[0]) - 1)
+#define DKMAXTYPES	(sizeof(dktypenames) / sizeof(dktypenames[0]) - 1) ///< Maximum number of drive types.
 #endif
 
-/*
- * Filesystem type and version.
- * Used to interpret other filesystem-specific
- * per-partition information.
- */
-#define	FS_UNUSED	0		/* unused */
-#define	FS_SWAP		1		/* swap */
-#define	FS_V6		2		/* Sixth Edition */
-#define	FS_V7		3		/* Seventh Edition */
-#define	FS_SYSV		4		/* System V */
-#define	FS_V71K		5		/* V7 with 1K blocks (4.1, 2.9) */
-#define	FS_V8		6		/* Eighth Edition, 4K blocks */
-#define	FS_BSDFFS	7		/* 4.2BSD fast file system */
-#define FS_LINUXFS	8		/* Linux file system */
+/** @name Filesystem Types (p_fstype) */
+/**@{*/
+#define	FS_UNUSED	0		///< Unused partition.
+#define	FS_SWAP		1		///< Swap partition.
+#define	FS_V6		2		///< Sixth Edition filesystem.
+#define	FS_V7		3		///< Seventh Edition filesystem.
+#define	FS_SYSV		4		///< System V filesystem.
+#define	FS_V71K		5		///< V7 with 1K blocks (4.1, 2.9).
+#define	FS_V8		6		///< Eighth Edition, 4K blocks.
+#define	FS_BSDFFS	7		///< 4.2BSD fast file system.
+#define FS_LINUXFS	8		///< Linux file system.
+/**@}*/
 
 #ifdef	DKTYPENAMES
+/**
+ * @brief Array of filesystem type names.
+ */
 static char *fstypenames[] = {
 	"unused",
 	"swap",
@@ -236,70 +257,69 @@ static char *fstypenames[] = {
 	"Linux",
 	0
 };
-#define FSMAXTYPES	(sizeof(fstypenames) / sizeof(fstypenames[0]) - 1)
+#define FSMAXTYPES	(sizeof(fstypenames) / sizeof(fstypenames[0]) - 1) ///< Maximum number of filesystem types.
 #endif
 
-/*
- * flags shared by various drives:
- */
-#define		D_REMOVABLE	0x01		/* removable media */
-#define		D_ECC		0x02		/* supports ECC */
-#define		D_BADSECT	0x04		/* supports bad sector forw. */
-#define		D_RAMDISK	0x08		/* disk emulator */
-#define		D_CHAIN		0x10		/* can do back-back transfers */
+/** @name Drive Flags (d_flags) */
+/**@{*/
+#define		D_REMOVABLE	0x01		///< Removable media.
+#define		D_ECC		0x02		///< Supports ECC.
+#define		D_BADSECT	0x04		///< Supports bad sector forwarding.
+#define		D_RAMDISK	0x08		///< Disk emulator.
+#define		D_CHAIN		0x10		///< Can do back-to-back transfers.
+/**@}*/
 
-/*
- * Drive data for SMD.
- */
-#define	d_smdflags	d_drivedata[0]
-#define		D_SSE		0x1		/* supports skip sectoring */
-#define	d_mindist	d_drivedata[1]
-#define	d_maxdist	d_drivedata[2]
-#define	d_sdist		d_drivedata[3]
+/** @name Drive Data for SMD */
+/**@{*/
+#define	d_smdflags	d_drivedata[0]	///< SMD specific flags.
+#define		D_SSE		0x1		///< Supports skip sectoring.
+#define	d_mindist	d_drivedata[1]	///< Minimum seek distance.
+#define	d_maxdist	d_drivedata[2]	///< Maximum seek distance.
+#define	d_sdist		d_drivedata[3]	///< Skip distance.
+/**@}*/
 
-/*
- * Drive data for ST506.
- */
-#define d_precompcyl	d_drivedata[0]
-#define d_gap3		d_drivedata[1]		/* used only when formatting */
+/** @name Drive Data for ST506 */
+/**@{*/
+#define d_precompcyl	d_drivedata[0]	///< Write precompensation cylinder.
+#define d_gap3		d_drivedata[1]		///< Gap3 value (used only when formatting).
+/**@}*/
 
-/*
- * IBM controller info (d_precompcyl used, too)
- */
-#define	d_step		d_drivedata[2]
+/** @name IBM Controller Info */
+/**@{*/
+#define	d_step		d_drivedata[2]	///< Step rate for IBM controllers.
+/**@}*/
 
 #ifndef LOCORE
-/*
- * Structure used to perform a format
- * or other raw operation, returning data
- * and/or register values.
- * Register identification and format
- * are device- and driver-dependent.
+/**
+ * @brief Structure used to perform a format or other raw operation.
+ *
+ * This structure is used for returning data and/or register values.
+ * Register identification and format are device- and driver-dependent.
  */
 struct format_op {
-	char	*df_buf;
-	int	df_count;		/* value-result */
-	recnum_t	df_startblk;
-	int	df_reg[8];		/* result */
+	char	*df_buf;		///< Buffer for data transfer.
+	int	df_count;		///< Value-result: size of data buffer/amount transferred.
+	recnum_t	df_startblk;	///< Starting block number for the operation.
+	int	df_reg[8];		///< Result: register values.
 };
 
-/*
- * Disk-specific ioctls.
- */
+/** @name Disk-specific IOCTLs */
+/**@{*/
 		/* get and set disklabel; DIOCGPART used internally */
-#define DIOCGDINFO	_IOR('d', 101, struct disklabel)/* get */
-#define DIOCSDINFO	_IOW('d', 102, struct disklabel)/* set */
-#define DIOCWDINFO	_IOW('d', 103, struct disklabel)/* set, update disk */
+#define DIOCGDINFO	_IOR('d', 101, struct disklabel) ///< Get disk label.
+#define DIOCSDINFO	_IOW('d', 102, struct disklabel) ///< Set disk label (in-core only).
+#define DIOCWDINFO	_IOW('d', 103, struct disklabel) ///< Set disk label and write to disk.
 
 /* do format operation, read or write */
-#define DIOCRFORMAT	_IOWR('d', 105, struct format_op)
-#define DIOCWFORMAT	_IOWR('d', 106, struct format_op)
+#define DIOCRFORMAT	_IOWR('d', 105, struct format_op) ///< Read format data.
+#define DIOCWFORMAT	_IOWR('d', 106, struct format_op) ///< Write format data.
 
-#define DIOCSSTEP	_IOW('d', 107, int)	/* set step rate */
-#define DIOCSRETRIES	_IOW('d', 108, int)	/* set # of retries */
-#define DIOCWLABEL	_IOW('d', 109, int)	/* write en/disable label */
+#define DIOCSSTEP	_IOW('d', 107, int)	///< Set step rate.
+#define DIOCSRETRIES	_IOW('d', 108, int)	///< Set number of retries.
+#define DIOCWLABEL	_IOW('d', 109, int)	///< Enable/disable writing of disk label.
 
-#define DIOCSBAD	_IOW('d', 110, struct dkbad)	/* set kernel dkbad */
+#define DIOCSBAD	_IOW('d', 110, struct dkbad)	///< Set kernel dkbad structure.
+/**@}*/
 
 #endif LOCORE
 

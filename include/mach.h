@@ -27,13 +27,22 @@
  *  Includes all the types that a normal user
  *  of Mach programs should need
  */
+/**
+ * @file mach.h
+ * @brief Master include file for Mach user programs.
+ *
+ * This file is a convenience header that includes a common set of Mach
+ * interface files, providing definitions for types, kernel interfaces (traps),
+ * port management, and initialization routines that are typically needed
+ * by user-level Mach programs.
+ */
 
 #ifndef	_MACH_H_
 #define	_MACH_H_
 
-#include <mach/mach_types.h>
-#include <mach/mach_interface.h>
-#include <mach/mach_port.h>
-#include <mach_init.h>
+#include <mach/mach_types.h>     /**< Defines fundamental Mach data types. */
+#include <mach/mach_interface.h> /**< Declares user-visible kernel functions (Mach traps). */
+#include <mach/mach_port.h>      /**< Defines `mach_port_t` and port-related operations (legacy). Note: Modern port definitions are in `mach/port.h`. This might be for older compatibility or a specific subset. */
+#include <mach_init.h>           /**< Declares Mach initialization routines, like `mach_host_self`. */
 
-#endif	_MACH_H_
+#endif	/* _MACH_H_ */

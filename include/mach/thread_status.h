@@ -30,6 +30,20 @@
  *	kernel call and may be changed with the thread_set_state kernel call.
  *
  */
+/**
+ * @file mach/thread_status.h
+ * @brief Definitions for thread state manipulation.
+ *
+ * This file provides generic type definitions for accessing and modifying
+ * a thread's execution state (e.g., CPU registers). The actual,
+ * machine-specific structures defining the thread state are included from
+ * `<mach/machine/thread_status.h>`.
+ *
+ * Thread state is typically retrieved using `thread_get_state` and modified
+ * using `thread_set_state` Mach traps. Different "flavors" of state can be
+ * accessed, with each flavor corresponding to a specific aspect of the
+ * thread's context (e.g., general purpose registers, floating point registers).
+ */
 
 #ifndef	_MACH_THREAD_STATUS_H_
 #define	_MACH_THREAD_STATUS_H_
@@ -38,18 +52,43 @@
  *	The actual structure that comprises the thread state is defined
  *	in the machine dependent module.
  */
-#include <mach/machine/vm_types.h>
-#include <mach/machine/thread_status.h>
+#include <mach/machine/vm_types.h> /* For natural_t */
+#include <mach/machine/thread_status.h> /* Defines machine-specific thread_state structures and state flavor constants */
 
-/*
- *	Generic definition for machine-dependent thread status.
+/**
+ * @brief Generic type for thread state information.
+ *
+ * This is a pointer to a variable-length array of `natural_t` (typically unsigned integers).
+ * The actual content and layout of this array are machine-dependent and defined by
+ * specific "flavors" of thread state (e.g., a flavor for general-purpose registers,
+ * another for floating-point registers, etc.). The specific structure corresponding
+ * to a flavor should be used to cast this pointer for access.
  */
+typedef natural_t		*thread_state_t;
 
-typedef natural_t		*thread_state_t;	/* Variable-length array */
+/**
+ * @def THREAD_STATE_MAX
+ * @brief Maximum size (in `natural_t` units) of the `thread_state_data_t` array.
+ * This defines a sufficiently large buffer to hold any flavor of thread state.
+ */
+#define	THREAD_STATE_MAX	(1024)
 
-#define	THREAD_STATE_MAX	(1024)		/* Maximum array size */
+/**
+ * @typedef thread_state_data_t
+ * @brief A fixed-size buffer to receive thread state information.
+ * This array is large enough to hold any flavor of thread state.
+ */
 typedef natural_t	thread_state_data_t[THREAD_STATE_MAX];
 
-#define	THREAD_STATE_FLAVOR_LIST	0	/* List of valid flavors */
+/**
+ * @def THREAD_STATE_FLAVOR_LIST
+ * @brief A special flavor for `thread_get_state` to retrieve a list of valid thread state flavors.
+ * When this flavor is used, the `thread_state_t` output will contain an array of
+ * `natural_t`, each representing a valid flavor constant for the target thread's architecture.
+ * The count of flavors is also returned by the `thread_get_state` call.
+ * A value of 0 for this flavor is chosen as it's typically an invalid or reserved
+ * flavor number for actual state structures.
+ */
+#define	THREAD_STATE_FLAVOR_LIST	0
 
 #endif	/* _MACH_THREAD_STATUS_H_ */

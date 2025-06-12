@@ -29,14 +29,54 @@
  *    for use by the kernel and are defined in message.h. 
  *
  */
+/**
+ * @file mach/msg_type.h
+ * @brief Defines user-level message type flags.
+ *
+ * This file provides definitions for message type flags that can be
+ * OR'ed into the `msg_type` field of a legacy `msg_header_t` (from
+ * the `MACH_IPC_COMPAT` interface) or potentially used in other
+ * user-defined ways within Mach messages (e.g., in `msgh_id` of
+ * `mach_msg_header_t`).
+ *
+ * These flags allow applications to convey additional semantics about
+ * the message content or handling, such as whether it's related to
+ * a specific subsystem (like Camelot) or requires special processing
+ * (like decryption or an RPC-style reply).
+ *
+ * Values 0-5 for message types are typically reserved for kernel use
+ * (e.g., `MSG_TYPE_NORMAL`, `MSG_TYPE_EMERGENCY` in the legacy interface).
+ */
 
 #ifndef	_MACH_MSG_TYPE_H_
 #define	_MACH_MSG_TYPE_H_
 
-#define MSG_TYPE_CAMELOT	(1 << 6)
-#define MSG_TYPE_ENCRYPTED	(1 << 7)
-#define	MSG_TYPE_RPC		(1 << 8)	/* Reply expected */
+/** @name User-defined Message Type Flags
+ *  These flags can be combined and used in the `msg_type` field
+ *  of a legacy `msg_header_t` or in user-defined fields of modern messages.
+ * @{
+ */
 
-#include <mach/message.h>
+/**
+ * @def MSG_TYPE_CAMELOT
+ * @brief Indicates a message related to the Camelot distributed transaction system.
+ */
+#define MSG_TYPE_CAMELOT	(1 << 6)
+
+/**
+ * @def MSG_TYPE_ENCRYPTED
+ * @brief Indicates that the message payload is encrypted.
+ */
+#define MSG_TYPE_ENCRYPTED	(1 << 7)
+
+/**
+ * @def MSG_TYPE_RPC
+ * @brief Indicates that the message is part of a Remote Procedure Call (RPC)
+ *        and a reply is expected.
+ */
+#define	MSG_TYPE_RPC		(1 << 8)
+/** @} */
+
+#include <mach/message.h> /* For legacy msg_header_t definition if MACH_IPC_COMPAT is used */
 
 #endif	/* _MACH_MSG_TYPE_H_ */

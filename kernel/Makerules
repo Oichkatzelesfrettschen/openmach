@@ -20,16 +20,37 @@
 ifndef _mach4_kernel_makerules_
 _mach4_kernel_makerules_ = yes
 
+#
+## @file kernel/Makerules
+## @brief Makefile fragment for building the generic (machine-independent) part of the Mach4 microkernel.
+##
+## This file is designed to be included by machine-dependent Makefiles.
+## It sets up common definitions, specifies source directories for various kernel
+## modules, and handles the generation of a version information file.
+##
 
+#
 # This makefile is for the generic part of the microkernel,
 # and is included by the corresponding machine-dependent makefile.
+#
 
-
-# Old defines that I hope to phase out
+#
+## @var DEFINES
+## @brief Adds standard kernel compilation defines.
+## `MACH_KERNEL` and `KERNEL` are common preprocessor symbols used to indicate
+## that the code is being compiled as part of the kernel.
+## These are noted as "Old defines that I hope to phase out".
 DEFINES += -DMACH_KERNEL -DKERNEL
 
-
-# Required generic sections
+#
+## @var SRCDIRS
+## @brief Specifies the source code directories for generic kernel components.
+## This variable appends paths relative to `$(GSRCDIR)` (Generic Source Directory)
+## for various kernel subsystems like device management, IPC, core kernel,
+## virtual memory (VM), DDB (kernel debugger), bogus (miscellaneous/test),
+## and utility code. The `kernel` entry itself is noted as potentially problematic
+## for include path resolution and overriding.
+##
 SRCDIRS += $(addprefix $(GSRCDIR)/,	\
 		kernel/device		\
 		kernel/ipc		\
@@ -48,18 +69,37 @@ SRCDIRS += $(addprefix $(GSRCDIR)/,	\
 # It is bad in a way because files included like this can't be overridden easily
 # by more-specific program sections.
 
-
+#
+## @var GEN_OBJFILES
+## @brief Lists object files to be generated, including `version.o`.
+##
+## @var CLEAN_FILES
+## @brief Lists files to be removed during the clean process, including `version.c`.
+##
+## @target version.c
+## @brief Rule to generate `version.c`.
+## This target creates a C source file containing a version string.
+## The version string includes information from `$(GSRCDIR)/Version.log`
+## and the current date. This `version.c` is then compiled into `version.o`.
+##
 GEN_OBJFILES += version.o
 version.c: $(GSRCDIR)/Version.log
 	echo >$@ \
 	  "char version[] = \"Mach4 `head -1 $(GSRCDIR)/Version.log`, `date`\";"
 CLEAN_FILES += version.c
 
-
+#
 # Include the makefile containing the generic rules.
+# This likely brings in standard compilation rules, toolchain definitions, etc.
+# from a more general Makerules file located at `$(GSRCDIR)/Makerules`.
+#
 include $(GSRCDIR)/Makerules
 
-
+#
+## @brief Dependencies for specific object files.
+## These lines specify header file dependencies for `memory_object.o`
+## and `mach_port.o`, ensuring they are rebuilt if the listed headers change.
+##
 memory_object.o: memory_object_user.h memory_object_default.h
 mach_port.o: mach_interface.h mach_port_interface.h
 

@@ -46,88 +46,103 @@
 /*
  * Device handle.
  */
-typedef	mach_port_t	device_t;
+typedef	mach_port_t	device_t; ///< Device handle type (Mach port).
 
 #endif	/* MACH_KERNEL */
 
-/*
- * Device name string
+/**
+ * @brief Device name string.
+ * Must match device_types.defs.
  */
-typedef	char	dev_name_t[128];	/* must match device_types.defs */
+typedef	char	dev_name_t[128];
 
-/*
- * Mode for open/read/write
+/**
+ * @brief Mode for open/read/write operations.
  */
 typedef unsigned int	dev_mode_t;
-#define	D_READ		0x1		/* read */
-#define	D_WRITE		0x2		/* write */
-#define	D_NODELAY	0x4		/* no delay on open */
-#define	D_NOWAIT	0x8		/* do not wait if data not available */
+#define	D_READ		0x1		///< Read access.
+#define	D_WRITE		0x2		///< Write access.
+#define	D_NODELAY	0x4		///< No delay on open.
+#define	D_NOWAIT	0x8		///< Do not wait if data not available.
 
-/*
- * IO buffer - out-of-line array of characters.
+/**
+ * @brief IO buffer - out-of-line array of characters.
  */
 typedef char *	io_buf_ptr_t;
 
-/*
- * IO buffer - in-line array of characters.
+/**
+ * @brief IO buffer - in-line array of characters.
+ * Must match device_types.defs.
  */
-#define IO_INBAND_MAX (128)		/* must match device_types.defs */
-typedef char 	io_buf_ptr_inband_t[IO_INBAND_MAX];
+#define IO_INBAND_MAX (128)		///< Maximum size for in-band IO buffer.
+typedef char 	io_buf_ptr_inband_t[IO_INBAND_MAX]; ///< In-band IO buffer type.
 
-/*
- * IO buffer vector - for scatter/gather IO.
+/**
+ * @brief IO buffer vector - for scatter/gather IO.
  */
 typedef struct {
-	vm_offset_t	data;
-	vm_size_t	count;
+	vm_offset_t	data;	///< Pointer to data buffer.
+	vm_size_t	count;	///< Size of data buffer.
 } io_buf_vec_t;
 
-/*
- * Record number for random-access devices
+/**
+ * @brief Record number for random-access devices.
  */
 typedef	unsigned int	recnum_t;
 
-/*
- * Flavors of set/get statuses
+/**
+ * @brief Flavors of set/get statuses.
  */
 typedef unsigned int	dev_flavor_t;
 
-/*
- * Generic array for get/set status
+/**
+ * @brief Generic array for get/set status.
+ * Variable-length array of integers.
  */
-typedef int		*dev_status_t;	/* Variable-length array of integers */
-#define	DEV_STATUS_MAX	(1024)		/* Maximum array size */
+typedef int		*dev_status_t;
+#define	DEV_STATUS_MAX	(1024)		///< Maximum array size for device status.
 
+/**
+ * @brief Fixed-size array for device status data.
+ */
 typedef int		dev_status_data_t[DEV_STATUS_MAX];
 
-/*
- * Mandatory get/set status operations
+/** @name Mandatory Get/Set Status Operations */
+/**@{*/
+
+/**
+ * @brief Get device size information.
+ * Operation code for device_get_status.
  */
-
-/* size a device: op code and indexes for returned values */
 #define	DEV_GET_SIZE			0
-#	define	DEV_GET_SIZE_DEVICE_SIZE	0	/* 0 if unknown */
-#	define	DEV_GET_SIZE_RECORD_SIZE	1	/* 1 if sequential */
-#define	DEV_GET_SIZE_COUNT		2
+/** @name Indexes for DEV_GET_SIZE returned values */
+/**@{*/
+#	define	DEV_GET_SIZE_DEVICE_SIZE	0	///< Index for device size (0 if unknown).
+#	define	DEV_GET_SIZE_RECORD_SIZE	1	///< Index for record size (1 if sequential).
+/**@}*/
+#define	DEV_GET_SIZE_COUNT		2		///< Number of values returned by DEV_GET_SIZE.
+/**@}*/
 
-/*
- * Device error codes
+/**
+ * @brief Device error codes.
  */
 typedef	int		io_return_t;
 
-#define	D_IO_QUEUED		(-1)	/* IO queued - do not return result */
-#define	D_SUCCESS		0
+/** @name IO Return Codes */
+/**@{*/
+#define	D_IO_QUEUED		(-1)	///< IO queued - do not return result immediately.
+#define	D_SUCCESS		0		///< Operation successful.
 
-#define	D_IO_ERROR		2500	/* hardware IO error */
-#define	D_WOULD_BLOCK		2501	/* would block, but D_NOWAIT set */
-#define	D_NO_SUCH_DEVICE	2502	/* no such device */
-#define	D_ALREADY_OPEN		2503	/* exclusive-use device already open */
-#define	D_DEVICE_DOWN		2504	/* device has been shut down */
-#define	D_INVALID_OPERATION	2505	/* bad operation for device */
-#define	D_INVALID_RECNUM	2506	/* invalid record (block) number */
-#define	D_INVALID_SIZE		2507	/* invalid IO size */
-#define D_NO_MEMORY		2508	/* memory allocation failure */
-#define D_READ_ONLY		2509	/* device cannot be written to */
+#define	D_IO_ERROR		2500	///< Hardware IO error.
+#define	D_WOULD_BLOCK		2501	///< Operation would block, but D_NOWAIT was set.
+#define	D_NO_SUCH_DEVICE	2502	///< No such device.
+#define	D_ALREADY_OPEN		2503	///< Exclusive-use device is already open.
+#define	D_DEVICE_DOWN		2504	///< Device has been shut down.
+#define	D_INVALID_OPERATION	2505	///< Invalid operation for this device.
+#define	D_INVALID_RECNUM	2506	///< Invalid record (block) number.
+#define	D_INVALID_SIZE		2507	///< Invalid IO size.
+#define D_NO_MEMORY		2508	///< Memory allocation failure.
+#define D_READ_ONLY		2509	///< Device is read-only and write was attempted.
+/**@}*/
 
 #endif	DEVICE_TYPES_H

@@ -30,24 +30,59 @@
  *
  *	Mach system sizing parameters
  */
+/**
+ * @file mach/mach_param.h
+ * @brief Mach system sizing parameters.
+ *
+ * This file defines various parameters that affect the sizing and limits
+ * of certain Mach kernel resources, particularly related to task ports
+ * and, historically, the older IPC interface.
+ */
 
 #ifndef	_MACH_MACH_PARAM_H_
 #define _MACH_MACH_PARAM_H_
 
 #ifdef	MACH_KERNEL
-#include <mach_ipc_compat.h>
+#include <mach_ipc_compat.h> /* For MACH_IPC_COMPAT definition */
 #endif	/* MACH_KERNEL */
 
-#define TASK_PORT_REGISTER_MAX	4	/* Number of "registered" ports */
+/**
+ * @def TASK_PORT_REGISTER_MAX
+ * @brief Maximum number of "registered" ports per task.
+ *
+ * Tasks can register a small number of ports with the kernel for special
+ * purposes (e.g., kernel port, bootstrap port). This defines the limit
+ * on how many such ports can be registered.
+ */
+#define TASK_PORT_REGISTER_MAX	4
 
 
-/* Definitions for the old IPC interface. */
-
+/** @name Legacy IPC Definitions
+ * These definitions are related to the older, now generally obsolete,
+ * Mach IPC interface. They are typically only relevant if `MACH_IPC_COMPAT`
+ * is enabled.
+ * @{
+ */
 #if	MACH_IPC_COMPAT
 
+/**
+ * @def PORT_BACKLOG_DEFAULT
+ * @brief Default message backlog limit for a port in the old IPC system.
+ *
+ * This was the default number of messages that could be queued on a port
+ * before senders would block or receive an error.
+ */
 #define PORT_BACKLOG_DEFAULT	5
+
+/**
+ * @def PORT_BACKLOG_MAX
+ * @brief Maximum message backlog limit for a port in the old IPC system.
+ *
+ * This was the maximum allowable value for a port's message backlog.
+ */
 #define PORT_BACKLOG_MAX	16
 
 #endif	/* MACH_IPC_COMPAT */
+/** @} */
 
 #endif	/* _MACH_MACH_PARAM_H_ */

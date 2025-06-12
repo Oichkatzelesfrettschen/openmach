@@ -31,11 +31,35 @@
  *	Remember to update the mig type definitions
  *	in mach_debug_types.defs when adding/removing fields.
  */
+/**
+ * @file mach_debug/hash_info.h
+ * @brief Definitions for retrieving kernel hash table information.
+ *
+ * This file defines structures used to obtain debugging information
+ * or statistics about internal kernel hash tables, specifically
+ * focusing on the distribution of entries within hash buckets.
+ */
 
+/**
+ * @struct hash_info_bucket
+ * @brief Information about a single bucket in a hash table.
+ *
+ * This structure provides a count of records (entries) within one
+ * specific bucket of a kernel hash table. This can be used to analyze
+ * the hash table's distribution and identify potential performance issues
+ * due to clustering.
+ */
 typedef struct hash_info_bucket {
-	natural_t	hib_count;	/* number of records in bucket */
+	natural_t	hib_count;	/**< Number of records (entries) currently in this hash bucket. */
 } hash_info_bucket_t;
 
+/**
+ * @typedef hash_info_bucket_array_t
+ * @brief Pointer to an array of `hash_info_bucket_t` structures.
+ *
+ * This type is used when retrieving information for multiple hash buckets
+ * simultaneously, for example, when getting statistics for an entire hash table.
+ */
 typedef hash_info_bucket_t *hash_info_bucket_array_t;
 
 #endif	_MACH_DEBUG_HASH_INFO_H_

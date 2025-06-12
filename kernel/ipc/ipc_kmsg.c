@@ -30,53 +30,89 @@
  *	File:	ipc/ipc_kmsg.c
  *	Author:	Rich Draves
  *	Date:	1989
+/**
+ * @file ipc/ipc_kmsg.c
+ * @brief Operations on kernel messages (ipc_kmsg_t).
+ * @author Rich Draves
+ * @date 1989
  *
- *	Operations on kernel messages.
+ * This file implements functions for managing kernel-internal representations
+ * of Mach messages (`ipc_kmsg_t`). This includes operations for:
+ * - Enqueuing and dequeuing kmsgs on kernel queues.
+ * - Destroying kmsgs, which involves releasing all associated resources like
+ *   port rights and out-of-line memory.
+ * - Cleaning kmsg bodies by iterating through type descriptors and deallocating
+ *   ports and memory.
+ * - Allocating kmsgs and copying message data from user space or kernel space.
+ * - Copying kmsg data out to user space or kernel space.
+ * - Handling the "copyin" of port rights and memory from user messages into
+ *   kernel messages, translating names to kernel object pointers.
+ * - Handling the "copyout" of port rights and memory from kernel messages
+ *   to user messages, translating kernel objects to port names.
+ * - Compatibility functions for the older IPC interface.
+ * - Debugging functions for printing kmsg contents.
  */
 
-#include <cpus.h>
-#include <mach_ipc_compat.h>
-#include <norma_ipc.h>
-#include <norma_vm.h>
+#include <cpus.h>                /* For NCPUS, used by ipc_kmsg_cache */
+#include <mach_ipc_compat.h>     /* For MACH_IPC_COMPAT conditional compilation */
+#include <norma_ipc.h>           /* For NORMA_IPC conditional compilation */
+#include <norma_vm.h>            /* For NORMA_VM related features (not directly used here but often related) */
 
 #include <mach/boolean.h>
 #include <mach/kern_return.h>
 #include <mach/message.h>
 #include <mach/port.h>
 #include <kern/assert.h>
-#include <kern/kalloc.h>
-#include <vm/vm_map.h>
-#include <vm/vm_object.h>
-#include <vm/vm_kern.h>
-#include <ipc/port.h>
-#include <ipc/ipc_entry.h>
-#include <ipc/ipc_kmsg.h>
-#include <ipc/ipc_thread.h>
-#include <ipc/ipc_marequest.h>
-#include <ipc/ipc_notify.h>
-#include <ipc/ipc_object.h>
-#include <ipc/ipc_space.h>
-#include <ipc/ipc_port.h>
-#include <ipc/ipc_right.h>
+#include <kern/kalloc.h>         /* For kalloc, kfree */
+#include <vm/vm_map.h>           /* For vm_map_t, vm_map_copy_discard, vm_map_copyin, vm_map_copyout */
+#include <vm/vm_object.h>        /* For VM_OBJECT_NULL (implicitly) */
+#include <vm/vm_kern.h>          /* For copyinmap, copyoutmap (kernel memory copy routines) */
+#include <ipc/port.h>            /* For ipc_port_t, IP_NULL, ip_active, etc. (actually ipc_object.h for IO_NULL, IO_VALID) */
+#include <ipc/ipc_entry.h>       /* For ipc_entry_t, IE_NULL */
+#include <ipc/ipc_kmsg.h>        /* For ipc_kmsg_t, IKM_NULL, ikm_init, ikm_alloc, ikm_free, ipc_kmsg_queue_t, etc. */
+#include <ipc/ipc_thread.h>      /* For current_thread()->ith_messages */
+#include <ipc/ipc_marequest.h>   /* For ipc_marequest_t, IMAR_NULL, ipc_marequest_destroy */
+#include <ipc/ipc_notify.h>      /* For ipc_notify_port_deleted, ipc_notify_no_senders, ipc_notify_send_once */
+#include <ipc/ipc_object.h>      /* For ipc_object_t, IO_NULL, IO_VALID, ipc_object_destroy, ipc_object_copyin, etc. */
+#include <ipc/ipc_space.h>       /* For ipc_space_t */
+#include <ipc/ipc_port.h>        /* For ipc_port_t related operations like ipc_port_check_circularity */
+#include <ipc/ipc_right.h>       /* For ipc_right_copyin, ipc_right_copyout, etc. */
 
-#include <ipc/ipc_machdep.h>
+#include <ipc/ipc_machdep.h>     /* For machine-dependent IPC aspects, if any */
 
-extern int copyinmap();
-extern int copyoutmap();
-void ipc_msg_print(); /* forward */
+/* External functions for memory copying between address spaces, typically from vm_kern.c or similar */
+extern int copyinmap(vm_map_t map, char *user_addr, char *kernel_addr, vm_size_t length);
+extern int copyoutmap(vm_map_t map, char *kernel_addr, char *user_addr, vm_size_t length);
+void ipc_msg_print(mach_msg_header_t *msgh); /* Forward declaration for debugging */
 
+/**
+ * @brief Checks if a vm_offset_t is misaligned with respect to `sizeof(vm_offset_t)`.
+ * @param x The address to check.
+ * @return True if misaligned, false otherwise.
+ */
 #define is_misaligned(x)	( ((vm_offset_t)(x)) & (sizeof(vm_offset_t)-1) )
+/**
+ * @brief Aligns a vm_offset_t upwards to the next `sizeof(vm_offset_t)` boundary.
+ * @param x The address to align.
+ * @return The aligned address.
+ */
 #define ptr_align(x)	\
 	( ( ((vm_offset_t)(x)) + (sizeof(vm_offset_t)-1) ) & ~(sizeof(vm_offset_t)-1) )
 
+/**
+ * @var ipc_kmsg_cache
+ * @brief Per-CPU cache for `ipc_kmsg_t` structures.
+ * Used to reduce the overhead of kmsg allocation/deallocation for common small messages.
+ * NCPUS is the number of CPUs, defined in `<cpus.h>`.
+ */
 ipc_kmsg_t ipc_kmsg_cache[NCPUS];
 
-/*
- *	Routine:	ipc_kmsg_enqueue
- *	Purpose:
- *		Enqueue a kmsg.
+/**
+ * @brief Enqueues a kernel message (`ipc_kmsg_t`) onto an IPC kernel message queue.
+ * This function typically wraps a macro `ipc_kmsg_enqueue_macro`.
+ * @param queue Pointer to the `ipc_kmsg_queue_t` where the message will be enqueued.
+ * @param kmsg The kernel message to enqueue.
  */
-
 void
 ipc_kmsg_enqueue(
 	ipc_kmsg_queue_t	queue,
@@ -85,12 +121,12 @@ ipc_kmsg_enqueue(
 	ipc_kmsg_enqueue_macro(queue, kmsg);
 }
 
-/*
- *	Routine:	ipc_kmsg_dequeue
- *	Purpose:
- *		Dequeue and return a kmsg.
+/**
+ * @brief Dequeues and returns the first kernel message from an IPC kernel message queue.
+ * @param queue Pointer to the `ipc_kmsg_queue_t` from which to dequeue.
+ * @return The first `ipc_kmsg_t` in the queue, or `IKM_NULL` if the queue is empty.
+ *         The message is removed from the queue.
  */
-
 ipc_kmsg_t
 ipc_kmsg_dequeue(
 	ipc_kmsg_queue_t	queue)
@@ -100,17 +136,18 @@ ipc_kmsg_dequeue(
 	first = ipc_kmsg_queue_first(queue);
 
 	if (first != IKM_NULL)
-		ipc_kmsg_rmqueue_first_macro(queue, first);
+		ipc_kmsg_rmqueue_first_macro(queue, first); /* Macro removes and returns first */
 
 	return first;
 }
 
-/*
- *	Routine:	ipc_kmsg_rmqueue
- *	Purpose:
- *		Pull a kmsg out of a queue.
+/**
+ * @brief Removes a specified kernel message from an IPC kernel message queue.
+ * The message must be present in the queue.
+ * @param queue Pointer to the `ipc_kmsg_queue_t`.
+ * @param kmsg The kernel message to remove.
+ * @note Sets `kmsg->ikm_next` and `kmsg->ikm_prev` to `IKM_BOGUS` after removal for debugging.
  */
-
 void
 ipc_kmsg_rmqueue(
 	ipc_kmsg_queue_t	queue,
@@ -118,35 +155,36 @@ ipc_kmsg_rmqueue(
 {
 	ipc_kmsg_t next, prev;
 
-	assert(queue->ikmq_base != IKM_NULL);
+	assert(queue->ikmq_base != IKM_NULL); /* Queue should not be empty if removing specific kmsg */
 
 	next = kmsg->ikm_next;
 	prev = kmsg->ikm_prev;
 
-	if (next == kmsg) {
+	if (next == kmsg) { /* kmsg is the only element in the queue */
 		assert(prev == kmsg);
 		assert(queue->ikmq_base == kmsg);
 
-		queue->ikmq_base = IKM_NULL;
+		queue->ikmq_base = IKM_NULL; /* Queue becomes empty */
 	} else {
-		if (queue->ikmq_base == kmsg)
+		if (queue->ikmq_base == kmsg) /* kmsg is the head of the queue */
 			queue->ikmq_base = next;
 
 		next->ikm_prev = prev;
 		prev->ikm_next = next;
 	}
-	/* XXX Temporary debug logic */
+	/* XXX Temporary debug logic: Mark removed kmsg's links as bogus */
 	kmsg->ikm_next = IKM_BOGUS;
 	kmsg->ikm_prev = IKM_BOGUS;
 }
 
-/*
- *	Routine:	ipc_kmsg_queue_next
- *	Purpose:
- *		Return the kmsg following the given kmsg.
- *		(Or IKM_NULL if it is the last one in the queue.)
+/**
+ * @brief Returns the kernel message following a given message in a queue.
+ * @param queue Pointer to the `ipc_kmsg_queue_t`.
+ * @param kmsg The reference kernel message.
+ * @return The next `ipc_kmsg_t` in the queue after `kmsg`, or `IKM_NULL`
+ *         if `kmsg` is the last message in the queue.
+ * @pre The queue must not be empty.
  */
-
 ipc_kmsg_t
 ipc_kmsg_queue_next(
 	ipc_kmsg_queue_t	queue,
@@ -157,22 +195,28 @@ ipc_kmsg_queue_next(
 	assert(queue->ikmq_base != IKM_NULL);
 
 	next = kmsg->ikm_next;
-	if (queue->ikmq_base == next)
+	if (queue->ikmq_base == next) /* If next points back to head, kmsg was the tail */
 		next = IKM_NULL;
 
 	return next;
 }
 
-/*
- *	Routine:	ipc_kmsg_destroy
- *	Purpose:
- *		Destroys a kernel message.  Releases all rights,
- *		references, and memory held by the message.
- *		Frees the message.
- *	Conditions:
- *		No locks held.
+/**
+ * @brief Destroys a kernel message, releasing all associated resources.
+ *
+ * This function deallocates all port rights, out-of-line memory, and other
+ * resources held by the kernel message `kmsg`. Finally, it frees the `ipc_kmsg_t`
+ * structure itself using `ikm_free`.
+ *
+ * To prevent recursion if `ipc_kmsg_clean` itself triggers further message
+ * destruction (e.g., via notifications), this function enqueues the message
+ * onto the current thread's temporary message queue (`ith_messages`). If the
+ * queue was empty before this call, it then processes all messages on this
+ * thread queue, cleaning and freeing each one. This serializes complex cleanup chains.
+ *
+ * @param kmsg The kernel message to destroy.
+ * @note No locks should be held by the caller.
  */
-
 void
 ipc_kmsg_destroy(
 	ipc_kmsg_t	kmsg)
@@ -183,40 +227,46 @@ ipc_kmsg_destroy(
 	/*
 	 *	ipc_kmsg_clean can cause more messages to be destroyed.
 	 *	Curtail recursion by queueing messages.  If a message
-	 *	is already queued, then this is a recursive call.
+	 *	is already queued on ith_messages, then this is a recursive call,
+	 *  and the outer call will handle the processing.
 	 */
-
 	queue = &current_thread()->ith_messages;
 	empty = ipc_kmsg_queue_empty(queue);
 	ipc_kmsg_enqueue(queue, kmsg);
 
-	if (empty) {
-		/* must leave kmsg in queue while cleaning it */
-
+	if (empty) { /* This is the outermost call, process the queue */
+		/* must leave kmsg in queue while cleaning it, then remove and free */
 		while ((kmsg = ipc_kmsg_queue_first(queue)) != IKM_NULL) {
-			ipc_kmsg_clean(kmsg);
-			ipc_kmsg_rmqueue(queue, kmsg);
-			ikm_free(kmsg);
+			ipc_kmsg_clean(kmsg); /* Release resources held by kmsg */
+			ipc_kmsg_rmqueue(queue, kmsg); /* Remove from thread's temp queue */
+			ikm_free(kmsg); /* Free the kmsg structure itself */
 		}
 	}
 }
 
-/*
- *	Routine:	ipc_kmsg_clean_body
- *	Purpose:
- *		Cleans the body of a kernel message.
- *		Releases all rights, references, and memory.
+/**
+ * @brief Cleans the body of a kernel message, releasing resources.
  *
- *		The last type/data pair might stretch past eaddr.
- *		(See the usage in ipc_kmsg_copyout.)
- *	Conditions:
- *		No locks held.
+ * Iterates through the type descriptors in the message body (from `saddr` to `eaddr`).
+ * For each descriptor:
+ * - If it describes port rights (`is_port` is true), it calls `ipc_object_destroy`
+ *   for each port right to decrement references or deallocate rights.
+ * - If it describes out-of-line memory (`is_inline` is false):
+ *     - If it was port data (ool ports), `kfree` is used.
+ *     - Otherwise (OOL data), `vm_map_copy_discard` is used to deallocate the VM copy object.
+ *
+ * @param saddr Start address of the message body content (after the header).
+ * @param eaddr End address of the message body content (exclusive, points just past the body).
+ * @note The last type/data pair might extend beyond `eaddr` if `eaddr` points to the
+ *       start of the last descriptor but not past its data. The loop condition `saddr < eaddr`
+ *       handles this. The original comment "See the usage in ipc_kmsg_copyout" might refer
+ *       to how `eaddr` is calculated or used there.
+ * @pre No locks held.
  */
-
 void
-ipc_kmsg_clean_body(saddr, eaddr)
-	vm_offset_t saddr;
-	vm_offset_t eaddr;
+ipc_kmsg_clean_body(
+	vm_offset_t	saddr,
+	vm_offset_t	eaddr)
 {
 	while (saddr < eaddr) {
 		mach_msg_type_long_t *type;
@@ -228,12 +278,14 @@ ipc_kmsg_clean_body(saddr, eaddr)
 
 		type = (mach_msg_type_long_t *) saddr;
 		is_inline = ((mach_msg_type_t*)type)->msgt_inline;
+
+		/* Correctly parse the type descriptor (short or long form) */
 		if (((mach_msg_type_t*)type)->msgt_longform) {
-			/* This must be aligned */
+			/* This must be aligned if natural_t is larger than mach_msg_type_t */
 			if ((sizeof(natural_t) > sizeof(mach_msg_type_t)) &&
 			    (is_misaligned(type))) {
-				saddr = ptr_align(saddr);
-				continue;
+				saddr = ptr_align(saddr); /* Align saddr before re-reading type */
+				continue; /* Re-evaluate loop condition with aligned saddr */
 			}
 			name = type->msgtl_name;
 			size = type->msgtl_size;
@@ -246,13 +298,12 @@ ipc_kmsg_clean_body(saddr, eaddr)
 			saddr += sizeof(mach_msg_type_t);
 		}
 
-		/* padding (ptrs and ports) ? */
-		if ((sizeof(natural_t) > sizeof(mach_msg_type_t)) &&
-		    ((size >> 3) == sizeof(natural_t)))
+		/* Handle potential padding after descriptor for pointers/ports */
+		if ((sizeof(natural_t) > sizeof(mach_msg_type_t)) && /* If pointers/ports are larger than basic type descriptor */
+		    ((size >> 3) == sizeof(natural_t))) /* And this descriptor is for such a type */
 			saddr = ptr_align(saddr);
 
-		/* calculate length of data in bytes, rounding up */
-
+		/* Calculate total length of data in bytes, rounded up to nearest byte */
 		length = ((number * size) + 7) >> 3;
 
 		is_port = MACH_MSG_TYPE_PORT_ANY(name);
@@ -263,58 +314,60 @@ ipc_kmsg_clean_body(saddr, eaddr)
 
 			if (is_inline) {
 				objects = (ipc_object_t *) saddr;
-				/* sanity check */
-				while (eaddr < (vm_offset_t)&objects[number]) number--;
-			} else {
+				/* Sanity check: ensure we don't read past eaddr if message is malformed or truncated */
+				/* This loop condition seems off; it should probably check against saddr + length or similar */
+				while (eaddr < (vm_offset_t)&objects[number]) number--; /* Reduce 'number' if it extends beyond eaddr */
+			} else { /* Out-of-line array of ports */
 				objects = (ipc_object_t *)
-						* (vm_offset_t *) saddr;
+						* (vm_offset_t *) saddr; /* Data pointer is at saddr */
 			}
 
-			/* destroy port rights carried in the message */
-
+			/* Destroy port rights carried in the message */
 			for (i = 0; i < number; i++) {
 				ipc_object_t object = objects[i];
-
-				if (!IO_VALID(object))
+				if (!IO_VALID(object)) /* Skip null/dead ports */
 					continue;
-
-				ipc_object_destroy(object, name);
+				ipc_object_destroy(object, name); /* name indicates disposition */
 			}
 		}
 
 		if (is_inline) {
-			/* inline data sizes round up to int boundaries */
-
+			/* Inline data sizes are rounded up to integer boundaries for alignment */
 			saddr += (length + 3) &~ 3;
-		} else {
-			vm_offset_t data = * (vm_offset_t *) saddr;
+		} else { /* Out-of-line data */
+			vm_offset_t data_ptr = * (vm_offset_t *) saddr;
 
-			/* destroy memory carried in the message */
-
-			if (length == 0)
-				assert(data == 0);
-			else if (is_port)
-				kfree(data, length);
-			else
-				vm_map_copy_discard((vm_map_copy_t) data);
-
-			saddr += sizeof(vm_offset_t);
+			/* Destroy memory carried in the message */
+			if (length == 0) {
+				assert(data_ptr == 0);
+			} else if (is_port) {
+				/* OOL array of ports was kalloc'd */
+				kfree(data_ptr, length);
+			} else {
+				/* OOL data was a VM copy object */
+				vm_map_copy_discard((vm_map_copy_t) data_ptr);
+			}
+			saddr += sizeof(vm_offset_t); /* Advance past the data pointer */
 		}
 	}
 }
 
-/*
- *	Routine:	ipc_kmsg_clean
- *	Purpose:
- *		Cleans a kernel message.  Releases all rights,
- *		references, and memory held by the message.
- *	Conditions:
- *		No locks held.
+/**
+ * @brief Cleans a kernel message, releasing all its resources.
+ *
+ * This involves:
+ * - Destroying any associated message-accepted request (`ikm_marequest`).
+ * - Destroying the destination port right (`msgh_remote_port`) held by the message.
+ * - Destroying the reply port right (`msgh_local_port`) held by the message.
+ * - If the message is complex (`MACH_MSGH_BITS_COMPLEX` is set), it calls
+ *   `ipc_kmsg_clean_body` to deallocate resources described in the message body.
+ *
+ * @param kmsg The kernel message to clean.
+ * @pre No locks held.
  */
-
 void
-ipc_kmsg_clean(kmsg)
-	ipc_kmsg_t kmsg;
+ipc_kmsg_clean(
+	ipc_kmsg_t	kmsg)
 {
 	ipc_marequest_t marequest;
 	ipc_object_t object;
@@ -342,6 +395,9 @@ ipc_kmsg_clean(kmsg)
 		ipc_kmsg_clean_body(saddr, eaddr);
 	}
 }
+
+/*
+ *	Routine:	ipc_kmsg_clean_partial
 
 /*
  *	Routine:	ipc_kmsg_clean_partial

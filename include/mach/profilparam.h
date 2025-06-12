@@ -48,6 +48,19 @@
  * WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+/**
+ * @file mach/profilparam.h
+ * @brief Parameters for the kernel execution profiling mechanism.
+ *
+ * This file defines configuration parameters for the profiling system
+ * described in `mach/profil.h`. These parameters dictate the number and
+ * size of buffers used for collecting profile data.
+ *
+ * @note The comment "These values are also used when compiling the server, be careful !"
+ *       emphasizes that these constants must be kept consistent between the kernel
+ *       (where data is collected) and any user-level server that consumes or
+ *       interprets this profiling data.
+ */
 #ifndef	_MACH_PROFILPARAM_H_
 #define	_MACH_PROFILPARAM_H_
 
@@ -55,8 +68,24 @@
  * These values are also used when compiling the server, be careful !
  */
 
-#define	NB_PROF_BUFFER		2	/* number of buffers servicing a 
-					 *	profiled thread */
-#define	SIZE_PROF_BUFFER	100	/* size of a profil buffer (in int) */
+/**
+ * @def NB_PROF_BUFFER
+ * @brief Number of profiling buffers allocated per profiled thread.
+ *
+ * Typically set to 2 to allow for double buffering: one buffer can be
+ * actively collecting samples while the other (full) buffer is being
+ * processed or sent to a server. This matches the definition in `mach/profil.h`.
+ */
+#define	NB_PROF_BUFFER		2
+
+/**
+ * @def SIZE_PROF_BUFFER
+ * @brief Size of each individual profiling buffer, specified in units of `int`.
+ *
+ * This determines how many integer-sized data points (e.g., PC samples or other
+ * profiling information) can be stored in a single buffer before it is considered full.
+ * This matches the definition in `mach/profil.h`.
+ */
+#define	SIZE_PROF_BUFFER	100
 
 #endif	/* _MACH_PROFILPARAM_H_ */

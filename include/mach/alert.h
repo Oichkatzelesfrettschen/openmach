@@ -27,11 +27,21 @@
 #ifndef	_MACH_ALERT_H_
 #define _MACH_ALERT_H_
 
-#define ALERT_BITS		32		/* Minimum; more may actually be available */
+/**
+ * @file mach/alert.h
+ * @brief Standard alert definitions.
+ *
+ * Alerts are a mechanism for notifying a thread or task of asynchronous events.
+ */
 
-#define ALERT_ABORT_STRONG	0x00000001	/* Request to abort _all_ operations */
-#define ALERT_ABORT_SAFE	0x00000002	/* Request to abort restartable operations */
+#define ALERT_BITS		32		/**< Minimum number of alert bits available; more may actually be available. */
 
-#define ALERT_USER		0xffff0000	/* User-defined alert bits */
+/** @name Standard Alert Types */
+/**@{*/
+#define ALERT_ABORT_STRONG	0x00000001	/**< Request to abort _all_ operations, including non-restartable ones. */
+#define ALERT_ABORT_SAFE	0x00000002	/**< Request to abort only restartable (safe) operations. */
+/**@}*/
+
+#define ALERT_USER		0xffff0000	/**< Mask for user-defined alert bits. The upper 16 bits are reserved for user definitions. */
 
 #endif	_MACH_ALERT_H_

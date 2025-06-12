@@ -121,91 +121,123 @@ struct bpf_version {
  * The instruction encondings.
  */
 
-/* Magic number for the first instruction */
-#define BPF_BEGIN NETF_BPF
+/** @name BPF Instruction Classes */
+/**@{*/
+#define BPF_CLASS(code) ((code) & 0x07) ///< Extracts the class of a BPF instruction.
+#define		BPF_LD		0x00	///< Load value into accumulator.
+#define		BPF_LDX		0x01	///< Load value into index register.
+#define		BPF_ST		0x02	///< Store accumulator into scratch memory.
+#define		BPF_STX		0x03	///< Store index register into scratch memory.
+#define		BPF_ALU		0x04	///< Arithmetic or logical operation.
+#define		BPF_JMP		0x05	///< Jump.
+#define		BPF_RET		0x06	///< Return.
+#define		BPF_MISC	0x07	///< Miscellaneous.
+/**@}*/
 
-/* instruction classes */
-#define BPF_CLASS(code) ((code) & 0x07)
-#define		BPF_LD		0x00
-#define		BPF_LDX		0x01
-#define		BPF_ST		0x02
-#define		BPF_STX		0x03
-#define		BPF_ALU		0x04
-#define		BPF_JMP		0x05
-#define		BPF_RET		0x06
-#define		BPF_MISC	0x07
+/** @name BPF Load/LoadX Fields */
+/**@{*/
+#define BPF_SIZE(code)	((code) & 0x18) ///< Extracts the size operand of a BPF instruction.
+#define		BPF_W		0x00	///< Word (4 bytes).
+#define		BPF_H		0x08	///< Half-word (2 bytes).
+#define		BPF_B		0x10	///< Byte.
+#define BPF_MODE(code)	((code) & 0xe0) ///< Extracts the mode operand of a BPF instruction.
+#define		BPF_IMM 	0x00	///< Immediate value.
+#define		BPF_ABS		0x20	///< Absolute offset in packet data.
+#define		BPF_IND		0x40	///< Indirect offset in packet data.
+#define		BPF_MEM		0x60	///< Scratch memory location.
+#define		BPF_LEN		0x80	///< Packet length.
+#define		BPF_MSH		0xa0	///< Byte offset within IP header of fragment offset.
+/**@}*/
 
-/* ld/ldx fields */
-#define BPF_SIZE(code)	((code) & 0x18)
-#define		BPF_W		0x00
-#define		BPF_H		0x08
-#define		BPF_B		0x10
-#define BPF_MODE(code)	((code) & 0xe0)
-#define		BPF_IMM 	0x00
-#define		BPF_ABS		0x20
-#define		BPF_IND		0x40
-#define		BPF_MEM		0x60
-#define		BPF_LEN		0x80
-#define		BPF_MSH		0xa0
+/** @name BPF ALU/Jump Fields */
+/**@{*/
+#define BPF_OP(code)	((code) & 0xf0) ///< Extracts the operation operand of a BPF ALU/Jump instruction.
+#define		BPF_ADD		0x00	///< Addition.
+#define		BPF_SUB		0x10	///< Subtraction.
+#define		BPF_MUL		0x20	///< Multiplication.
+#define		BPF_DIV		0x30	///< Division.
+#define		BPF_OR		0x40	///< Bitwise OR.
+#define		BPF_AND		0x50	///< Bitwise AND.
+#define		BPF_LSH		0x60	///< Left shift.
+#define		BPF_RSH		0x70	///< Right shift.
+#define		BPF_NEG		0x80	///< Negation.
+#define		BPF_JA		0x00	///< Jump always.
+#define		BPF_JEQ		0x10	///< Jump if equal.
+#define		BPF_JGT		0x20	///< Jump if greater than.
+#define		BPF_JGE		0x30	///< Jump if greater than or equal.
+#define		BPF_JSET	0x40	///< Jump if bit is set.
+#define		BPF_CKMATCH_IMM	0x50	///< Check for match with immediate value.
+#define BPF_SRC(code)	((code) & 0x08) ///< Extracts the source operand of a BPF ALU/Jump instruction.
+#define		BPF_K		0x00	///< Use constant value (k).
+#define		BPF_X		0x08	///< Use index register (X).
+/**@}*/
 
-/* alu/jmp fields */
-#define BPF_OP(code)	((code) & 0xf0)
-#define		BPF_ADD		0x00
-#define		BPF_SUB		0x10
-#define		BPF_MUL		0x20
-#define		BPF_DIV		0x30
-#define		BPF_OR		0x40
-#define		BPF_AND		0x50
-#define		BPF_LSH		0x60
-#define		BPF_RSH		0x70
-#define		BPF_NEG		0x80
-#define		BPF_JA		0x00
-#define		BPF_JEQ		0x10
-#define		BPF_JGT		0x20
-#define		BPF_JGE		0x30
-#define		BPF_JSET	0x40
-#define		BPF_CKMATCH_IMM	0x50
-#define BPF_SRC(code)	((code) & 0x08)
-#define		BPF_K		0x00
-#define		BPF_X		0x08
+/** @name BPF Return Fields */
+/**@{*/
+#define BPF_RVAL(code)	((code) & 0x38) ///< Extracts the return value type of a BPF return instruction.
+#define		BPF_A		0x10	///< Return value in accumulator.
+#define		BPF_MATCH_IMM	0x18	///< Return match status with immediate value.
+#define		BPF_MATCH_DATA	0x20	///< Return match status with data.
+/**@}*/
 
-/* ret - BPF_K and BPF_X also apply */
-#define BPF_RVAL(code)	((code) & 0x38)
-#define		BPF_A		0x10
-#define		BPF_MATCH_IMM	0x18
-#define		BPF_MATCH_DATA	0x20
+/** @name BPF Miscellaneous Fields */
+/**@{*/
+#define BPF_MISCOP(code) ((code) & 0xf8) ///< Extracts the operation of a BPF miscellaneous instruction.
+#define		BPF_TAX		0x00	///< Copy accumulator to index register.
+#define		BPF_TXA		0x80	///< Copy index register to accumulator.
+#define		BPF_KEY		0x10	///< Set key for subsequent match operations.
+#define		BPF_REG_DATA	0x18	///< Register data.
+#define		BPF_POSTPONE	0x20	///< Postpone decision.
+/**@}*/
 
-/* misc */
-#define BPF_MISCOP(code) ((code) & 0xf8)
-#define		BPF_TAX		0x00
-#define		BPF_TXA		0x80
-#define		BPF_KEY		0x10
-#define		BPF_REG_DATA	0x18
-#define		BPF_POSTPONE	0x20
-
-/*
- * The instruction data structure.
+/**
+ * @brief The BPF instruction data structure.
  */
 struct bpf_insn {
-	unsigned short	code;
-	unsigned char 	jt;
-	unsigned char 	jf;
-	int	k;
+	unsigned short	code;	///< Instruction code.
+	unsigned char 	jt;	///< Jump if true offset.
+	unsigned char 	jf;	///< Jump if false offset.
+	int	k;		///< Generic operand.
 };
-typedef struct bpf_insn *bpf_insn_t;
+typedef struct bpf_insn *bpf_insn_t; ///< Typedef for a pointer to a BPF instruction.
 
 /*
  * largest bpf program size
  */
-#define NET_MAX_BPF ((NET_MAX_FILTER*sizeof(filter_t))/sizeof(struct bpf_insn))
+#define NET_MAX_BPF ((NET_MAX_FILTER*sizeof(filter_t))/sizeof(struct bpf_insn)) ///< Maximum size of a BPF program.
 
-/*
- * Macros for insn array initializers.
+/** @name Macros for BPF Instruction Array Initializers */
+/**@{*/
+/**
+ * @brief Initializes a BPF statement instruction.
+ * @param code The instruction code.
+ * @param k The generic operand.
  */
 #define BPF_STMT(code, k) { (unsigned short)(code), 0, 0, k }
+
+/**
+ * @brief Initializes a BPF jump instruction.
+ * @param code The instruction code.
+ * @param k The generic operand.
+ * @param jt The jump if true offset.
+ * @param jf The jump if false offset.
+ */
 #define BPF_JUMP(code, k, jt, jf) { (unsigned short)(code), jt, jf, k }
+
+/**
+ * @brief Initializes a BPF return match instruction.
+ * @param code The instruction code.
+ * @param k The generic operand.
+ * @param nkey The number of keys.
+ */
 #define BPF_RETMATCH(code, k, nkey) { (unsigned short)(code), nkey, 0, k }
 
+/**
+ * @brief Macro to set a BPF statement instruction in an array.
+ * @param pc Pointer to the current instruction in the array.
+ * @param c The instruction code.
+ * @param n The generic operand.
+ */
 #define	BPF_INSN_STMT(pc, c, n)  {\
 	(pc)->code = (c);		\
 	(pc)->jt = (pc)->jf = 0;	\
@@ -213,6 +245,14 @@ typedef struct bpf_insn *bpf_insn_t;
 	(pc)++;				\
 }
 
+/**
+ * @brief Macro to set a BPF jump instruction in an array.
+ * @param pc Pointer to the current instruction in the array.
+ * @param c The instruction code.
+ * @param n The generic operand.
+ * @param jtrue The jump if true offset.
+ * @param jfalse The jump if false offset.
+ */
 #define BPF_INSN_JUMP(pc, c, n, jtrue, jfalse) {\
 	(pc)->code = (c);		\
 	(pc)->jt = (jtrue);		\
@@ -221,6 +261,13 @@ typedef struct bpf_insn *bpf_insn_t;
 	(pc)++;				\
 }
 
+/**
+ * @brief Macro to set a BPF return match instruction in an array.
+ * @param pc Pointer to the current instruction in the array.
+ * @param c The instruction code.
+ * @param n The generic operand.
+ * @param nkey The number of keys.
+ */
 #define BPF_INSN_RETMATCH(pc, c, n, nkey) {\
 	(pc)->code = (c);		\
 	(pc)->jt = (nkey);		\
@@ -228,19 +275,27 @@ typedef struct bpf_insn *bpf_insn_t;
 	(pc)->k = (n);			\
 	(pc)++;				\
 }
+/**@}*/
 
 /*
  * Number of scratch memory words (for BPF_LD|BPF_MEM and BPF_ST).
  */
-#define BPF_MEMWORDS 16
+#define BPF_MEMWORDS 16 ///< Number of scratch memory words.
 
 /*
  * Link level header can be accessed by adding BPF_DLBASE to an offset.
  */
-#define BPF_DLBASE	(1<<30)
+#define BPF_DLBASE	(1<<30) ///< Base offset for accessing link-level header.
 
-#define BPF_BYTES(n) ((n) * sizeof (struct bpf_insn))
-#define BPF_BYTES2LEN(n) ((n) / sizeof (struct bpf_insn))
+#define BPF_BYTES(n) ((n) * sizeof (struct bpf_insn)) ///< Converts number of BPF instructions to bytes.
+#define BPF_BYTES2LEN(n) ((n) / sizeof (struct bpf_insn)) ///< Converts bytes to number of BPF instructions.
+
+/**
+ * @brief Compares two BPF instructions.
+ * @param p Pointer to the first instruction.
+ * @param q Pointer to the second instruction.
+ * @return True if instructions are equal, false otherwise.
+ */
 #define BPF_INSN_EQ(p,q) ((p)->code == (q)->code && \
 			  (p)->jt == (q)->jt &&	\
 			  (p)->jf == (q)->jf &&	\

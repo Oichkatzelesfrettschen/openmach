@@ -29,6 +29,14 @@
  *	Boolean data type.
  *
  */
+/**
+ * @file mach/boolean.h
+ * @brief Defines the boolean_t type and TRUE/FALSE macros.
+ *
+ * This file provides a system-wide definition for boolean values.
+ * The actual `boolean_t` type is typically defined in a machine-specific
+ * header included herein.
+ */
 
 #ifndef	_MACH_BOOLEAN_H_
 #define	_MACH_BOOLEAN_H_
@@ -38,7 +46,7 @@
  */
 
 #ifndef	ASSEMBLER
-#include <mach/machine/boolean.h>
+#include <mach/machine/boolean.h> /* Defines boolean_t */
 #endif	/* ASSEMBLER */
 
 #endif	/* _MACH_BOOLEAN_H_ */
@@ -53,10 +61,20 @@
 #if	!defined(NOBOOL)
 
 #ifndef	TRUE
+/**
+ * @def TRUE
+ * @brief Represents the boolean true value.
+ * Typically defined as `((boolean_t) 1)`.
+ */
 #define TRUE	((boolean_t) 1)
 #endif	/* TRUE */
 
 #ifndef	FALSE
+/**
+ * @def FALSE
+ * @brief Represents the boolean false value.
+ * Typically defined as `((boolean_t) 0)`.
+ */
 #define FALSE	((boolean_t) 0)
 #endif	/* FALSE */
 

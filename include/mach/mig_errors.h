@@ -27,58 +27,87 @@
  * Mach Interface Generator errors
  *
  */
+/**
+ * @file mach/mig_errors.h
+ * @brief Error codes and related definitions for MIG (Mach Interface Generator).
+ *
+ * MIG is a tool that generates RPC (Remote Procedure Call) stub code for
+ * Mach IPC. This file defines standard error codes that can be returned
+ * by MIG-generated stubs or the MIG runtime to indicate problems during
+ * RPC processing, such as type mismatches, server errors, or communication issues.
+ */
 
 #ifndef	_MACH_MIG_ERRORS_H_
 #define _MACH_MIG_ERRORS_H_
 
 #ifdef	MACH_KERNEL
-#include <mach_ipc_compat.h>
+#include <mach_ipc_compat.h> /* For MACH_IPC_COMPAT */
 #endif	/* MACH_KERNEL */
 
-#include <mach/kern_return.h>
-#include <mach/message.h>
+#include <mach/kern_return.h> /* For kern_return_t */
+#include <mach/message.h>     /* For mach_msg_header_t, mach_msg_type_t, and legacy msg_header_t, msg_type_t */
 
-/*
- *	These error codes should be specified as system 4, subsytem 2.
- *	But alas backwards compatibility makes that impossible.
- *	The problem is old clients of new servers (eg, the kernel)
- *	which get strange large error codes when there is a Mig problem
- *	in the server.  Unfortunately, the IPC system doesn't have
- *	the knowledge to convert the codes in this situation.
+/**
+ * @name MIG Error Codes
+ * These error codes are typically returned in the `RetCode` field of a
+ * `mig_reply_header_t` or directly by client-side MIG stubs.
+ *
+ * @note Historically, these were negative numbers to avoid conflict with
+ *       `kern_return_t` positive/zero success codes. The comment indicates
+ *       a desire to map them to system 4, subsystem 2, but this was
+ *       hindered by backward compatibility concerns.
+ * @{
  */
+#define MIG_TYPE_ERROR		-300	/**< Type checking failed on client side when preparing request or processing reply. */
+#define MIG_REPLY_MISMATCH	-301	/**< Reply message ID does not match the request message ID. Indicates a mismatched reply. */
+#define MIG_REMOTE_ERROR	-302	/**< Server-side routine detected an error and indicated it in the reply message. The actual error is often in `RetCode`. */
+#define MIG_BAD_ID		-303	/**< Request message ID is not recognized by the server or subsystem. */
+#define MIG_BAD_ARGUMENTS	-304	/**< Type checking failed on server side when unpacking arguments. */
+#define MIG_NO_REPLY		-305	/**< Server should not send a reply for this request (e.g., for oneway RPCs). Client might receive this if it incorrectly expects a reply. */
+#define MIG_EXCEPTION		-306	/**< Server-side routine raised an exception that was caught by the MIG stub. */
+#define MIG_ARRAY_TOO_LARGE	-307	/**< An array passed in the message was too large for the receiver's buffer or type definition. */
+#define MIG_SERVER_DIED		-308	/**< Communication with server failed, possibly because the server terminated or the port died. */
+#define MIG_DESTROY_REQUEST	-309	/**< Client is destroying a request for which no reply is expected or pending (e.g., after a timeout or error). */
+/** @} */
 
-#define MIG_TYPE_ERROR		-300	/* client type check failure */
-#define MIG_REPLY_MISMATCH	-301	/* wrong reply message ID */
-#define MIG_REMOTE_ERROR	-302	/* server detected error */
-#define MIG_BAD_ID		-303	/* bad request message ID */
-#define MIG_BAD_ARGUMENTS	-304	/* server type check failure */
-#define MIG_NO_REPLY		-305	/* no reply should be sent */
-#define MIG_EXCEPTION		-306	/* server raised exception */
-#define MIG_ARRAY_TOO_LARGE	-307	/* array not large enough */
-#define MIG_SERVER_DIED		-308	/* server died */
-#define MIG_DESTROY_REQUEST	-309	/* destroy request with no reply */
-
+/**
+ * @struct mig_reply_header_t
+ * @brief Standard reply message header format for MIG-generated RPCs.
+ *
+ * This structure defines the common layout for the beginning of a reply
+ * message sent by a MIG server stub. It includes the standard Mach message
+ * header and a type descriptor for the return code.
+ */
 typedef struct {
-	mach_msg_header_t	Head;
-	mach_msg_type_t		RetCodeType;
-	kern_return_t		RetCode;
+	mach_msg_header_t	Head;		///< Standard Mach message header.
+	mach_msg_type_t		RetCodeType;	///< Type descriptor for the `RetCode` field.
+	kern_return_t		RetCode;	///< Return code from the server-side operation. Can be `KERN_SUCCESS` or any other `kern_return_t` or `mig_return_t`.
 } mig_reply_header_t;
 
+/**
+ * @struct mig_symtab
+ * @brief Structure for a MIG symbol table entry.
+ *
+ * MIG symbol tables are used by server-side dispatch routines to map
+ * incoming message IDs (`ms_routine_number`) to the corresponding
+ * server stub function (`ms_routine`) and its name (`ms_routine_name`).
+ */
 typedef struct mig_symtab {
-	char	*ms_routine_name;
-	int	ms_routine_number;
+	char	*ms_routine_name;	///< Name of the server routine (for debugging/logging).
+	int	ms_routine_number;	///< Routine number, typically corresponds to `mach_msg_id_t - SubsystemBase`.
 #if	defined(__STDC__) || defined(c_plus_plus) || defined(hc)
-	void
+	void	(*ms_routine)();	///< Pointer to the server stub function.
 #else
-	int
+	int	(*ms_routine)();	///< Pointer to the server stub function (legacy C compilers).
 #endif
-		(*ms_routine)();
 } mig_symtab_t;
 
-/*
- * Definition for server stub routines.  These routines
- * unpack the request message, call the server procedure,
- * and pack the reply message.
+/**
+ * @typedef mig_routine_t
+ * @brief Type definition for a MIG server stub routine.
+ *
+ * Server stub routines generated by MIG typically take the request message
+ * header and a pointer to where the reply message header should be constructed.
  */
 #if	defined(__STDC__) || defined(c_plus_plus)
 typedef	void	(*mig_routine_t)(mach_msg_header_t *, mach_msg_header_t *);
@@ -90,16 +119,27 @@ typedef	int	(*mig_routine_t)();	/* PCC cannot handle void (*)() */
 #endif
 #endif
 
-/* Definitions for the old IPC interface. */
-
+/** @name Legacy Mach IPC Compatibility
+ * @{
+ */
 #if	MACH_IPC_COMPAT
 
+/**
+ * @struct death_pill_t
+ * @brief Legacy structure for a "death pill" message.
+ *
+ * A death pill is a special message often used in the context of port
+ * destruction or server termination to notify clients or related components.
+ * This structure uses the old IPC `msg_header_t`.
+ * @deprecated Use modern Mach IPC mechanisms and notifications.
+ */
 typedef struct {
-	msg_header_t		Head;
-	msg_type_t		RetCodeType;
-	kern_return_t		RetCode;
+	msg_header_t		Head;		///< Legacy message header.
+	msg_type_t		RetCodeType;	///< Legacy type descriptor for the return code.
+	kern_return_t		RetCode;	///< Return code, often indicating the reason for termination.
 } death_pill_t;
 
 #endif	/* MACH_IPC_COMPAT */
+/** @} */
 
 #endif	/* _MACH_MIG_ERRORS_H_ */
