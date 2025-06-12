@@ -27,9 +27,9 @@
 #ifndef	_ROUTINE_H
 #define	_ROUTINE_H
 
+#include "global.h" /* For system types including boolean_t */
 #include <sys/types.h>
-
-#include "boolean.h"
+#include "boolean.h" /* For TRUE/FALSE macros */
 #include "type.h"
 
 /* base kind arg */

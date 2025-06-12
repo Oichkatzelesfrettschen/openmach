@@ -1,0 +1,105 @@
+%{
+#include <stdio.h>
+#include <string.h>
+#include "global.h"
+#include "parser.h" /* For token definitions */
+
+/* BEGIN Embedded definitions to bypass cpu.h issues */
+#define word_size_in_bits 32
+#define little_endian 1
+#define big_endian 0
+/* END Embedded definitions */
+
+/* Define yyerror to resolve implicit declaration warning */
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+
+/* Attempt to include cpu.h, which might be empty.
+   If it's truly empty or only contains comments,
+   the definitions above will take precedence or be the only ones. */
+#include "cpu.h"
+%}
+
+%option yylineno
+
+%%
+
+"boolean"	{ return TOK_BOOLEAN; }
+"char"		{ return TOK_CHAR; }
+"string"	{ return TOK_STRING; }
+"integer"	{ return TOK_INTEGER; }
+"real"		{ return TOK_REAL; }
+"pointer"	{ return TOK_POINTER; }
+"array"		{ return TOK_ARRAY; }
+"struct"	{ return TOK_STRUCT; }
+"union"		{ return TOK_UNION; }
+"void"		{ return TOK_VOID; }
+
+"in"		{ return TOK_IN; }
+"out"		{ return TOK_OUT; }
+"inout"		{ return TOK_INOUT; }
+"requestport"	{ return TOK_REQUESTPORT; }
+"replyport"	{ return TOK_REPLYPORT; }
+"server"	{ return TOK_SERVER; }
+"subsystem"	{ return TOK_SUBSYSTEM; }
+"type"		{ return TOK_TYPE; }
+"skip"		{ return TOK_SKIP; }
+"wait"		{ return TOK_WAIT; }
+"nowait"	{ return TOK_NOWAIT; }
+"routine"	{ return TOK_ROUTINE; }
+"simpleroutine"	{ return TOK_SIMPLEROUTINE; }
+"msgtype"	{ return TOK_MSGTYPE; }
+"destructor"	{ return TOK_DESTRUCTOR; }
+"ipc"		{ return TOK_IPC; }
+"variable"	{ return TOK_VARIABLE; }
+"fixed"		{ return TOK_FIXED; }
+"error"		{ return TOK_ERROR; }
+"abort"		{ return TOK_ABORT; }
+"map"		{ return TOK_MAP; }
+"noexport"	{ return TOK_NOEXPORT; }
+"kernel"	{ return TOK_KERNEL; }
+"user"		{ return TOK_USER; }
+"cpp"		{ return TOK_CPP; }
+"c"			{ return TOK_C; }
+"true"		{ return TOK_TRUE; }
+"false"		{ return TOK_FALSE; }
+
+
+[a-zA-Z_][a-zA-Z0-9_]*	{ yylval.str = strdup(yytext); return TOK_IDENTIFIER; }
+[0-9]+			{ yylval.val = atoi(yytext); return TOK_NUMBER; }
+
+":"			{ return ':'; }
+";"			{ return ';'; }
+"("			{ return '('; }
+")"			{ return ')'; }
+"{"			{ return '{'; }
+"}"			{ return '}'; }
+"["			{ return '['; }
+"]"			{ return ']'; }
+","			{ return ','; }
+"+"			{ return '+'; }
+"-"			{ return '-'; }
+"*"			{ return '*'; }
+"/"			{ return '/'; }
+"="			{ return '='; }
+"&"			{ return '&'; }
+"|"			{ return '|'; }
+"^"			{ return '^'; }
+"~"			{ return '~'; }
+"<<"		{ return TOK_LSHIFT; }
+">>"		{ return TOK_RSHIFT; }
+
+[
+]+		/* ignore whitespace */
+"/*"			{ int c; while ((c = input()) != '*' || (c = input()) != '/'); } /* ignore comments */
+"//"			{ int c; while ((c = input()) != '\n'); } /* ignore C++ style comments */
+
+
+.			{ yyerror("invalid character"); }
+
+%%
+
+int yywrap() {
+    return 1;
+}

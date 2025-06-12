@@ -183,9 +183,10 @@ CLEAN_FILES += $(GEN_CFILES) \
 	$(TARGET_CC) -S $(CPPFLAGS) $(CFLAGS) \
 		$(TARGET_CFLAGS) -x c -o $@ $<
 
-%.h: %.symc.o
-	sed <$< -e '/*/!d' | \
-		sed -e 's/[*]/#define/' -e 's/mAgIc[^-0-9]*//' >$@
+# Rule to generate .h from .symc.o, commented out to protect manual mig/cpu.h
+#%.h: %.symc.o
+#	sed <$< -e '/*/!d' | \
+#		sed -e 's/[*]/#define/' -e 's/mAgIc[^-0-9]*//' >$@
 
 CLEAN_FILES += *.symc *.symc.o
 

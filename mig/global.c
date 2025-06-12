@@ -26,6 +26,7 @@
 
 #include "error.h"
 #include "global.h"
+#include "mig_string.h" /* For strmake, strconcat, streql */
 
 boolean_t BeQuiet = FALSE;
 boolean_t BeVerbose = FALSE;

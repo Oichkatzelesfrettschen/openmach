@@ -27,9 +27,9 @@
 #ifndef	_TYPE_H
 #define	_TYPE_H
 
+#include "global.h" /* For system types including boolean_t */
 #include <sys/types.h>
-
-#include "boolean.h"
+#include "boolean.h" /* For TRUE/FALSE macros */
 #include "mig_string.h"
 
 typedef u_int ipc_flags_t;

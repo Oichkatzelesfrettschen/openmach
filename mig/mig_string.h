@@ -27,15 +27,14 @@
 #ifndef	_MIG_STRING_H
 #define	_MIG_STRING_H
 
+#include "global.h" /* For system types including boolean_t, string_t, const_string_t, identifier_t, strNULL */
 #include <string.h>
+#include "boolean.h" /* For TRUE/FALSE macros */
 
-#include "boolean.h"
-
-typedef char *string_t;
-typedef const char *const_string_t;
-typedef const_string_t identifier_t;
-
-#define	strNULL		((string_t) 0)
+/*
+ * string_t, const_string_t, identifier_t, strNULL
+ * are now defined in global.h
+ */
 
 extern string_t strmake(const char *string);
 extern string_t strconcat(const_string_t left, const_string_t right);

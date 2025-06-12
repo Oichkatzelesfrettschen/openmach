@@ -1,269 +1,151 @@
-%k 10000
-%n 5000
-%a 20000
-%e 10000
-%p 25000
-
-Ident		([A-Za-z_][A-Za-z_0-9]*)
-Number		([0-9]+)
-String		([-/._$A-Za-z0-9]+)
-QString		(\"[^"\n]*\")
-AString		(\<[^>\n]*\>)
-FileName	({QString}|{AString})
-
-%{
-/* 
- * Mach Operating System
- * Copyright (c) 1991,1990 Carnegie Mellon University
- * All Rights Reserved.
- * 
- * Permission to use, copy, modify and distribute this software and its
- * documentation is hereby granted, provided that both the copyright
- * notice and this permission notice appear in all copies of the
- * software, derivative works or modified versions, and any portions
- * thereof, and that both notices appear in supporting documentation.
- * 
- * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
- * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
- * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
- * Carnegie Mellon requests users of this software to return to
- * 
- *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
- *  School of Computer Science
- *  Carnegie Mellon University
- *  Pittsburgh PA 15213-3890
- * 
- * any improvements or extensions that they make and grant Carnegie Mellon
- * the rights to redistribute these changes.
- */
-
+%{%
+#include <stdio.h>
 #include <string.h>
-
+#ifndef PARAM_DECL
+#define PARAM_DECL(type, name, init) type name init
+#endif
+#include "global.h"
 #include "mig_string.h"
 #include "type.h"
 #include "statement.h"
-#include "global.h"
-#include "parser.h"
-#include "lexxer.h"
+#include "routine.h"
+#include "error.h"
+#include "utils.h"
+#include "parser.h" /* MODIFIED: Use parser.h as y.tab.h gets renamed */
 #include "cpu.h"
+extern int yylineno;
+extern FILE *yyin;
+extern char *yytext;
 
-#define	stringize(x)	#x
+#define input()		(yyinput())
+#define unput(c)	(yyunput(c))
+#define output(c)	(yyoutput(c))
 
-#ifdef	LDEBUG
-#define RETURN(sym)							\
-{									\
-    printf("yylex: returning '%s' (%d)\n", #sym, (sym));		\
-    return (sym);							\
-}
-#else	LDEBUG
-#define RETURN(sym)	return (sym)
-#endif	LDEBUG
-
-#define	TPRETURN(intype, outtype, tsize)				\
-{									\
-    yylval.symtype.innumber = (intype);					\
-    yylval.symtype.instr = stringize(intype);				\
-    yylval.symtype.outnumber = (outtype);				\
-    yylval.symtype.outstr = stringize(outtype);				\
-    yylval.symtype.size = (tsize);					\
-    RETURN(sySymbolicType);						\
-}
-
-#define	TRETURN(type, tsize)	TPRETURN(type,type,tsize)
-
-#define	FRETURN(val)							\
-{									\
-    yylval.flag = (val);						\
-    RETURN(syIPCFlag);							\
-}
-
-extern YYSTYPE yylval;		/* added by rm */
-
-int lineno;
-char *inname;
-
-#ifdef	YY_START
-static int oldYYBegin;
-#define SAVE_BEGIN oldYYBegin = YY_START
-#define RSTR_BEGIN BEGIN oldYYBegin
-#else
-static struct yysvf *oldYYBegin;
-#define SAVE_BEGIN oldYYBegin = yybgin
-#define RSTR_BEGIN yybgin = oldYYBegin;
-#endif
-
-static void doSharp(const char *body); /* process body of # directives */
+static int yylex_KeyWord(int token);
+static int yylex_Identifier(char *text);
+static int yylex_SymbolicType(char *text, int type_token);
+static int yylex_StringConst(char *text);
+static int yylex_CharConst(char *text);
+static int yylex_Number(char *text);
+static int yylex_Boolean(boolean_t val);
+static int yylex_Strudel(void);
+static void next_char(void);
 %}
 
-%Start	Normal String FileName QString SkipToEOL
+DIGIT    [0-9]
+HEXDIGIT [0-9a-fA-F]
+OCTALDIGIT [0-7]
+ALPHA    [a-zA-Z_]
+ALNUM    [a-zA-Z0-9_]
+
+pathname ({ALPHA}|{DIGIT}|[\.\/+])({ALPHA}|{DIGIT}|[\.\/+]|[-_])*
+comment  \/\*([^*]|\*+[^*/])*\*+\/ /* Corrected non-greedy C-style comment */
+cppcomment \/\/[^\n]*
+
+rcsident {ALPHA}({ALPHA}|{DIGIT}|_|-)*
+ident    {ALPHA}{ALNUM}*
+number   {DIGIT}+
+hexnumber 0x{HEXDIGIT}+
+octalnumber 0{OCTALDIGIT}*
+string   "\""([^"\\]|\\.)*"\"" /* Allows escaped quotes */
+charconst "'"([^'\\]|\\.)"'" /* Allows escaped quotes */
+
+%s STATE_COMMENT STATE_ENDCOMMENT STATE_SEMANTICS
 
 %%
+{comment}		{ /* ignore comments */ }
+{cppcomment}    { /* ignore c++ comments */ }
 
-<Normal>[Rr][Oo][Uu][Tt][Ii][Nn][Ee]		RETURN(syRoutine);
-<Normal>[Ff][Uu][Nn][Cc][Tt][Ii][Oo][Nn]	RETURN(syFunction);
-<Normal>[Pp][Rr][Oo][Cc][Ee][Dd][Uu][Rr][Ee]	RETURN(syProcedure);
-<Normal>[Ss][Ii][Mm][Pp][Ll][Ee][Pp][Rr][Oo][Cc][Ee][Dd][Uu][Rr][Ee] RETURN(sySimpleProcedure);
-<Normal>[Ss][Ii][Mm][Pp][Ll][Ee][Rr][Oo][Uu][Tt][Ii][Nn][Ee] RETURN(sySimpleRoutine);
-<Normal>[Ss][Uu][Bb][Ss][Yy][Ss][Tt][Ee][Mm]	RETURN(sySubsystem);
-<Normal>[Mm][Ss][Gg][Oo][Pp][Tt][Ii][Oo][Nn]	RETURN(syMsgOption);
-<Normal>[Mm][Ss][Gg][Ss][Ee][Qq][Nn][Oo]	RETURN(syMsgSeqno);
-<Normal>[Ww][Aa][Ii][Tt][Tt][Ii][Mm][Ee]	RETURN(syWaitTime);
-<Normal>[Nn][Oo][Ww][Aa][Ii][Tt][Tt][Ii][Mm][Ee]	RETURN(syNoWaitTime);
-<Normal>[Ii][Nn]				RETURN(syIn);
-<Normal>[Oo][Uu][Tt]				RETURN(syOut);
-<Normal>[Ii][Nn][Oo][Uu][Tt]			RETURN(syInOut);
-<Normal>[Rr][Ee][Qq][Uu][Ee][Ss][Tt][Pp][Oo][Rr][Tt]	RETURN(syRequestPort);
-<Normal>[Rr][Ee][Pp][Ll][Yy][Pp][Oo][Rr][Tt]		RETURN(syReplyPort);
-<Normal>[Uu][Rr][Ee][Pp][Ll][Yy][Pp][Oo][Rr][Tt]	RETURN(syUReplyPort);
-<Normal>[Ss][Rr][Ee][Pp][Ll][Yy][Pp][Oo][Rr][Tt]	RETURN(sySReplyPort);
-<Normal>[Aa][Rr][Rr][Aa][Yy]			RETURN(syArray);
-<Normal>[Oo][Ff]				RETURN(syOf);
-<Normal>[Ee][Rr][Rr][Oo][Rr]			RETURN(syErrorProc);
-<Normal>[Ss][Ee][Rr][Vv][Ee][Rr][Pp][Rr][Ee][Ff][Ii][Xx] RETURN(syServerPrefix);
-<Normal>[Uu][Ss][Ee][Rr][Pp][Rr][Ee][Ff][Ii][Xx]	RETURN(syUserPrefix);
-<Normal>[Ss][Ee][Rr][Vv][Ee][Rr][Dd][Ee][Mm][Uu][Xx]	RETURN(syServerDemux);
-<Normal>[Rr][Cc][Ss][Ii][Dd]			RETURN(syRCSId);
-<Normal>[Ii][Mm][Pp][Oo][Rr][Tt]		RETURN(syImport);
-<Normal>[Uu][Ii][Mm][Pp][Oo][Rr][Tt]		RETURN(syUImport);
-<Normal>[Ss][Ii][Mm][Pp][Oo][Rr][Tt]		RETURN(sySImport);
-<Normal>[Tt][Yy][Pp][Ee]			RETURN(syType);
-<Normal>[Kk][Ee][Rr][Nn][Ee][Ll][Ss][Ee][Rr][Vv][Ee][Rr] RETURN(syKernelServer);
-<Normal>[Kk][Ee][Rr][Nn][Ee][Ll][Uu][Ss][Ee][Rr]	RETURN(syKernelUser);
-<Normal>[Ss][Kk][Ii][Pp]			RETURN(sySkip);
-<Normal>[Ss][Tt][Rr][Uu][Cc][Tt]		RETURN(syStruct);
-<Normal>[Ii][Nn][Tt][Rr][Aa][Nn]		RETURN(syInTran);
-<Normal>[Oo][Uu][Tt][Tt][Rr][Aa][Nn]		RETURN(syOutTran);
-<Normal>[Dd][Ee][Ss][Tt][Rr][Uu][Cc][Tt][Oo][Rr]	RETURN(syDestructor);
-<Normal>[Cc][Tt][Yy][Pp][Ee]				RETURN(syCType);
-<Normal>[Cc][Uu][Ss][Ee][Rr][Tt][Yy][Pp][Ee]		RETURN(syCUserType);
-<Normal>[Cc][Ss][Ee][Rr][Vv][Ee][Rr][Tt][Yy][Pp][Ee]	RETURN(syCServerType);
-<Normal>[Cc]_[Ss][Tt][Rr][Ii][Nn][Gg]			RETURN(syCString);
+^"/*"			{ BEGIN STATE_COMMENT; next_char(); }
+<STATE_COMMENT>"*/"		{ BEGIN STATE_ENDCOMMENT; next_char(); }
+<STATE_COMMENT>.			{ next_char(); }
+<STATE_COMMENT>\n		{ yylineno++; next_char(); }
 
-<Normal>[Ii][Ss][Ll][Oo][Nn][Gg]		FRETURN(flLong);
-<Normal>[Ii][Ss][Nn][Oo][Tt][Ll][Oo][Nn][Gg]	FRETURN(flNotLong);
-<Normal>[Dd][Ee][Aa][Ll][Ll][Oo][Cc]		FRETURN(flDealloc);
-<Normal>[Nn][Oo][Tt][Dd][Ee][Aa][Ll][Ll][Oo][Cc] FRETURN(flNotDealloc);
-<Normal>[Ss][Ee][Rr][Vv][Ee][Rr][Cc][Oo][Pp][Yy] FRETURN(flServerCopy);
-<Normal>[Cc][Oo][Uu][Nn][Tt][Ii][Nn][Oo][Uu][Tt] FRETURN(flCountInOut);
+^"#ident"		{ BEGIN STATE_SEMANTICS; return yylex_Strudel(); }
+<STATE_SEMANTICS>[^\n]*	{ return yylex_Strudel(); }
+<STATE_SEMANTICS>\n		{ yylineno++; BEGIN INITIAL; return '\n'; }
 
-<Normal>[Pp][Oo][Ll][Yy][Mm][Oo][Rr][Pp][Hh][Ii][Cc]	TRETURN(MACH_MSG_TYPE_POLYMORPHIC,word_size_in_bits);
+"boolean"		{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"char"			{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"string"		{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"integer"		{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"real"			{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"pointer"		{ return yylex_SymbolicType(yytext, sySymbolicType); }
+"array"			{ return yylex_KeyWord(syArray); }
+"struct"		{ return yylex_KeyWord(syStruct); }
+"union"			{ return yylex_KeyWord(syType); }
+"void"			{ return yylex_SymbolicType(yytext, sySymbolicType); }
 
-<Normal>"MACH_MSG_TYPE_UNSTRUCTURED"	TRETURN(MACH_MSG_TYPE_UNSTRUCTURED,0);
-<Normal>"MACH_MSG_TYPE_BIT"		TRETURN(MACH_MSG_TYPE_BIT,1);
-<Normal>"MACH_MSG_TYPE_BOOLEAN"		TRETURN(MACH_MSG_TYPE_BOOLEAN,32);
-<Normal>"MACH_MSG_TYPE_INTEGER_16"	TRETURN(MACH_MSG_TYPE_INTEGER_16,16);
-<Normal>"MACH_MSG_TYPE_INTEGER_32"	TRETURN(MACH_MSG_TYPE_INTEGER_32,32);
-<Normal>"MACH_MSG_TYPE_INTEGER_64"	TRETURN(MACH_MSG_TYPE_INTEGER_64,64);
-<Normal>"MACH_MSG_TYPE_CHAR"		TRETURN(MACH_MSG_TYPE_CHAR,8);
-<Normal>"MACH_MSG_TYPE_BYTE"		TRETURN(MACH_MSG_TYPE_BYTE,8);
-<Normal>"MACH_MSG_TYPE_INTEGER_8"	TRETURN(MACH_MSG_TYPE_INTEGER_8,8);
-<Normal>"MACH_MSG_TYPE_REAL"		TRETURN(MACH_MSG_TYPE_REAL,0);
-<Normal>"MACH_MSG_TYPE_STRING"		TRETURN(MACH_MSG_TYPE_STRING,0);
-<Normal>"MACH_MSG_TYPE_STRING_C"	TRETURN(MACH_MSG_TYPE_STRING_C,0);
+"in"			{ return yylex_KeyWord(syIn); }
+"out"			{ return yylex_KeyWord(syOut); }
+"inout"			{ return yylex_KeyWord(syInOut); }
+"requestport"	{ return yylex_KeyWord(syRequestPort); }
+"replyport"		{ return yylex_KeyWord(syReplyPort); }
+"server"		{ return yylex_KeyWord(syServer); }
+"subsystem"		{ return yylex_KeyWord(sySubsystem); }
+"type"			{ return yylex_KeyWord(syType); }
+"skip"			{ return yylex_KeyWord(sySkip); }
+"wait"			{ return yylex_KeyWord(syWaitTime); }
+"nowait"		{ return yylex_KeyWord(syNoWaitTime); }
+"routine"		{ return yylex_KeyWord(syRoutine); }
+"simpleroutine"	{ return yylex_KeyWord(sySimpleRoutine); }
+"msgtype"		{ return yylex_KeyWord(syMsgType); }
+"destructor"	{ return yylex_KeyWord(syDestructor); }
+"ipc"			{ return yylex_KeyWord(syIPC); }
+"variable"		{ return yylex_KeyWord(syVariable); }
+"fixed"			{ return yylex_KeyWord(syFixed); }
+"error"			{ return yylex_KeyWord(syErrorProc); }
+"abort"			{ return yylex_KeyWord(syAbort); }
+"map"			{ return yylex_KeyWord(syMap); }
+"noexport"		{ return yylex_KeyWord(syNoExport); }
+"kernel"		{ return yylex_KeyWord(syKernelUser); }
+"user"			{ return yylex_KeyWord(syUserPrefix); }
+"cpp"			{ return yylex_KeyWord(syCPP); }
+"c"			{ return yylex_KeyWord(syCType); }
+"true"			{ return yylex_Boolean(TRUE); }
+"false"			{ return yylex_Boolean(FALSE); }
 
-<Normal>"MACH_MSG_TYPE_MOVE_RECEIVE"	TPRETURN(MACH_MSG_TYPE_MOVE_RECEIVE,MACH_MSG_TYPE_PORT_RECEIVE,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_COPY_SEND"	TPRETURN(MACH_MSG_TYPE_COPY_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_MAKE_SEND"	TPRETURN(MACH_MSG_TYPE_MAKE_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_MOVE_SEND"	TPRETURN(MACH_MSG_TYPE_MOVE_SEND,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_MAKE_SEND_ONCE"	TPRETURN(MACH_MSG_TYPE_MAKE_SEND_ONCE,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_MOVE_SEND_ONCE"	TPRETURN(MACH_MSG_TYPE_MOVE_SEND_ONCE,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
+{ident}			{ return yylex_Identifier(yytext); }
+{number}		{ return yylex_Number(yytext); }
+{hexnumber}		{ return yylex_Number(yytext); }
+{octalnumber}   { return yylex_Number(yytext); }
+{string}		{ return yylex_StringConst(yytext); }
+{charconst}		{ return yylex_CharConst(yytext); }
 
-<Normal>"MACH_MSG_TYPE_PORT_NAME"	TRETURN(MACH_MSG_TYPE_PORT_NAME,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_PORT_RECEIVE"	TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_RECEIVE,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_PORT_SEND"	TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_SEND,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_PORT_SEND_ONCE"	TPRETURN(MACH_MSG_TYPE_POLYMORPHIC,MACH_MSG_TYPE_PORT_SEND_ONCE,word_size_in_bits);
-<Normal>"MACH_MSG_TYPE_POLYMORPHIC"	TRETURN(MACH_MSG_TYPE_POLYMORPHIC,0);
+":"			{ return syColon; }
+";"			{ return sySemi; }
+"("			{ return syLParen; }
+")"			{ return syRParen; }
+"{"			{ return syLBrack; }
+"}"			{ return syRBrack; }
+"["			{ return syLBrack; }
+"]"			{ return syRBrack; }
+","			{ return syComma; }
+"+"			{ return syPlus; }
+"-"			{ return syMinus; }
+"*"			{ return syStar; }
+"/"			{ return syDiv; }
+"="			{ return syEqual; }
+"&"			{ return '&'; }
+"|"			{ return syBar; }
+"^"			{ return syCaret; }
+"~"			{ return syTilde; }
+"<<"			{ return syLShift; }
+">>"			{ return syRShift; }
 
-<Normal>":"		RETURN(syColon);
-<Normal>";"		RETURN(sySemi);
-<Normal>","		RETURN(syComma);
-<Normal>"+"		RETURN(syPlus);
-<Normal>"-"		RETURN(syMinus);
-<Normal>"*"		RETURN(syStar);
-<Normal>"/"		RETURN(syDiv);
-<Normal>"("		RETURN(syLParen);
-<Normal>")"		RETURN(syRParen);
-<Normal>"="		RETURN(syEqual);
-<Normal>"^"		RETURN(syCaret);
-<Normal>"~"		RETURN(syTilde);
-<Normal>"<"		RETURN(syLAngle);
-<Normal>">"		RETURN(syRAngle);
-<Normal>"["		RETURN(syLBrack);
-<Normal>"]"		RETURN(syRBrack);
-<Normal>"|"		RETURN(syBar);
-
-<Normal>{Ident}		{ yylval.identifier = strmake(yytext);
-			  RETURN(syIdentifier); }
-<Normal>{Number}	{ yylval.number = atoi(yytext); RETURN(syNumber); }
-
-<String>{String}	{ yylval.string = strmake(yytext);
-			  BEGIN Normal; RETURN(syString); }
-<FileName>{FileName}	{ yylval.string = strmake(yytext);
-			  BEGIN Normal; RETURN(syFileName); }
-<QString>{QString}	{ yylval.string = strmake(yytext);
-			  BEGIN Normal; RETURN(syQString); }
-
-^\#[ \t]*{Number}[ \t]*\"[^"]*\"	{ doSharp(yytext+1);
-					  SAVE_BEGIN;
-					  BEGIN SkipToEOL; }
-^\#\ *{Number}				{ doSharp(yytext+1);
-					  SAVE_BEGIN;
-					  BEGIN SkipToEOL; }
-^\#					{ yyerror("illegal # directive");
-					  SAVE_BEGIN;
-					  BEGIN SkipToEOL; }
-
-<SkipToEOL>\n		RSTR_BEGIN;
-<SkipToEOL>.		;
-
-[ \t]			;
-\n			{ lineno++; }
-.			{ BEGIN Normal; RETURN(syError); }
-
+[ \t]+			/* ignore whitespace */;
+\n			{ yylineno++; }
+.			{ yyerror("invalid character"); }
 %%
-
-extern void
-LookNormal(void)
-{
-    if (inname == 0)
-    {
-	inname = strmake("(unknown)");
-	lineno = 0;
-    }
-
-    BEGIN Normal;
-}
-
-extern void
-LookString(void)
-{
-    BEGIN String;
-}
-
-extern void
-LookQString(void)
-{
-    BEGIN QString;
-}
-
-extern void
-LookFileName(void)
-{
-    BEGIN FileName;
-}
-
-static void
-doSharp(const char *body)
-{
-    register const char *startName;
-
-    lineno = atoi(body);
-    startName = strchr(body, '"');
-    if (startName != NULL)
-    {
-	*strrchr(body, '"') = '\0';
-	strfree(inname);
-	inname = strmake(startName+1);
-    }
-}
+PARAM_DECL(int, yylineno, =1);
+static int yylex_KeyWord(int token) { return token; }
+static int yylex_Identifier(char *text) { yylval.identifier = LookUpIdentifier(text); return syIdentifier; }
+static int yylex_SymbolicType(char *text, int type_token) { yylval.identifier = LookUpIdentifier(text); return type_token; }
+static int yylex_StringConst(char *text) { yylval.string = DeString(text); return syString; }
+static int yylex_CharConst(char *text) { yylval.number = DeChar(text); return syNumber; }
+static int yylex_Number(char *text) { char *ptr=NULL; if (text[0] == '0' && (text[1] == 'x' || text[1] == 'X')) yylval.number = strtol(text, &ptr, 16); else if (text[0] == '0') yylval.number = strtol(text, &ptr, 8); else yylval.number = atoi(text); return syNumber; }
+static int yylex_Boolean(boolean_t val) { yylval.boolean = val; return syBoolean; }
+static int yylex_Strudel(void) { yylval.string = strdup(yytext); return syStrudel; }
+static void next_char(void) { /* Stub */ }
+/* yyerror is in parser.y */
+int yywrap(void) { return 1; }

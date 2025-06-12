@@ -1,0 +1,39 @@
+%{%
+#include <stdio.h>
+#include <string.h> /* For strdup if used by yylval */
+/* PARAM_DECL might not be needed for a minimal lexer if no complex actions */
+/* #define PARAM_DECL(type, name, init) type name init */
+
+/* Includes for YYSTYPE and tokens. parser.h should come from our fixed parser.y */
+#include "global.h"     /* For boolean_t, if used by YYSTYPE in parser.h */
+#include "mig_string.h" /* For identifier_t, if used by YYSTYPE in parser.h */
+#include "type.h"       /* For ipc_type_t, if used by YYSTYPE in parser.h */
+/* Add other type headers if parser.h -> YYSTYPE needs them */
+#include "parser.h" /* Defines YYSTYPE and sy* tokens */
+/* cpu.h might not be needed if no rules use word_size_in_bits directly */
+/* #include "cpu.h" */
+
+extern int yylineno;
+extern FILE *yyin;
+extern char *yytext; /* Flex provides this */
+
+/* Basic yyerror for flex */
+void yyerror(const char *s) {
+    fprintf(stderr, "Minimal Lexer Error: %s at line %d near token \"%s\"\n", s, yylineno, yytext);
+}
+%}
+
+%option yylineno
+
+%%
+
+[0-9]+		{ printf("Saw number: %s\n", yytext); return syNumber; /* Assuming syNumber is in parser.h */ }
+[a-zA-Z]+	{ printf("Saw identifier: %s\n", yytext); /* yylval.identifier = LookUpIdentifier(yytext); */ return syIdentifier; /* Assuming syIdentifier */ }
+[ \t\n]+	{ /* Ignore whitespace */ }
+.		{ yyerror("Unexpected character"); }
+
+%%
+
+int yywrap() {
+    return 1;
+}

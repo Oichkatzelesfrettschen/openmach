@@ -1,0 +1,93 @@
+%{%
+#include <stdio.h>
+/* Includes for YYSTYPE visibility */
+#include "global.h"
+#include "mig_string.h"
+#include "type.h"
+#include "routine.h"
+#include "statement.h"
+#include "error.h"   /* For yyerror and other error functions */
+#include "lexxer.h"  /* For yylex prototype */
+
+extern FILE *yyin;
+extern int yylex(void);
+extern char *yytext; /* Usually provided by lex */
+extern int yylineno; /* Usually provided by lex */
+void yyerror(const char *);
+int yyparse(void);
+
+%}
+
+%union {
+    identifier_t identifier;
+    const_string_t string;
+    int number;
+    boolean_t boolean;
+    statement_kind_t statement_kind;
+    ipc_type_t *ipc_type; /* Pointer for complex types */
+    routine_t *routine;   /* Pointer for complex types */
+    arg_kind_t arg_kind;
+    argument_t *argument; /* Pointer for complex types */
+    ipc_flags_t ipc_flags;
+    struct {
+        u_int innumber;
+        const_string_t instr;
+        u_int outnumber;
+        const_string_t outstr;
+        u_int size;
+    } symtype;
+}
+
+%token <identifier> syIdentifier
+%token <string> syString syCString syStrudel
+%token <number> syNumber
+%token <boolean> syBoolean
+%token <ipc_flags> syIPCFlags
+%token <symtype> sySymbolicType
+
+%token sySkip syRoutine sySimpleRoutine syProcedure sySimpleProcedure syFunction
+%token sySubsystem syKernelUser syKernelServer
+%token syMsgOption syMsgSeqno syWaitTime syNoWaitTime syErrorProc
+%token syServerPrefix syUserPrefix syServerDemux syRCSId
+%token syImport syUImport sySImport
+%token syIn syOut syInOut syRequestPort syReplyPort sySReplyPort syUReplyPort
+%token syType syArray syStruct syOf
+%token syInTran syOutTran syDestructor syCType syCUserType syCServerType
+%token syColon sySemi syComma syPlus syMinus syStar syDiv
+%token syLParen syRParen syEqual syCaret syTilde syLAngle syRAngle
+%token syLBrack syRBrack syBar
+%token syError
+%token syServer syFixed syIPC syVariable syMap syNoExport syKernel syUser syCPP syC /* Added from user script */
+%token syLShift syRShift /* For << >> */
+
+
+%type <ipc_type> TypeSpec
+%type <routine> Routine RoutineDecl
+%type <argument> Arguments ArgumentList Argument
+%type <number> IntExp
+
+%%
+MigInput: SpecificationList ;
+SpecificationList: /* empty */ | SpecificationList Specification ;
+Specification: Subsystem sySemi | TypeDecl sySemi | RoutineDecl sySemi ;
+Subsystem: sySubsystem syIdentifier syNumber ;
+TypeDecl: syType syIdentifier syEqual TypeSpec ;
+RoutineDecl: Routine ;
+Routine: syRoutine syIdentifier Arguments ;
+Arguments: syLParen ArgumentList syRParen | syLParen syRParen;
+ArgumentList: /* empty */ | Argument | ArgumentList sySemi Argument;
+Argument: syIdentifier syColon TypeSpec;
+TypeSpec: sySymbolicType | syIdentifier;
+IntExp: syNumber;
+%%
+void yyerror(const char *s) {
+    fprintf(stderr, "mig-parser: %s at line %d near token %s\n", s, yylineno, yytext);
+}
+#if 0
+#include "lex.yy.c"
+int main(int argc, char *argv[]) {
+    yyin = stdin;
+    do { yyparse(); } while (!feof(yyin));
+    return 0;
+}
+#endif

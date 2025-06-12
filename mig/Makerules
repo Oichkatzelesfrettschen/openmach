@@ -38,9 +38,9 @@ CLEAN_FILES += parser.c lexxer.c parser.h
 	mv lex.yy.c $*.c
 
 %.c %.h: %.y
-	$(YACC) $(YFLAGS) -d $<
-	mv y.tab.c $*.c
-	mv y.tab.h $*.h
+	$(YACC) $(YFLAGS) $< /* YACC variable already has -d and -o parser.c */
+	# mv y.tab.c $*.c # Not needed if YACC command uses -o to name output
+	# mv y.tab.h $*.h # Not needed if YACC command uses -d and -o to name output
 
 # Compile the migcom sources with the host includes and flags.
 COMPILE_FOR = HOST

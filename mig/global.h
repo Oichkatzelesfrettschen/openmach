@@ -28,9 +28,17 @@
 #define	_GLOBAL_H
 
 #include <sys/types.h>
+#include <mach/message.h> /* For MACH_MSG_TYPE_... constants */
+/* Other local mig headers will include global.h first, then what they need,
+   including boolean.h (for TRUE/FALSE) and mig_string.h (for string_t)
+   if they depend on system-defined boolean_t or string_t potentially. */
 
-#include "boolean.h"
-#include "mig_string.h"
+/* Basic string types used by mig tool itself */
+typedef char *string_t;
+typedef const char *const_string_t;
+typedef const_string_t identifier_t; /* Often used interchangeably with const_string_t */
+
+#define strNULL		((string_t) 0) /* Definition from mig_string.h, useful here */
 
 extern boolean_t BeQuiet;	/* no warning messages */
 extern boolean_t BeVerbose;	/* summarize types, routines */
