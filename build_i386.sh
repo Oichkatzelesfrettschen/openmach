@@ -1,4 +1,6 @@
 #!/bin/bash
+##\file build_i386.sh
+##\brief Build OpenMach for the i386 target.
 set -e
 set -x
 
@@ -6,7 +8,7 @@ set -x
 cd i386
 
 # Run the configure script
-if ./configure --with-mach4=../; then
+if ./configure --with-mach4=../ --host=i686-linux-gnu; then
   echo "Configure script completed successfully."
 else
   echo "Configure script failed. Exiting."

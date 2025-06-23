@@ -1,7 +1,6 @@
 /* SPDX-License-Identifier: Utah-BSD-Style */
 /* See LICENSE file for full copyright notice */
 
- */
 #ifndef _MIG_MESSAGE_H
 #define _MIG_MESSAGE_H
 

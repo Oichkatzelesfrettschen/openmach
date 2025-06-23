@@ -29,12 +29,13 @@
 
 #### Start of configuration section ####
 
-GSRCDIR	= /app/mach4
-# MSRCDIR should point to the true top of the source tree (/app)
-# abs_builddir is /app/i386 when configure is run there.
-MSRCDIR = /app/i386/kernel/..
+## \brief Path to the generic Mach4 source tree.
+GSRCDIR = ../../mach4
+# MSRCDIR should point to the true top of the source tree (..)
+# abs_builddir is ../.. when configure is run there.
+MSRCDIR = ..
 # OBJDIR should point to where Makeconf is, relative to this Makefile's location if Makeconf is included relatively,
-# or an absolute path. /app/i386/kernel is /app/i386.
+# or an absolute path. ../../kernel is ../...
 OBJDIR	= ..
 
 prefix = /usr/local

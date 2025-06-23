@@ -19,7 +19,8 @@
 #
 #### Start of configuration section ####
 
-GSRCDIR	= /app/mach4
+## \brief Path to the generic Mach4 source tree.
+GSRCDIR = ../mach4
 MSRCDIR = .
 OBJDIR	= .
 

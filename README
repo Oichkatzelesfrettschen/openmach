@@ -590,14 +590,14 @@ for a multiprocessor (e.g. kernel/imps).
 XX not working yet - waiting for imps implementation
 
 
-Other Options
--------------
-`PROTECTION' is normally defined to 1 (by what?), but can be turned off if
-the kernel is only going to need to support one protection domain (the
-kernel's).  This is useful for embedded systems or systems that do not have
-protected/virtual memory support.
-XX not working yet - waiting for VM updates
-
+For development within the Codex environment run the provided `setup.sh` script.
+It installs a wide range of build tools. The script prefers Clang 18 but will
+use Clang 20 when available and falls back to Clang 14 or 11 if necessary.
+Additional cross‑compilers for the i386 target are installed along with common
+Python and Node tooling. Execute the script once to prepare a container:
+./setup.sh
+Note that the script uses `apt` and `pip` to fetch dependencies and therefore
+requires network access during the setup phase.
 `PAGING' is normally defined to 1 (by what?), but can be turned off
 if only physical (wired) memory will be desu.  Potentially useful for the
 same reasons as above.
