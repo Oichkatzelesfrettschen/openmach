@@ -12,7 +12,12 @@ It is NOT a modern C++17 MINIX filesystem implementation.
 
 ## Build Prerequisites (to be fully confirmed through successful build)
 - A working `mig` (Mach Interface Generator) compatible with this project's .defs files.
-- A 32-bit C toolchain (clang or gcc).
+- A 32-bit C toolchain. The setup script installs **clang-18** by default
+  and installs `clang-20` when available. If clang-18 is missing it
+  falls back to `clang-14` or `clang-11`. Optional i686 cross
+  compilers are installed when present.
+  Cross‑compiler packages for `i686-linux-gnu` are installed when
+  available to support 32‑bit builds.
 - Standard Unix build utilities (make, autoconf, flex, bison).
 - Extreme patience and debugging skills.
 

@@ -1,11 +1,11 @@
 #
 #
-cpu.symc.o: cpu.symc /app/include/mach/message.h \
- /app/include/mach/kern_return.h ../include/mach/machine/kern_return.h \
- /app/include/mach/port.h /app/include/mach/boolean.h \
+cpu.symc.o: cpu.symc /workspace/openmach/include/mach/message.h \
+ /workspace/openmach/include/mach/kern_return.h ../include/mach/machine/kern_return.h \
+ /workspace/openmach/include/mach/port.h /workspace/openmach/include/mach/boolean.h \
  ../include/mach/machine/boolean.h ../include/mach/machine/vm_types.h
 #
-error.o: /app/mig/error.c /usr/include/stdc-predef.h \
+error.o: /workspace/openmach/mig/error.c /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -60,20 +60,20 @@ error.o: /app/mig/error.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/global.h /app/mig/boolean.h /app/mig/mig_string.h \
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/boolean.h /workspace/openmach/mig/mig_string.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/lexxer.h
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/lexxer.h
 #
-global.o: /app/mig/global.c /usr/include/stdc-predef.h /app/mig/error.h \
+global.o: /workspace/openmach/mig/global.c /usr/include/stdc-predef.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -85,7 +85,7 @@ global.o: /app/mig/global.c /usr/include/stdc-predef.h /app/mig/error.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/global.h /usr/include/x86_64-linux-gnu/sys/types.h \
+ /workspace/openmach/mig/global.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
  /usr/include/x86_64-linux-gnu/bits/time64.h \
@@ -112,8 +112,8 @@ global.o: /app/mig/global.c /usr/include/stdc-predef.h /app/mig/error.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
@@ -121,7 +121,7 @@ global.o: /app/mig/global.c /usr/include/stdc-predef.h /app/mig/error.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h
 #
-header.o: /app/mig/header.c /usr/include/stdc-predef.h /app/mig/write.h \
+header.o: /workspace/openmach/mig/header.c /usr/include/stdc-predef.h /workspace/openmach/mig/write.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -148,8 +148,8 @@ header.o: /app/mig/header.c /usr/include/stdc-predef.h /app/mig/write.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /app/mig/statement.h \
- /app/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /workspace/openmach/mig/statement.h \
+ /workspace/openmach/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
@@ -172,20 +172,20 @@ header.o: /app/mig/header.c /usr/include/stdc-predef.h /app/mig/write.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/type.h /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/type.h /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/utils.h \
- /app/mig/global.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/utils.h \
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h
 #
-migcom.o: /app/mig/migcom.c /usr/include/stdc-predef.h \
+migcom.o: /workspace/openmach/mig/migcom.c /usr/include/stdc-predef.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -246,14 +246,14 @@ migcom.o: /app/mig/migcom.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/global.h /app/mig/boolean.h /app/mig/mig_string.h \
- /app/mig/lexxer.h /app/mig/write.h /app/mig/statement.h \
- /app/mig/routine.h /app/mig/type.h
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/boolean.h /workspace/openmach/mig/mig_string.h \
+ /workspace/openmach/mig/lexxer.h /workspace/openmach/mig/write.h /workspace/openmach/mig/statement.h \
+ /workspace/openmach/mig/routine.h /workspace/openmach/mig/type.h
 #
 parser.o: parser.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -281,12 +281,12 @@ parser.o: parser.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/lexxer.h /app/mig/global.h \
+ /workspace/openmach/mig/lexxer.h /workspace/openmach/mig/global.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
@@ -310,16 +310,16 @@ parser.o: parser.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/type.h \
- /app/mig/routine.h /app/mig/statement.h
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/type.h \
+ /workspace/openmach/mig/routine.h /workspace/openmach/mig/statement.h
 #
-routine.o: /app/mig/routine.c /usr/include/stdc-predef.h \
+routine.o: /workspace/openmach/mig/routine.c /usr/include/stdc-predef.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -375,21 +375,21 @@ routine.o: /app/mig/routine.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/global.h /app/mig/boolean.h /app/mig/mig_string.h \
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/boolean.h /workspace/openmach/mig/mig_string.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/routine.h \
- /app/mig/type.h /app/mig/message.h cpu.h
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/routine.h \
+ /workspace/openmach/mig/type.h /workspace/openmach/mig/message.h cpu.h
 #
-server.o: /app/mig/server.c /usr/include/stdc-predef.h \
+server.o: /workspace/openmach/mig/server.c /usr/include/stdc-predef.h \
  /usr/include/assert.h /usr/include/features.h \
  /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -397,7 +397,7 @@ server.o: /app/mig/server.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs-64.h /app/mig/write.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h /workspace/openmach/mig/write.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
@@ -417,8 +417,8 @@ server.o: /app/mig/server.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /app/mig/statement.h \
- /app/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /workspace/openmach/mig/statement.h \
+ /workspace/openmach/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
@@ -441,21 +441,21 @@ server.o: /app/mig/server.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/type.h /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/type.h /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/utils.h \
- /app/mig/global.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/utils.h \
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  cpu.h
 #
-statement.o: /app/mig/statement.c /usr/include/stdc-predef.h \
+statement.o: /workspace/openmach/mig/statement.c /usr/include/stdc-predef.h \
  /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -499,20 +499,20 @@ statement.o: /app/mig/statement.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/global.h \
- /app/mig/boolean.h /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/global.h \
+ /workspace/openmach/mig/boolean.h /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/statement.h /app/mig/routine.h /app/mig/type.h
+ /workspace/openmach/mig/statement.h /workspace/openmach/mig/routine.h /workspace/openmach/mig/type.h
 #
-string.o: /app/mig/string.c /usr/include/stdc-predef.h \
+string.o: /workspace/openmach/mig/string.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/sys/types.h /usr/include/features.h \
  /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -555,19 +555,19 @@ string.o: /app/mig/string.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/boolean.h \
- /app/mig/error.h /usr/include/x86_64-linux-gnu/sys/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/error.h /usr/include/x86_64-linux-gnu/sys/errno.h \
  /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
  /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/mig_string.h /usr/include/string.h \
+ /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h
 #
-type.o: /app/mig/type.c /usr/include/stdc-predef.h /usr/include/stdio.h \
+type.o: /workspace/openmach/mig/type.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -622,28 +622,28 @@ type.o: /app/mig/type.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/global.h /app/mig/boolean.h /app/mig/mig_string.h \
+ /workspace/openmach/mig/global.h /workspace/openmach/mig/boolean.h /workspace/openmach/mig/mig_string.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/type.h \
- /app/mig/message.h cpu.h
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/type.h \
+ /workspace/openmach/mig/message.h cpu.h
 #
-user.o: /app/mig/user.c /usr/include/stdc-predef.h /usr/include/assert.h \
+user.o: /workspace/openmach/mig/user.c /usr/include/stdc-predef.h /usr/include/assert.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
- /usr/include/x86_64-linux-gnu/gnu/stubs-64.h /app/mig/write.h \
+ /usr/include/x86_64-linux-gnu/gnu/stubs-64.h /workspace/openmach/mig/write.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
@@ -663,8 +663,8 @@ user.o: /app/mig/user.c /usr/include/stdc-predef.h /usr/include/assert.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /app/mig/statement.h \
- /app/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /workspace/openmach/mig/statement.h \
+ /workspace/openmach/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
@@ -687,21 +687,21 @@ user.o: /app/mig/user.c /usr/include/stdc-predef.h /usr/include/assert.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/type.h /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/type.h /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/error.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/error.h \
  /usr/include/x86_64-linux-gnu/sys/errno.h /usr/include/errno.h \
  /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /app/mig/utils.h /app/mig/global.h cpu.h
+ /workspace/openmach/mig/utils.h /workspace/openmach/mig/global.h cpu.h
 #
-utils.o: /app/mig/utils.c /usr/include/stdc-predef.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h /app/mig/write.h \
+utils.o: /workspace/openmach/mig/utils.c /usr/include/stdc-predef.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h /workspace/openmach/mig/write.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -727,8 +727,8 @@ utils.o: /app/mig/utils.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h /app/mig/statement.h \
- /app/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /workspace/openmach/mig/statement.h \
+ /workspace/openmach/mig/routine.h /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
@@ -751,16 +751,16 @@ utils.o: /app/mig/utils.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
  /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
- /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /app/mig/boolean.h \
- /app/mig/type.h /app/mig/mig_string.h /usr/include/string.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /workspace/openmach/mig/boolean.h \
+ /workspace/openmach/mig/type.h /workspace/openmach/mig/mig_string.h /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h /app/mig/utils.h \
- /app/mig/global.h
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h /workspace/openmach/mig/utils.h \
+ /workspace/openmach/mig/global.h
 #
-vprint.o: /app/mig/vprint.c /usr/include/stdc-predef.h
+vprint.o: /workspace/openmach/mig/vprint.c /usr/include/stdc-predef.h
 #
 #
 #
@@ -782,8 +782,8 @@ lexxer.o: lexxer.c /usr/include/stdio.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-  /usr/lib/llvm-14/lib/clang/14.0.6/include/stddef.h \
-  /usr/lib/llvm-14/lib/clang/14.0.6/include/stdarg.h \
+  /usr/lib/llvm-18/lib/clang/18/include/stddef.h \
+  /usr/lib/llvm-18/lib/clang/18/include/stdarg.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
@@ -831,15 +831,15 @@ lexxer.o: lexxer.c /usr/include/stdio.h \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/lib/llvm-14/lib/clang/14.0.6/include/inttypes.h \
+  /usr/lib/llvm-18/lib/clang/18/include/inttypes.h \
   /usr/include/inttypes.h \
-  /usr/lib/llvm-14/lib/clang/14.0.6/include/stdint.h \
+  /usr/lib/llvm-18/lib/clang/18/include/stdint.h \
   /usr/include/stdint.h /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
-  /app/mig/mig_string.h /app/mig/boolean.h /app/mig/type.h \
-  /app/mig/statement.h /app/mig/routine.h /app/mig/global.h parser.h \
-  /app/mig/lexxer.h cpu.h /usr/include/unistd.h \
+  /workspace/openmach/mig/mig_string.h /workspace/openmach/mig/boolean.h /workspace/openmach/mig/type.h \
+  /workspace/openmach/mig/statement.h /workspace/openmach/mig/routine.h /workspace/openmach/mig/global.h parser.h \
+  /workspace/openmach/mig/lexxer.h cpu.h /usr/include/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/environments.h \
   /usr/include/x86_64-linux-gnu/bits/confname.h \
