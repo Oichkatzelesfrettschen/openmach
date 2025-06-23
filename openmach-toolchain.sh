@@ -49,26 +49,26 @@ openmach_cc() {
 		export LD="ld -m elf_i386"
 		echo "Toolchain set to: MODERNIZE mode (gcc-11 for C99)"
 		;;
-	"clang18")
-		# Modern clang toolchain with build cache wrappers
-		export CC="clang-18 -m32"
-		export CXX="clang++-18 -m32"
-		export AS="clang-18 -c -x assembler --target=i386-unknown-linux-gnu"
-		export LD="clang-18 --target=i386-unknown-linux-gnu"
-		if command -v buildcache >/dev/null; then
-			export CC="buildcache $CC"
-			export CXX="buildcache $CXX"
-		elif command -v ccache >/dev/null; then
-			export CC="ccache $CC"
-			export CXX="ccache $CXX"
-		fi
-		echo "Toolchain set to: CLANG18 mode"
-		;;
-	*)
-		echo "Usage: openmach_cc legacy|analyze|modernize|clang18"
-		return 1
-		;;
-	esac
+        "clang14")
+                # Modern clang toolchain using clang-14 with build cache wrappers
+                export CC="clang-14 -m32"
+                export CXX="clang++-14 -m32"
+                export AS="clang-14 -c -x assembler --target=i386-unknown-linux-gnu"
+                export LD="clang-14 --target=i386-unknown-linux-gnu"
+                if command -v buildcache >/dev/null; then
+                        export CC="buildcache $CC"
+                        export CXX="buildcache $CXX"
+                elif command -v ccache >/dev/null; then
+                        export CC="ccache $CC"
+                        export CXX="ccache $CXX"
+                fi
+                echo "Toolchain set to: CLANG14 mode"
+                ;;
+        *)
+                echo "Usage: openmach_cc legacy|analyze|modernize|clang14"
+                return 1
+                ;;
+        esac
 	echo "CC is now: $CC"
 	echo "CXX is now: $CXX"
 }

@@ -18,15 +18,15 @@ export DEBIAN_FRONTEND=noninteractive
 
 ## \brief Packages installed via apt.
 apt_packages=(
-	apt-utils build-essential binutils clang clang-tools lld lldb llvm clang-18 bison
-	ccache cmake make automake autoconf libtool pkg-config
+        apt-utils build-essential binutils clang-14 clang-tools-14 lld-14 lldb-14 llvm-14 bison
+        ccache cmake make automake autoconf libtool pkg-config
 	gdb valgrind git curl wget python3 python3-pip python3-venv golang
 	libffi-dev libssl-dev nodejs npm shellcheck cloc tmux lcov parted mtools mbr bc
 	qemu-system-x86 qemu-utils
 	graphviz libgraphviz-dev doxygen plantuml cscope cflow
 	python3-sphinx python3-breathe python3-sphinx-rtd-theme
 	universal-ctags ripgrep asciidoctor
-	python3-dev libncurses-dev libgtk-3-dev gcc-multilib g++-multilib
+        python3-dev libncurses-dev libgtk-3-dev gcc-11 g++-11 gcc-multilib g++-multilib gcc-i686-linux-gnu g++-i686-linux-gnu
 	coq coqide libcoq-ocaml-dev coq-theories openjdk-11-jre-headless
 	llvm-bolt libpolly-19-dev
 )

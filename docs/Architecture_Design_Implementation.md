@@ -14,7 +14,7 @@ The repository contains 1420 files across multiple languages. `cloc` identifies 
 ## Modernization Goals
 
 1. **Refactor to C23** – Adopt modern C23 features such as `static_assert`, enumerated attributes, and modules where feasible, while keeping compatibility with both GCC and Clang. All new and refactored functions must be documented using Doxygen comments.
-2. **Build System Refresh** – Transition to `clang-18` with support for `ccache`. Update autoconf scripts to check for modern toolchain components and drop obsolete macros. Generate compile_commands.json for tooling.
+2. **Build System Refresh** – Transition to `clang-14` with support for `ccache`. Update autoconf scripts to check for modern toolchain components and drop obsolete macros. Generate compile_commands.json for tooling.
 3. **Kernel Modularization** – Gradually decompose monolithic kernel components into well-defined modules. Split hardware abstraction, memory management, scheduler, IPC, and drivers into isolated subsystems with minimal coupling.
 4. **Improve Testability** – Introduce unit tests using a minimal C testing framework. Aim for automated testing under QEMU with 32‑bit images. Use continuous integration to monitor build and boot status.
 5. **Documentation & Clean Code** – Enforce clang‑format on all sources and shellcheck on scripts as per `AGENTS.md`. Remove legacy comments and add Doxygen for each function and struct. Keep documentation in the `docs/` directory and generate HTML with Doxygen.
