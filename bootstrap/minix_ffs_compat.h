@@ -17,27 +17,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define	MINIX_SBSIZE		MINIX_BLOCK_SIZE	/* Size of superblock */
-#define	MINIX_SBLOCK		((minix_daddr_t) 2)		/* Location of superblock */
+#define MINIX_SBSIZE MINIX_BLOCK_SIZE   /* Size of superblock */
+#define MINIX_SBLOCK ((minix_daddr_t)2) /* Location of superblock */
 
-#define	MINIX_NDADDR		7
-#define	MINIX_NIADDR		2
+#define MINIX_NDADDR 7
+#define MINIX_NIADDR 2
 
-#define	MINIX_MAXNAMLEN	14
+#define MINIX_MAXNAMLEN 14
 
-#define	MINIX_ROOTINO		1 /* MINIX ROOT INODE */
+#define MINIX_ROOTINO 1 /* MINIX ROOT INODE */
 
-#define	MINIX_NINDIR(fs)	512 /* DISK_ADDRESSES_PER_BLOCKS */
+#define MINIX_NINDIR(fs) 512 /* DISK_ADDRESSES_PER_BLOCKS */
 
-#define	IFMT		00170000
-#define	IFREG		0100000
-#define	IFDIR		0040000
-#define	ISVTX		0001000
+#define IFMT 00170000
+#define IFREG 0100000
+#define IFDIR 0040000
+#define ISVTX 0001000
 
-#define f_fs		u.minix.minix_fs
-#define i_ic		u.minix.minix_ic
-#define f_nindir	u.minix.minix_nindir
-#define f_blk		u.minix.minix_blk
-#define f_blksize	u.minix.minix_blksize
-#define f_blkno		u.minix.minix_blkno
-
+#define f_fs u.minix.minix_fs
+#define i_ic u.minix.minix_ic
+#define f_nindir u.minix.minix_nindir
+#define f_blk u.minix.minix_blk
+#define f_blksize u.minix.minix_blksize
+#define f_blkno u.minix.minix_blkno

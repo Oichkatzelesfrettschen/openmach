@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -34,35 +34,35 @@
 /*
  * Disk devices do all IO in 512-byte blocks.
  */
-#define	DEV_BSIZE	512
+#define DEV_BSIZE 512
 
 /*
  * Conversion between bytes and disk blocks.
  */
-#define	btodb(byte_offset)	((byte_offset) >> 9)
-#define	dbtob(block_number)	((block_number) << 9)
+#define btodb(byte_offset) ((byte_offset) >> 9)
+#define dbtob(block_number) ((block_number) << 9)
 
 /*
  * Compatibility definitions for old type names.
  */
 
-typedef	unsigned char	u_char;		/* unsigned char */
-typedef	unsigned short	u_short;	/* unsigned short */
-typedef	unsigned int	u_int;		/* unsigned int */
+typedef unsigned char u_char;   /* unsigned char */
+typedef unsigned short u_short; /* unsigned short */
+typedef unsigned int u_int;     /* unsigned int */
 
 typedef struct _quad_ {
-	unsigned int	val[2];		/* 2 int values make... */
-} quad;					/* an 8-byte item */
+  unsigned int val[2]; /* 2 int values make... */
+} quad;                /* an 8-byte item */
 
-typedef	unsigned int	time_t;		/* an unsigned int */
-typedef unsigned int	daddr_t;	/* an unsigned int */
-typedef	unsigned int	off_t;		/* another unsigned int */
+typedef unsigned int time_t;  /* an unsigned int */
+typedef unsigned int daddr_t; /* an unsigned int */
+typedef unsigned int off_t;   /* another unsigned int */
 
-typedef	unsigned short	uid_t;
-typedef	unsigned short	gid_t;
-typedef	unsigned int	ino_t;
+typedef unsigned short uid_t;
+typedef unsigned short gid_t;
+typedef unsigned int ino_t;
 
-#define	NBBY	8
+#define NBBY 8
 
 /*
  * The file system is made out of blocks of at most MAXBSIZE units,
@@ -75,8 +75,8 @@ typedef	unsigned int	ino_t;
  * Note that the disk devices are assumed to have DEV_BSIZE "sectors"
  * and that fragments must be some multiple of this size.
  */
-#define	MAXBSIZE	8192
-#define	MAXFRAG		8
+#define MAXBSIZE 8192
+#define MAXFRAG 8
 
 /*
  * MAXPATHLEN defines the longest permissible path length
@@ -88,6 +88,5 @@ typedef	unsigned int	ino_t;
  * loops reasonably quickly.
  */
 
-#define	MAXPATHLEN	1024
-#define	MAXSYMLINKS	8
-
+#define MAXPATHLEN 1024
+#define MAXSYMLINKS 8

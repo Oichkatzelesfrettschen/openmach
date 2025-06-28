@@ -17,47 +17,40 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <device/device_types.h>
 #include <device/device.h>
+#include <device/device_types.h>
 
-#include <mach/mach_traps.h>
 #include <mach/mach_interface.h>
+#include <mach/mach_traps.h>
 
 #include <file_io.h>
 
-int ino2blk (struct ext2_super_block *fs, struct ext2_group_desc *gd, int ino)
-{
-        int group;
-        int blk;
+int ino2blk(struct ext2_super_block *fs, struct ext2_group_desc *gd, int ino) {
+  int group;
+  int blk;
 
-        group = (ino - 1) / EXT2_INODES_PER_GROUP(fs);
-        blk = gd[group].bg_inode_table +
-	      (((ino - 1) % EXT2_INODES_PER_GROUP(fs)) /
-               EXT2_INODES_PER_BLOCK(fs));
-        return blk;
+  group = (ino - 1) / EXT2_INODES_PER_GROUP(fs);
+  blk = gd[group].bg_inode_table +
+        (((ino - 1) % EXT2_INODES_PER_GROUP(fs)) / EXT2_INODES_PER_BLOCK(fs));
+  return blk;
 }
 
-int fsbtodb (struct ext2_super_block *fs, int b)
-{
-        return (b * EXT2_BLOCK_SIZE(fs)) / DEV_BSIZE;
+int fsbtodb(struct ext2_super_block *fs, int b) {
+  return (b * EXT2_BLOCK_SIZE(fs)) / DEV_BSIZE;
 }
 
-int itoo (struct ext2_super_block *fs, int ino)
-{
-	return (ino - 1) % EXT2_INODES_PER_BLOCK(fs);
+int itoo(struct ext2_super_block *fs, int ino) {
+  return (ino - 1) % EXT2_INODES_PER_BLOCK(fs);
 }
 
-int blkoff (struct ext2_super_block * fs, vm_offset_t offset)
-{
-	return offset % EXT2_BLOCK_SIZE(fs);
+int blkoff(struct ext2_super_block *fs, vm_offset_t offset) {
+  return offset % EXT2_BLOCK_SIZE(fs);
 }
 
-int lblkno (struct ext2_super_block * fs, vm_offset_t offset)
-{
-	return offset / EXT2_BLOCK_SIZE(fs);
+int lblkno(struct ext2_super_block *fs, vm_offset_t offset) {
+  return offset / EXT2_BLOCK_SIZE(fs);
 }
 
-int blksize (struct ext2_super_block *fs, struct file *fp, daddr_t file_block)
-{
-	return EXT2_BLOCK_SIZE(fs);	/* XXX - fix for fragments */
+int blksize(struct ext2_super_block *fs, struct file *fp, daddr_t file_block) {
+  return EXT2_BLOCK_SIZE(fs); /* XXX - fix for fragments */
 }

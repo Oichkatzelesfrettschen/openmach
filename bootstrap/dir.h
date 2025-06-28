@@ -1,25 +1,25 @@
-/* 
+/*
  * Mach Operating System
  * Copyright (c) 1991,1990 Carnegie Mellon University
  * All Rights Reserved.
- * 
+ *
  * Permission to use, copy, modify and distribute this software and its
  * documentation is hereby granted, provided that both the copyright
  * notice and this permission notice appear in all copies of the
  * software, derivative works or modified versions, and any portions
  * thereof, and that both notices appear in supporting documentation.
- * 
+ *
  * CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
  * CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
  * ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
- * 
+ *
  * Carnegie Mellon requests users of this software to return to
- * 
+ *
  *  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
  *  School of Computer Science
  *  Carnegie Mellon University
  *  Pittsburgh PA 15213-3890
- * 
+ *
  * any improvements or extensions that they make and grant Carnegie Mellon
  * the rights to redistribute these changes.
  */
@@ -43,7 +43,7 @@
  */
 
 #ifndef _BOOT_UFS_DIR_H_
-#define	_BOOT_UFS_DIR_H_
+#define _BOOT_UFS_DIR_H_
 
 /*
  * A directory consists of some number of blocks of DIRBLKSIZ
@@ -70,14 +70,14 @@
  * Entries other than the first in a directory do not normally have
  * dp->d_ino set to 0.
  */
-#define DIRBLKSIZ	DEV_BSIZE
-#define	MAXNAMLEN	255
+#define DIRBLKSIZ DEV_BSIZE
+#define MAXNAMLEN 255
 
-struct	direct {
-	u_int	d_ino;			/* inode number of entry */
-	u_short	d_reclen;		/* length of this record */
-	u_short	d_namlen;		/* length of string in d_name */
-	char	d_name[MAXNAMLEN + 1];	/* name with length <= MAXNAMLEN */
+struct direct {
+  u_int d_ino;                /* inode number of entry */
+  u_short d_reclen;           /* length of this record */
+  u_short d_namlen;           /* length of string in d_name */
+  char d_name[MAXNAMLEN + 1]; /* name with length <= MAXNAMLEN */
 };
 
 /*
@@ -87,8 +87,8 @@ struct	direct {
  * null byte (dp->d_namlen+1), rounded up to a 4 byte boundary.
  */
 #undef DIRSIZ
-#define DIRSIZ(dp) \
-    ((sizeof (struct direct) - (MAXNAMLEN+1)) + (((dp)->d_namlen+1 + 3) &~ 3))
+#define DIRSIZ(dp)                                                             \
+  ((sizeof(struct direct) - (MAXNAMLEN + 1)) + (((dp)->d_namlen + 1 + 3) & ~3))
 
 #ifdef KERNEL
 /*
@@ -97,14 +97,14 @@ struct	direct {
  * is MAXNAMLEN - 1, and this just won't do.
  */
 struct dirtemplate {
-	u_int	dot_ino;
-	short	dot_reclen;
-	short	dot_namlen;
-	char	dot_name[4];		/* must be multiple of 4 */
-	u_int	dotdot_ino;
-	short	dotdot_reclen;
-	short	dotdot_namlen;
-	char	dotdot_name[4];		/* ditto */
+  u_int dot_ino;
+  short dot_reclen;
+  short dot_namlen;
+  char dot_name[4]; /* must be multiple of 4 */
+  u_int dotdot_ino;
+  short dotdot_reclen;
+  short dotdot_namlen;
+  char dotdot_name[4]; /* ditto */
 };
 #endif
 
@@ -113,30 +113,30 @@ struct dirtemplate {
  * and is provided solely (and temporarily) for backward compatibility.
  */
 #ifndef KERNEL
-#define d_fileno d_ino		/* compatibility with POSIX */
+#define d_fileno d_ino /* compatibility with POSIX */
 #ifndef DEV_BSIZE
-#define	DEV_BSIZE	512
+#define DEV_BSIZE 512
 #endif
 /*
  * Definitions for library routines operating on directories.
  */
 typedef struct _dirdesc {
-	int	dd_fd;
-	int	dd_loc;
-	int	dd_size;
-	char	dd_buf[DIRBLKSIZ];
+  int dd_fd;
+  int dd_loc;
+  int dd_size;
+  char dd_buf[DIRBLKSIZ];
 } DIR;
 
-#define dirfd(dirp)	((dirp)->dd_fd)
+#define dirfd(dirp) ((dirp)->dd_fd)
 
 #ifndef NULL
 #define NULL 0
 #endif
-extern	DIR *opendir();
-extern	struct direct *readdir();
-extern	int telldir();
-extern	void seekdir();
-#define rewinddir(dirp)	seekdir((dirp), (long)0)
-extern	void closedir();
+extern DIR *opendir();
+extern struct direct *readdir();
+extern int telldir();
+extern void seekdir();
+#define rewinddir(dirp) seekdir((dirp), (long)0)
+extern void closedir();
 #endif /* not KERNEL */
 #endif /* _BOOT_UFS_DIR_H_ */

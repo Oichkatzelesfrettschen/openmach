@@ -17,46 +17,41 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <device/device_types.h>
 #include <device/device.h>
+#include <device/device_types.h>
 
-#include <mach/mach_traps.h>
 #include <mach/mach_interface.h>
+#include <mach/mach_traps.h>
 
 #include <file_io.h>
 
-#define	MINIX_BLOCK_SIZE	1024
+#define MINIX_BLOCK_SIZE 1024
 
-int minix_ino2blk (struct minix_super_block *fs, int ino)
-{
-        int blk;
+int minix_ino2blk(struct minix_super_block *fs, int ino) {
+  int blk;
 
-	blk=0 /* it's Mach */+2 /* boot+superblock */ + fs->s_imap_blocks +
-		fs->s_zmap_blocks + (ino-1)/MINIX_INODES_PER_BLOCK;
-        return blk;
+  blk = 0 /* it's Mach */ + 2 /* boot+superblock */ + fs->s_imap_blocks +
+        fs->s_zmap_blocks + (ino - 1) / MINIX_INODES_PER_BLOCK;
+  return blk;
 }
 
-int minix_fsbtodb (struct minix_super_block *fs, int b)
-{
-        return (b * MINIX_BLOCK_SIZE) / DEV_BSIZE;
+int minix_fsbtodb(struct minix_super_block *fs, int b) {
+  return (b * MINIX_BLOCK_SIZE) / DEV_BSIZE;
 }
 
-int minix_itoo (struct minix_super_block *fs, int ino)
-{
-	return (ino - 1) % MINIX_INODES_PER_BLOCK;
+int minix_itoo(struct minix_super_block *fs, int ino) {
+  return (ino - 1) % MINIX_INODES_PER_BLOCK;
 }
 
-int minix_blkoff (struct minix_super_block * fs, vm_offset_t offset)
-{
-	return offset % MINIX_BLOCK_SIZE;
+int minix_blkoff(struct minix_super_block *fs, vm_offset_t offset) {
+  return offset % MINIX_BLOCK_SIZE;
 }
 
-int minix_lblkno (struct minix_super_block * fs, vm_offset_t offset)
-{
-	return offset / MINIX_BLOCK_SIZE;
+int minix_lblkno(struct minix_super_block *fs, vm_offset_t offset) {
+  return offset / MINIX_BLOCK_SIZE;
 }
 
-int minix_blksize (struct minix_super_block *fs, struct file *fp, minix_daddr_t file_block)
-{
-	return MINIX_BLOCK_SIZE;
+int minix_blksize(struct minix_super_block *fs, struct file *fp,
+                  minix_daddr_t file_block) {
+  return MINIX_BLOCK_SIZE;
 }
