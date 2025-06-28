@@ -1,2 +1,0 @@
-kernel/Makefile:43: /app/i386/kernel/Makeconf: No such file or directory
-make: *** No rule to make target '/app/i386/kernel/Makeconf'.  Stop.
