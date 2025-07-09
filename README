@@ -591,8 +591,10 @@ XX not working yet - waiting for imps implementation
 
 
 For development within the Codex environment run the provided `setup.sh` script.
+Common Python and Node tooling are also
+installed.  Execute the script once to prepare a container:
 It installs a wide range of build tools. The script prefers Clang 18 but will
-use Clang 20 when available and falls back to Clang 14 or 11 if necessary.
+use Clang 20 when available and falls back to Clang 14 or 11 if necessary along with appropiate lld and lldb, valgrind, lcov, and cscope.
 Additional cross‑compilers for the i386 target are installed along with common
 Python and Node tooling. Execute the script once to prepare a container:
 ./setup.sh
