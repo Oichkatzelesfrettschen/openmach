@@ -21,7 +21,8 @@
 
 #### Start of configuration section ####
 
-GSRCDIR	= /app/mach4
+## \brief Path to the generic Mach4 tree used for building mig
+GSRCDIR = ../..
 MSRCDIR = ..
 OBJDIR	= ..
 

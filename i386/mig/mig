@@ -1,4 +1,6 @@
 #!/bin/sh
+##\file mig
+##\brief Wrapper for running migcom with clang preprocessor.
 #
 # Mach Operating System
 # Copyright (c) 1991,1990 Carnegie Mellon University
@@ -27,9 +29,10 @@
 
 migcom=${MIGDIR-/usr/local/lib}/migcom
 # cpp="${CPP-gcc}" # This should be just "gcc" or similar
-# Use CC from environment, which should be clang-14
-# Explicitly use clang-14 -E to avoid issues with CC not being propagated
-cpp="clang-14 -E"
+## \brief C preprocessor command for MIG.
+# Prefer clang-18 but honor CLANG_VER environment variable when provided.
+CLANG_VER="${CLANG_VER:-18}"
+cpp="clang-${CLANG_VER} -E"
 
 cppflags=
 migflags=
@@ -171,7 +174,7 @@ do
         # Filter out -I- from cppflags for .d generation as clang doesn't like it
         cppflags_for_d_gen="`echo "$cppflags" | sed 's/-I-//g'`"
         echo "DEBUG MIG.SH: cppflags for .d generation (no -I-): $cppflags_for_d_gen" >&2
-        $cpp $cppflags_for_d_gen "$file" > /dev/null 2>/tmp/mig_dep_errors.log # Input via filename for -MD
+        "$cpp" "$cppflags_for_d_gen" "$file" > /dev/null 2>/tmp/mig_dep_errors.log # Input via filename for -MD
         if [ -s /tmp/mig_dep_errors.log ]; then
             echo "DEBUG MIG.SH: Errors during .d generation for $file (using $cpp $cppflags_for_d_gen):" >&2
             cat /tmp/mig_dep_errors.log >&2
@@ -179,7 +182,7 @@ do
 
         if [ -f "${base}.d" ]; then
             sed 's%^[^:]*:%'"${deps}"':%' <"${base}.d" >"${base}-mig.d"
-            rm -f ${base}.d
+            rm -f "${base}.d"
             echo "DEBUG MIG.SH: Processed dependency file ${base}.d -> ${base}-mig.d" >&2
         else
             echo "DEBUG MIG.SH: Dependency file ${base}.d was NOT created for $file (check /tmp/mig_dep_errors.log)." >&2
